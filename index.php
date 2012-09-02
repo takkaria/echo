@@ -34,6 +34,31 @@ F3::route('POST /event_add', function() {
 			send email asking to confirm email address
 }); */
 
+/* admin routing... 
+
+/admin {
+
+	if not logged in:
+		silent redir /admin/login
+	else:
+		
+}
+
+/admin/login GET {
+	display form
+}
+
+/admin/login POST {
+	validate form
+	check pass = "pw" & email = "em"
+	if worked:
+		create session
+		session.loggedin = true
+		redir /admin
+}
+
+*/
+
 F3::run();
 
 ?>

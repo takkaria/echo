@@ -1,0 +1,21 @@
+<@collect events into arrays@>
+
+<@foreach day@>
+
+<@day("Tuesday 27 March">@>
+
+<@foreach event with that day:@>
+<event>
+<h1><@title@></h1>
+<p class="wherewhen"><@when@> @ <@where@></p>
+<p class="desc">
+<@if facebook_id:@>
+<a href="http://facebook.com/events/<@facebook_id@>"><img src="fb.png" alt="Fb"></a>
+<@endif@>
+<@blurb@>
+<@if url_info:@>
+<a href="<@url_info@>">more info</a>
+<@endif@>
+</p>
+</event>
+<@endforeach@>

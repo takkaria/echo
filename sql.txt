@@ -1,0 +1,25 @@
+
+CREATE TABLE events
+(
+	ID int auto_increment PRIMARY KEY,
+
+	/* actual event data */
+	title TEXT NOT NULL,
+	when DATETIME NOT NULL,
+	location TEXT,
+	blurb TEXT,
+	facebook_id INT,
+	url_info TEXT,
+
+	/* maint stuff */
+	submitter_email TEXT,
+	approved BOOLEAN DEFAULT=FALSE
+);
+
+CREATE TABLE users
+(
+	email TEXT PRIMARY KEY,
+	validated BOOLEAN,
+	approved TEXT,
+	banned BOOLEAN
+);

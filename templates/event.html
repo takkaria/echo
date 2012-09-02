@@ -1,0 +1,16 @@
+<div class="event">
+<h1>{{@event.title}}</h1>
+<p class="wherewhen">{{@event.time}} @ {{@event.location}}</p>
+<p class="desc">
+
+<F3:check if="{{@event.facebook_id}}">
+<a href="http://facebook.com/events/{{@event.facebook_id}}"><img src="fb.png" alt="Fb"></a>
+</F3:check>
+
+{{@event.blurb}}
+
+<F3:check if="{{@event.url_info}}">
+<a href="{{@event.url_info}}">more info</a>
+</F3:check>
+</p>
+</div>

@@ -1,0 +1,9 @@
+<F3:repeat group="{{@events}}" value="{{@event}}">
+
+<@foreach day@>
+
+<@day("Tuesday 27 March">@>
+
+<@foreach event with that day:@>
+<@=EVENT.html@>
+<@endforeach@>

@@ -1,9 +1,7 @@
 <F3:include href="templates/header.html" />
 
-hello!
-
-<F3:repeat group="{{@DB->result}}" value="{{@event}}">
-<F3:include href="templates/event.html" />
+<F3:repeat group="{{@events}}" key="{{@day}}" value="{{@events}}">
+<F3:include href="templates/event_week.html" />
 </F3:repeat>
 
 <F3:include href="templates/footer.html" />

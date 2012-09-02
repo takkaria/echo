@@ -1,0 +1,13 @@
+<tr>
+<th><b>{{@event.title}}</b>
+<td>{{@event.date}}
+<td>{{@event.location}}
+<td>{{@event.blurb}}
+
+<td><F3:check if="{{@event.facebook_id}}">
+<a href="http://facebook.com/events/{{@event.facebook_id}}">Fb {{@event.facebook_id}}</a>
+</F3:check>
+
+<td><F3:check if="{{@event.url_info}}">
+<a href="{{@event.url_info}}">more info</a>
+</F3:check>

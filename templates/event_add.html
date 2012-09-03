@@ -11,26 +11,34 @@ input, textarea { font-family: Arial; font-size: 14px; border: 1px solid #aaa; p
 
 </style>
 
+<F3:check if="{{count(@messages)}}">
+<ul>
+<F3:repeat group="{{@messages}}" value="{{@message}}">
+	<li>{{@message}}
+</F3:repeat>
+</ul>
+</F3:check>
+
 <form method="POST" action="?">
 
 <label for="title">Title:</label>
-<input type="text" name="title" id="title" value="{{@REQUEST.title}}">
+<input type="text" name="title" id="title" value="{{@POST.title}}">
 
 <label for="date">Date: (dd-mm-yyyy)</label>
-<input type="text" name="date" id="date" value="{{@REQUEST.date}}">
+<input type="text" name="date" id="date" value="{{@POST.date}}">
 
 <label for="time">Time: (hh:mm)</label>
-<input type="text" name="time" id="time" value="{{@REQUEST.time}}">
+<input type="text" name="time" id="time" value="{{@POST.time}}">
 <!-- XXX all day? -->
 
 <label for="location">Location:</label>
-<input type="text" name="location" id="location" value="{{@REQUEST.location}}">
+<input type="text" name="location" id="location" value="{{@POST.location}}">
 
 <label for="blurb">Short blurb:</label>
-<textarea name="blurb" id="blurb" rows="4" cols="40">{{@REQUEST.blurb}}</textarea>
+<textarea name="blurb" id="blurb" rows="4" cols="40">{{@POST.blurb}}</textarea>
 
 <label for="email">Your email:</label>
-<input type="text" name="email" id="email" value="{{@REQUEST.email}}">
+<input type="text" name="email" id="email" value="{{@POST.email}}">
 
 <!-- XXX facebook, more info URL -->
 

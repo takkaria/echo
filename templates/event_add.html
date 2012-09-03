@@ -1,0 +1,41 @@
+<F3:include href="templates/header.html" />
+
+<style>
+
+* { line-height: 1.3; }
+
+label, input, textarea { display: block; }
+input, textarea { font-family: Arial; font-size: 14px; border: 1px solid #aaa; padding: 4px; width: 30em; }
+
+#date, #time { width: 12em; }
+
+</style>
+
+<form method="POST" action="?">
+
+<label for="title">Title:</label>
+<input type="text" name="title" id="title" value="{{@REQUEST.title}}">
+
+<label for="date">Date: (dd-mm-yyyy)</label>
+<input type="text" name="date" id="date" value="{{@REQUEST.date}}">
+
+<label for="time">Time: (hh:mm)</label>
+<input type="text" name="time" id="time" value="{{@REQUEST.time}}">
+<!-- XXX all day? -->
+
+<label for="location">Location:</label>
+<input type="text" name="location" id="location" value="{{@REQUEST.location}}">
+
+<label for="blurb">Short blurb:</label>
+<textarea name="blurb" id="blurb" rows="4" cols="40">{{@REQUEST.blurb}}</textarea>
+
+<label for="email">Your email:</label>
+<input type="text" name="email" id="email" value="{{@REQUEST.email}}">
+
+<!-- XXX facebook, more info URL -->
+
+
+<input type="submit" value="Submit event!">
+</form>
+
+<F3:include href="templates/footer.html" />

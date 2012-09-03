@@ -17,8 +17,6 @@ F3::set('DB', new DB("sqlite:events.sqlite"));
 
 F3::route('GET /', function() {
 
-	F3::set("title", "Echo");
-
 	DB::sql("SELECT *
 		FROM events
 		WHERE date >= date('now', 'start of day') AND
@@ -37,12 +35,16 @@ F3::route('GET /', function() {
 	$sorted = group_assoc($results, "date");
 	F3::set('events', $sorted);
 
+	F3::set("title", "Echo");
 	echo Template::serve("templates/index.html");
 });
 
-/* F3::route('GET /event_add', function() {
-	display form
+F3::route('GET /event_add', function() {
+	F3::set("title", "Add an event");
+	echo Template::serve("templates/event_add.html");
 });
+
+/*
 
 F3::route('POST /event_add', function() {
 	validate fields

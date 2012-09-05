@@ -2,6 +2,7 @@
 require_once 'fatfree/lib/base.php';
 
 date_default_timezone_set('UTC');
+
 function group_assoc($array, $key)
 {
     $return = array();
@@ -10,6 +11,22 @@ function group_assoc($array, $key)
     }
     return $return;
 }
+
+function spam_check()
+{
+	$list = "dnsbl.sorbs.net; xbl.spamhaus.org; ubl.lashback.com";
+	$addr = F3::realip();
+	$quad = implode('.', array_reverse(explode('.',$addr)));
+
+	foreach (F3::split($blocklists) as $list) {
+		// Check against DNS blacklist
+		if (gethostbyname($quad.'.'.$list) != $quad.'.'.$list) {
+			Template::serve("templates/spam.html");
+			die;
+		}
+	}
+}
+
 
 /* ---------- */
 
@@ -45,11 +62,10 @@ F3::route('GET /event_add', function() {
 });
 
 F3::route('POST /event_add', function() {
+	spam_check();
 
 	$messages = array();
 	$date = NULL;
-
-	/* XXX try spam filtering logic here? */
 
 	F3::input('title', function($value) use(&$messages) {
 		if (strlen($value) < 3)
@@ -77,6 +93,8 @@ F3::route('POST /event_add', function() {
 			$messages[] = "Invalid email address";
 		}
 	});
+
+	/* XXX need to make sure location and blurb are provided */
 
 	if (count($messages) > 0) {
 		F3::set("title", "Add an event");

@@ -14,7 +14,7 @@ function group_assoc($array, $key)
 
 function spam_check()
 {
-	$list = "dnsbl.sorbs.net; xbl.spamhaus.org; ubl.lashback.com";
+	$blocklists = "dnsbl.sorbs.net; xbl.spamhaus.org; ubl.lashback.com";
 	$addr = F3::realip();
 	$quad = implode('.', array_reverse(explode('.',$addr)));
 
@@ -37,7 +37,8 @@ F3::route('GET /', function() {
 	DB::sql("SELECT *
 		FROM events
 		WHERE date >= date('now', 'start of day') AND
-				date <= date('now', 'start of day', '+7 days')
+				date <= date('now', 'start of day', '+7 days') AND
+				approved == 0
 		ORDER BY date");
 
 	$results = F3::get('DB->result');
@@ -106,12 +107,12 @@ F3::route('POST /event_add', function() {
 
 		/* Make event to save */
 		$event = new Axon('events');
-		$event->title = F3::get('REQUEST.title');
+		$event->title = $_POST['title'];
 		$event->date = $date->format("Y-m-d H:i");
 		$event->location = $_POST['location'];
 		$event->blurb = $_POST['blurb'];
-		$event->email = F3::get('REQUEST.email');
-		$event->approved = md5sum($event->email . rand());
+		$event->email = $_POST['email'];
+		$event->approved = md5($event->email . rand());
 
 		/* Find the user record */
 		$user = new Axon('users');
@@ -124,11 +125,38 @@ F3::route('POST /event_add', function() {
 
 		$event->save();
 
-		/* Send a confirmation email */
+		/* Send confirm email */
+		F3::set("approved_id", $event->approved);
+		$message = Template::serve('templates/confirm_mail.txt');
 
-		F3::reroute("/../echo");
+		$to = $event->email;
+		$subject = "Manchester Echo: Please confirm your event";
+		$headers = "From: echo@manchesterecho.net";
+		mail($to, $subject, $message, $headers);
+
+		/* Back to the main page */
+		F3::reroute("/../echo"); /* XXX needs fixing for main page */
 	}
 
+});
+
+F3::route('GET /c/@id', function() {
+	F3::set("title", "Confirm event");
+
+	$id = F3::get('PARAMS.id');
+	if (!ctype_alnum($id))
+		$id = "";
+
+	DB::sql("UPDATE events SET approved=0 WHERE approved=:id", 
+			array(':id' => $id));
+
+	/* XXX find some way to relay to main page */
+	if (F3::get('DB->result') == 0)
+		$message = "No event to approve found!  Maybe you already approved it?";
+	else
+		$message = "Fail!";
+
+	F3::reroute("/../echo"); /* XXX needs fixing for main page */
 });
 
 /* admin routing... 

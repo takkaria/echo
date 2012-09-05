@@ -47,8 +47,7 @@ F3::route('GET /event_add', function() {
 F3::route('POST /event_add', function() {
 
 	$messages = array();
-	$parsed_date = NULL;
-	$parsed_time = NULL;
+	$date = NULL;
 
 	/* XXX try spam filtering logic here? */
 
@@ -59,16 +58,18 @@ F3::route('POST /event_add', function() {
 			$messages[] = "Title too long.";
 	});
 
-	F3::input('date', function($value) use(&$messages, &$parsed_date) {
-		$parsed_date = strptime($value, "%d-%m-%Y");
-		if (!$parsed_date)
+	F3::input('date', function($value) use(&$messages, &$date) {
+		$date = DateTime::createFromFormat("j-m-Y", $value);
+		if (!$date)
 			$messages[] = "Invalid date.";
 	});
 
-	F3::input('time', function($value) use(&$messages, &$parsed_time) {
-		$parsed_time = strptime($value, "%H:%M");
-		if (!$parsed_time)
+	F3::input('time', function($value) use(&$messages, &$date) {
+		$time = date_parse_from_format("H:i", $value);
+		if ($time['error_count'] > 0)
 			$messages[] = "Invalid time.";
+		if ($date)
+			$date->setTime($time['hour'], $time['minute']);
 	});
 
 	F3::input('email', function($value) use(&$messages) {
@@ -83,43 +84,39 @@ F3::route('POST /event_add', function() {
 		F3::set('messages', $messages);
 		echo Template::serve("templates/event_add.html");
 	} else {
-		/* Add the time to the already-established date */
-		$parsed_date['tm_min'] = $parsed_time['tm_min'];
-		$parsed_date['tm_hour'] = $parsed_time['tm_hour'];
+		/* XXX should check the event hasn't already been saved */
+
+		/* Make event to save */
+		$event = new Axon('events');
+		$event->title = F3::get('REQUEST.title');
+		$event->date = $date->format("Y-m-d H:i");
+		$event->location = $_POST['location'];
+		$event->blurb = $_POST['blurb'];
+		$event->submitter_email = F3::get('REQUEST.email');
 
 		/* Find the user record */
 		$user = new Axon('users');
-		$user->load('email="' . $_POST['email'] . '"'); /* XXX potential injection attack */
+		$user->load('email="' . F3::get('REQUEST.email') . '"'); /* XXX potential injection attack */
 
 		if ($user->dry()) {
-			/* send email to confirm, save event */
-		} else if ($user->banned) {
-			/* reject request */
+			$user->email = F3::get('REQUEST.email');
+			$user->validated = 0;
+			$user->approved = 0;
+			$user->banned = 0;
+			$user->save();
+
+			/* XXX Now send email to confirm... */
 		}
 
-		/* save event */
+		if ($user->approved)
+			$event->approved = 1;
 
-		if ($user->approved) {
-			/* set event to approved straight away */
-		}
+		if (!$user->banned)
+			$event->save();
+
+		F3::reroute("/../echo");
 	}
 
-/* CREATE TABLE events
-(
-	id INT auto_increment PRIMARY KEY,
-	
-	title TEXT,
-	date DATETIME,
-	location TEXT,
-	blurb TEXT,
-	facebook_id INT,
-	url_info TEXT,
-	
-	submitter_email TEXT,
-	approved BOOLEAN
-); */
-
-	}
 });
 
 /* admin routing... 

@@ -1,29 +1,25 @@
 CREATE TABLE events
 (
-	id INT auto_increment PRIMARY KEY,
-	
-	/* actual event data */
+	id INT PRIMARY KEY,
+
 	title TEXT,
 	date DATETIME,
 	location TEXT,
 	blurb TEXT,
 	facebook_id INT,
-	url_info TEXT,
+	url TEXT,
 	
 	/* maint stuff */
-	submitter_email TEXT,
-	approved BOOLEAN
+	email TEXT,
+	approved TEXT /* when this is a string, it's not approved */
 );
 
 CREATE TABLE users
 (
 	email TEXT PRIMARY KEY,
-	validated BOOLEAN,
-	approved BOOLEAN,
 	banned BOOLEAN
 );
 
-INSERT INTO users VALUES ( "takkaria@gmail.com", 1, 1, 0 );
-INSERT INTO events ( title, date, location, blurb, submitter_email, approved )
+INSERT INTO events ( title, date, location, blurb, email )
 	VALUES ( "Thing", datetime('now', 'start of day', '+21 hours'), "Wahlbar",
-	"A thing, hay!", "takkaria@gmail.com", 1);
+	"A thing, hay!", "takkaria@gmail.com");

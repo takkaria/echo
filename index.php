@@ -110,27 +110,21 @@ F3::route('POST /event_add', function() {
 		$event->date = $date->format("Y-m-d H:i");
 		$event->location = $_POST['location'];
 		$event->blurb = $_POST['blurb'];
-		$event->submitter_email = F3::get('REQUEST.email');
+		$event->email = F3::get('REQUEST.email');
+		$event->approved = md5sum($event->email . rand());
 
 		/* Find the user record */
 		$user = new Axon('users');
 		$user->load('email="' . F3::get('REQUEST.email') . '"'); /* XXX potential injection attack */
 
-		if ($user->dry()) {
-			$user->email = F3::get('REQUEST.email');
-			$user->validated = 0;
-			$user->approved = 0;
-			$user->banned = 0;
-			$user->save();
-
-			/* XXX Now send email to confirm... */
+		if (!$user->dry() && $user->banned) {
+			Template::serve("templates/spam.html");
+			die;
 		}
 
-		if ($user->approved)
-			$event->approved = 1;
+		$event->save();
 
-		if (!$user->banned)
-			$event->save();
+		/* Send a confirmation email */
 
 		F3::reroute("/../echo");
 	}

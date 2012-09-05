@@ -127,7 +127,7 @@ F3::route('POST /event_add', function() {
 
 		/* Send confirm email */
 		F3::set("approved_id", $event->approved);
-		$message = Template::serve('templates/confirm_mail.txt');
+		$message = Template::serve('templates/event_confirm_mail.txt');
 
 		$to = $event->email;
 		$subject = "Manchester Echo: Please confirm your event";

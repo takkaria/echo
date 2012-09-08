@@ -24,11 +24,11 @@ input, textarea { font-family: Arial; font-size: 14px; border: 1px solid #aaa; p
 <label for="title">Title:</label>
 <input type="text" name="title" id="title" value="{{@POST.title}}">
 
-<label for="date">Date: (dd-mm-yyyy)</label>
-<input type="text" name="date" id="date" value="{{@POST.date}}">
+<label for="date">Date:</label>
+<input type="text" name="date" id="date" value="{{@POST.date}}" placeholder="dd-mm-yyyy">
 
-<label for="time">Time: (hh:mm)</label>
-<input type="text" name="time" id="time" value="{{@POST.time}}">
+<label for="time">Time:</label>
+<input type="text" name="time" id="time" value="{{@POST.time}}" placeholder="hh:mm">
 <!-- XXX all day? -->
 
 <label for="location">Location:</label>

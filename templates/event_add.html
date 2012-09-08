@@ -1,16 +1,5 @@
 <F3:include href="templates/header.html" />
 
-<style>
-
-* { line-height: 1.3; }
-
-label, input, textarea { display: block; }
-input, textarea { font-family: Arial; font-size: 14px; border: 1px solid #aaa; padding: 4px; width: 30em; }
-
-#date, #time { width: 12em; }
-
-</style>
-
 <F3:check if="{{count(@messages)}}">
 <ul>
 <F3:repeat group="{{@messages}}" value="{{@message}}">

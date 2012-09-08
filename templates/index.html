@@ -1,7 +1,16 @@
 <F3:include href="templates/header.html" />
 
+<div id="news">
+<h2>News</h2>
+</div>
+
+<div id="events">
+<h2>Events</h2>
+<p class="sublinks"><a href="event_add">add your own event</a>
+
 <F3:repeat group="{{@events}}" key="{{@day}}" value="{{@events}}">
 <F3:include href="templates/event_week.html" />
 </F3:repeat>
+</div>
 
 <F3:include href="templates/footer.html" />

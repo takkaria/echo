@@ -1,10 +1,11 @@
 <?php
 require_once 'fatfree/lib/base.php';
 
+/* XXX Need to add a config file for header image, db info, etc. */
+
 date_default_timezone_set('UTC');
 
-function group_assoc($array, $key)
-{
+function group_assoc($array, $key) {
     $return = array();
     foreach ($array as $v) {
         $return[$v[$key]][] = $v;
@@ -12,8 +13,7 @@ function group_assoc($array, $key)
     return $return;
 }
 
-function spam_check()
-{
+function spam_check() {
 	$blocklists = "dnsbl.sorbs.net; xbl.spamhaus.org; ubl.lashback.com";
 	$addr = F3::realip();
 	$quad = implode('.', array_reverse(explode('.',$addr)));
@@ -26,7 +26,6 @@ function spam_check()
 		}
 	}
 }
-
 
 /* ---------- */
 

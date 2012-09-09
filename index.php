@@ -1,5 +1,5 @@
 <?php
-require_once 'fatfree/lib/base.php';
+require_once 'lib/fatfree/lib/base.php';
 
 /* XXX Need to add a config file for header image, db info, etc. */
 

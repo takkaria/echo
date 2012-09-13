@@ -46,8 +46,6 @@ CREATE TABLE feeds (
 
 CREATE VIEW post_info AS SELECT * FROM posts LEFT OUTER JOIN feeds ON posts.feed_url = feeds.feed_url;
 
-INSERT INTO posts ( id, title, link, date, summary ) VALUES ( "guid:124777hfb78vbyds87447", "celebrate and save library walk today", "http://nowhere-fest.blogspot.com/2012/09/celebrate-and-save-library-walk-today.html", datetime('now', '-1 day'), "Please, please come and loiter this evening (September 11th) - we'll be celebrating library walk - join us at 6pm Piccadilly Gardens where we will embark on a beating the bounds with music, banners, badges, biscuits, a great range of speakers and a few surprises. We're celebrating a beautiful place, public space, the right to roam and our twentieth century heritage, be wonderful to see lots of loiterers there." );
-
 INSERT INTO feeds ( feed_url, site_url, title) VALUES (
 "http://insidethem60.journallocal.co.uk/feed/",
 "http://insidethem60.journallocal.co.uk/",

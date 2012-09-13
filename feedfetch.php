@@ -9,9 +9,16 @@ require_once 'lib/fatfree/lib/base.php';
 require_once 'lib/simplepie_1.3.compiled.php';
 require_once 'lib/simple_html_dom.php';
 
-function do_summary_magic($summary) {
-	/* Strip html entities first */
-	$summary = strip_tags(html_entity_decode($summary, ENT_QUOTES, 'UTF-8'));
+function deentity($text) {
+	// First nuke non-breaking spaces
+	$text = preg_replace("/&nbsp;/", " ", $text);
+
+	// Then strip tags and entities
+	return html_entity_decode($text, ENT_QUOTES, 'UTF-8');
+}
+
+function trim_summary($summary) {
+	$summary = strip_tags($summary);
 
 	// apparently we need to strip out any unfinished sentences...
 	// Inside the M60 (wordpress) abbreviates like:
@@ -26,8 +33,6 @@ function do_summary_magic($summary) {
 }
 
 function summary_from_content($content) {
-	$content = strip_tags(html_entity_decode($content, ENT_QUOTES, 'UTF-8'));
-
 	// strategy: try and grab the first paragraph
 	// failing that, grab the chunk of text up until the first double-<br>
 	$html = str_get_html($content);
@@ -41,7 +46,16 @@ function summary_from_content($content) {
 	}
 
 	$content = substr($content, 0, 500);
-	$content = do_summary_magic($content);
+	$content = trim_summary($content);
+
+	// Check for cut-off URLs
+	// strategy: find the last space in the text
+	// and see if the text after is 'http'
+	if (preg_match('/^ (www|http)/', strrchr($content, " "))) {
+		// Then just capture up until the last space and re-do the trimming
+		$content = preg_replace('/(.*) .*/', "$1", $content);
+		$content = trim_summary($content);
+	}
 
 	return $content;
 }
@@ -66,6 +80,9 @@ function fetch_feed($url) {
 	$feed->init();
 
 	foreach ($feed->get_items() as $post) {
+		if (!$post->get_title())
+			break;
+
 		$dbstore = array(
 			':feed_url' => $url,
 			':id' => $post->get_id(),
@@ -77,14 +94,11 @@ function fetch_feed($url) {
 
 		$summary = $post->get_description(true);
 		if ($summary)
-			$summary = do_summary_magic($summary);
+			$summary = trim_summary(deentity($summary));
 		else
-			$summary = summary_from_content($post->get_content(true));
+			$summary = summary_from_content(deentity($post->get_content(true)));
 
 		$dbstore[':summary'] = $summary;
-
-		// XXX Try not to cut off URLs mid-flow
-		// XXX Consider not adding title-less posts
 
 		DB::sql('INSERT OR IGNORE INTO POSTS ( feed_url, id, title, link, date, image, summary ) VALUES ( :feed_url, :id, :title, :link, :date, :image, :summary );', $dbstore);
 	}

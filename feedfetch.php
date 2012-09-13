@@ -1,5 +1,7 @@
 <?php
 
+// XXX need to build an admin interface to add/remove feeds
+
 if (php_sapi_name() != 'cli')
 	exit(1);
 

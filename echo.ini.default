@@ -1,0 +1,14 @@
+; This is an echo config file
+
+[general]
+name = Manchester Echo
+email = echo@manchesterecho.net
+
+[spam]
+blocklist[] = dnsbl.sorbs.net
+blocklist[] = xbl.spamhaus.org
+blocklist[] = ubl.lashback.com
+
+[db]
+events = events.sqlite
+feeds = feeds.sqlite

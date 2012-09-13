@@ -1,9 +1,8 @@
 <?php
 require_once 'lib/fatfree/lib/base.php';
 
-/* XXX Need to add a config file for header image, db info, etc. */
-
 date_default_timezone_set('UTC');
+$options = parse_ini_file('echo.ini', true);
 
 function group_assoc($array, $key) {
     $return = array();
@@ -14,11 +13,13 @@ function group_assoc($array, $key) {
 }
 
 function spam_check() {
-	$blocklists = "dnsbl.sorbs.net; xbl.spamhaus.org; ubl.lashback.com";
+	global $options;
+
+	$blocklist = $options['spam']['blocklist'];
 	$addr = F3::realip();
 	$quad = implode('.', array_reverse(explode('.',$addr)));
 
-	foreach (F3::split($blocklists) as $list) {
+	foreach ($blocklist as $list) {
 		// Check against DNS blacklist
 		if (gethostbyname($quad.'.'.$list) != $quad.'.'.$list) {
 			Template::serve("templates/spam.html");
@@ -27,10 +28,26 @@ function spam_check() {
 	}
 }
 
+function send_confirm_email($to, $approved_hash) {
+	global $options;
+
+	/* Send confirm email */
+	F3::set("approved_id", $approved_hash);
+	$message = Template::serve('templates/event_confirm_mail.txt');
+
+	$subject = $options['general']['name'] . ": Please confirm your event";
+	$headers = "From: " . $options['general']['email'];
+	mail($to, $subject, $message, $headers);
+}
+
+function reroute($where) {
+	F3::reroute($where);
+}
+
 /* ---------- */
 
-F3::set('DB', new DB("sqlite:events.sqlite"));
-F3::set('feeds', new DB("sqlite:feeds.sqlite"));
+F3::set('DB', new DB("sqlite:" . $options['db']['events']));
+F3::set('feeds', new DB("sqlite:" . $options['db']['feeds']));
 
 F3::route('GET /', function() {
 
@@ -147,17 +164,8 @@ F3::route('POST /event_add', function() {
 
 		$event->save();
 
-		/* Send confirm email */
-		F3::set("approved_id", $event->approved);
-		$message = Template::serve('templates/event_confirm_mail.txt');
-
-		$to = $event->email;
-		$subject = "Manchester Echo: Please confirm your event";
-		$headers = "From: echo@manchesterecho.net";
-		mail($to, $subject, $message, $headers);
-
-		/* Back to the main page */
-		F3::reroute("/../echo"); /* XXX needs fixing for main page */
+		send_confirm_email($event->email, $event->approved);
+		reroute("/");
 	}
 
 });
@@ -178,7 +186,7 @@ F3::route('GET /c/@id', function() {
 	else
 		$message = "Fail!";
 
-	F3::reroute("/../echo"); /* XXX needs fixing for main page */
+	reroute("/");
 });
 
 /* admin routing... 

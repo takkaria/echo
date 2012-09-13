@@ -2,6 +2,10 @@
 
 <div id="news">
 <h2>News</h2>
+
+<F3:repeat group="{{@posts}}" value="{{@post}}">
+<F3:include href="templates/post.html" />
+</F3:repeat>
 </div>
 
 <div id="events">

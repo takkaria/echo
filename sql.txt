@@ -8,7 +8,9 @@ CREATE TABLE events
 	blurb TEXT,
 	facebook_id INT,
 	url TEXT,
-	
+
+	/* XXX add something like film/meeting/etc. to allow filters)
+
 	/* maint stuff */
 	email TEXT,
 	approved TEXT /* when this is a string, it's not approved */
@@ -23,3 +25,28 @@ CREATE TABLE users
 INSERT INTO events ( title, date, location, blurb, email )
 	VALUES ( "Thing", datetime('now', 'start of day', '+21 hours'), "Wahlbar",
 	"A thing, hay!", "takkaria@gmail.com");
+
+-- 
+
+CREATE TABLE posts (
+	id TEXT PRIMARY KEY,
+	title TEXT,
+	link TEXT,
+	date DATETIME,
+	summary TEXT,
+	image TEXT,	 /* this is an URL... maybe make it a data: link? */
+	feed_url TEXT
+);
+
+CREATE TABLE feeds (
+	feed_url TEXT PRIMARY KEY,
+	site_url TEXT,
+	title TEXT
+);
+
+INSERT INTO posts ( id, title, link, date, summary ) VALUES ( "guid:124777hfb78vbyds87447", "celebrate and save library walk today", "http://nowhere-fest.blogspot.com/2012/09/celebrate-and-save-library-walk-today.html", datetime('now', '-1 day'), "Please, please come and loiter this evening (September 11th) - we'll be celebrating library walk - join us at 6pm Piccadilly Gardens where we will embark on a beating the bounds with music, banners, badges, biscuits, a great range of speakers and a few surprises. We're celebrating a beautiful place, public space, the right to roam and our twentieth century heritage, be wonderful to see lots of loiterers there." );
+
+INSERT INTO feeds ( feed_url, site_url, title) VALUES (
+"http://insidethem60.journallocal.co.uk/feed/",
+"http://insidethem60.journallocal.co.uk/",
+"Inside the M60" );

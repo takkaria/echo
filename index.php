@@ -30,9 +30,11 @@ function spam_check() {
 /* ---------- */
 
 F3::set('DB', new DB("sqlite:events.sqlite"));
+F3::set('feeds', new DB("sqlite:feeds.sqlite"));
 
 F3::route('GET /', function() {
 
+	/* Events */
 	DB::sql("SELECT *
 		FROM events
 		WHERE date >= date('now', 'start of day') AND
@@ -52,6 +54,23 @@ F3::route('GET /', function() {
 	$sorted = group_assoc($results, "date");
 	F3::set('events', $sorted);
 
+	/* Feed posts */
+	DB::sql("SELECT *
+		FROM posts
+		ORDER BY date DESC
+		LIMIT 0, 10", NULL, 0, 'feeds');
+
+	$results = F3::get('feeds->result');
+	foreach ($results as &$post) {
+		$ts = strtotime($post['date']);
+
+		$post['time'] = strftime('%H:%M', $ts);
+		$post['date'] = strftime('%a %e %B', $ts);
+	}
+
+	F3::set('posts', $results);
+
+	/* Serve it up! */
 	F3::set("title", "Echo");
 	echo Template::serve("templates/index.html");
 });

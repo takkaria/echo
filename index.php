@@ -56,7 +56,7 @@ F3::route('GET /', function() {
 
 	/* Feed posts */
 	DB::sql("SELECT *
-		FROM posts
+		FROM post_info
 		ORDER BY date DESC
 		LIMIT 0, 10", NULL, 0, 'feeds');
 
@@ -66,6 +66,10 @@ F3::route('GET /', function() {
 
 		$post['time'] = strftime('%H:%M', $ts);
 		$post['date'] = strftime('%a %e %B', $ts);
+		$post['feed'] = array();
+		$post['feed']['url'] = $post['feed_url'];
+		$post['feed']['title'] = $post['title:1'];
+		$post['feed']['site'] = $post['site_url'];
 	}
 
 	F3::set('posts', $results);

@@ -12,6 +12,8 @@ h1, h2, h3, h4, h5, h6 { font-family: 'Enriqueta'; }
 
 h1 { font-size: 140%; margin: 0; margin-bottom: -20px; }
 
+.msg { width: 40em; margin: 1em 1em 0 1em; padding: 1em 1.5em; box-shadow: 5px 5px 5px #fcc; border-radius: 10px; background-color: #f77; font-size: 120%; font-weight: bold; }
+
 /** Main page formatting **/
 #news { width: 35em; }
 #events { width: 25em; }
@@ -38,3 +40,8 @@ input, textarea { font-family: Arial; font-size: 14px; border: 1px solid #aaa; p
 </style>
 
 <h1><img src="/~takkaria/echo/images/echo.png" alt="Echo" height="130"></h1>
+
+<F3:check if="{{@message}}">
+	<p class="msg">{{@message}}</p>
+	<!-- XXX add some kind of 'close message" button -->
+</F3:check>

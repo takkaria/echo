@@ -48,6 +48,8 @@ function reroute($where) {
 
 F3::set('DB', new DB("sqlite:" . $options['db']['events']));
 F3::set('feeds', new DB("sqlite:" . $options['db']['feeds']));
+if (isset($_GET['msg']))
+	F3::set('message', strip_tags($_GET['msg']));
 
 F3::route('GET /', function() {
 
@@ -180,13 +182,12 @@ F3::route('GET /c/@id', function() {
 	DB::sql("UPDATE events SET approved=0 WHERE approved=:id", 
 			array(':id' => $id));
 
-	/* XXX find some way to relay to main page */
 	if (F3::get('DB->result') == 0)
 		$message = "No event to approve found!  Maybe you already approved it?";
 	else
-		$message = "Fail!";
+		$message = "Event approved :)";
 
-	reroute("/");
+	reroute("/?msg=" . urlencode($message));
 });
 
 /* admin routing... 

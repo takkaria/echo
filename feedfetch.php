@@ -98,6 +98,9 @@ function fetch_feed($url) {
 		else
 			$summary = summary_from_content(deentity($post->get_content(true)));
 
+		// XXX remove title if it's duplicated inside content
+		// and date too?
+
 		$dbstore[':summary'] = $summary;
 
 		DB::sql('INSERT OR IGNORE INTO POSTS ( feed_url, id, title, link, date, image, summary ) VALUES ( :feed_url, :id, :title, :link, :date, :image, :summary );', $dbstore);

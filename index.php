@@ -44,6 +44,62 @@ function reroute($where) {
 	F3::reroute($where);
 }
 
+function admin_check() {
+	// XXX fill this in
+}
+
+function event_get($where, $single = FALSE) {
+	DB::sql("SELECT * FROM events WHERE " . $where . " ORDER BY date");
+	$r = F3::get('DB->result');
+	if ($single)
+		$r = $r[0];
+	return $r;
+}
+
+function event_parse_form_data(&$messages) {
+	F3::input('title', function($value) use(&$messages) {
+		if (strlen($value) < 3)
+			$messages[] = "Title too short.";
+		else if (strlen($value) > 140)
+			$messages[] = "Title too long.";
+	});
+
+	F3::input('date', function($value) use(&$messages, &$date) {
+		$date = DateTime::createFromFormat("Y-m-j", $value);
+		if (!$date)
+			$messages[] = "Invalid date.";
+	});
+
+	F3::input('time', function($value) use(&$messages, &$date) {
+		$time = date_parse_from_format("H:i", $value);
+		if ($time['error_count'] > 0)
+			$messages[] = "Invalid time.";
+		if ($date)
+			$date->setTime($time['hour'], $time['minute']);
+	});
+
+	F3::input('email', function($value) use(&$messages) {
+		if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+			$messages[] = "Invalid email address";
+		}
+	});
+
+	/* XXX need to make sure location and blurb are provided */
+
+	if (count($messages) > 0)
+		return;
+
+	$event = array();
+	$event['title'] = $_POST['title'];
+	$event['date'] = $date->format("Y-m-d H:i");
+	$event['location'] = $_POST['location'];
+	$event['blurb'] = $_POST['blurb'];
+	$event['email'] = $_POST['email'];
+
+	return $event;
+}
+
+
 /* ---------- */
 
 F3::set('DB', new DB("sqlite:" . $options['db']['events']));
@@ -54,14 +110,11 @@ if (isset($_GET['msg']))
 F3::route('GET /', function() {
 
 	/* Events */
-	DB::sql("SELECT *
-		FROM events
-		WHERE date >= date('now', 'start of day') AND
-				date <= date('now', 'start of day', '+7 days') AND
-				approved == 0
-		ORDER BY date");
+	$where = "date >= date('now', 'start of day') AND " .
+			"date <= date('now', 'start of day', '+7 days') AND " .
+			"approved == 0";
+	$results = event_get($where);
 
-	$results = F3::get('DB->result');
 	foreach ($results as &$event) {
 		$ts = strtotime($event['date']);
 
@@ -98,45 +151,16 @@ F3::route('GET /', function() {
 	echo Template::serve("templates/index.html");
 });
 
-F3::route('GET /event_add', function() {
+F3::route('GET /event/add', function() {
 	F3::set("title", "Add an event");
 	echo Template::serve("templates/event_add.html");
 });
 
-F3::route('POST /event_add', function() {
+F3::route('POST /event/add', function() {
 	spam_check();
 
 	$messages = array();
-	$date = NULL;
-
-	F3::input('title', function($value) use(&$messages) {
-		if (strlen($value) < 3)
-			$messages[] = "Title too short.";
-		else if (strlen($value) > 140)
-			$messages[] = "Title too long.";
-	});
-
-	F3::input('date', function($value) use(&$messages, &$date) {
-		$date = DateTime::createFromFormat("j-m-Y", $value);
-		if (!$date)
-			$messages[] = "Invalid date.";
-	});
-
-	F3::input('time', function($value) use(&$messages, &$date) {
-		$time = date_parse_from_format("H:i", $value);
-		if ($time['error_count'] > 0)
-			$messages[] = "Invalid time.";
-		if ($date)
-			$date->setTime($time['hour'], $time['minute']);
-	});
-
-	F3::input('email', function($value) use(&$messages) {
-		if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
-			$messages[] = "Invalid email address";
-		}
-	});
-
-	/* XXX need to make sure location and blurb are provided */
+	$event = event_parse_form_data($messages);
 
 	if (count($messages) > 0) {
 		F3::set("title", "Add an event");
@@ -144,17 +168,6 @@ F3::route('POST /event_add', function() {
 		F3::set('messages', $messages);
 		echo Template::serve("templates/event_add.html");
 	} else {
-		/* XXX should check the event hasn't already been saved */
-
-		/* Make event to save */
-		$event = new Axon('events');
-		$event->title = $_POST['title'];
-		$event->date = $date->format("Y-m-d H:i");
-		$event->location = $_POST['location'];
-		$event->blurb = $_POST['blurb'];
-		$event->email = $_POST['email'];
-		$event->approved = md5($event->email . rand());
-
 		/* Find the user record */
 		$user = new Axon('users');
 		$user->load('email="' . F3::get('REQUEST.email') . '"'); /* XXX potential injection attack */
@@ -164,12 +177,17 @@ F3::route('POST /event_add', function() {
 			die;
 		}
 
-		$event->save();
+		/* XXX should check the event hasn't already been saved */
+		/* Make event to save */
+		$e = new Axon('events');
+		F3::set('event', $event);
+		$e->copyFrom('event');
+		$event->approved = md5($event->email . rand());
+		$e->save();
 
 		send_confirm_email($event->email, $event->approved);
 		reroute("/");
 	}
-
 });
 
 F3::route('GET /c/@id', function() {
@@ -188,6 +206,46 @@ F3::route('GET /c/@id', function() {
 		$message = "Event approved :)";
 
 	reroute("/?msg=" . urlencode($message));
+});
+
+F3::route('GET /event/@id', function() {
+	admin_check();
+
+	$id = intval(F3::get('PARAMS.id'));
+	$event = event_get("id = " . $id, TRUE);
+
+	// Split date into date/time
+	list ($event['date'], $event['time']) = explode(" ", $event['date']);
+
+	F3::set('POST', $event);
+
+	F3::set("title", "Edit event");
+	echo Template::serve("templates/event_add.html");
+});
+
+F3::route('POST /event/@id', function() {
+	admin_check();
+	spam_check();
+
+	$id = intval(F3::get('PARAMS.id'));
+
+	$messages = array();
+	$event = event_parse_form_data($messages);
+
+	if (count($messages) > 0) {
+		F3::set("title", "Edit event");
+		F3::set('POST', F3::scrub($_POST));
+		F3::set('messages', $messages);
+		echo Template::serve("templates/event_add.html");
+	} else {
+		/* Make event to save */
+		$e = new Axon('events');
+		$e->load('id=' . $id);
+		F3::set('event', $event);
+		$e->copyFrom('event');
+		$e->save();
+		reroute("/event/" . $id . "?msg=Event%20saved.");
+	}
 });
 
 /* admin routing... 

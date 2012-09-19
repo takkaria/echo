@@ -181,7 +181,7 @@ F3::route('GET /', function() {
 
 	$sorted = array();
 	foreach ($results as $e)
-		$sorted[$e->datetime->format("A e B")][] = $e;
+		$sorted[$e->datetime->format("l j F")][] = $e;
 
 	F3::set('events', $sorted);
 

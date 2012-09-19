@@ -11,23 +11,23 @@
 <form method="POST" action="?">
 
 <label for="title">Title:</label>
-<input type="text" name="title" id="title" value="{{@POST.title}}">
+<input type="text" name="title" id="title" value="{{@title}}">
 
 <label for="date">Date:</label>
-<input type="text" name="date" id="date" value="{{@POST.date}}" placeholder="yyyy-mm-dd">
+<input type="text" name="date" id="date" value="{{@date}}" placeholder="yyyy-mm-dd">
 
 <label for="time">Time:</label>
-<input type="text" name="time" id="time" value="{{@POST.time}}" placeholder="hh:mm">
+<input type="text" name="time" id="time" value="{{@time}}" placeholder="hh:mm">
 <!-- XXX all day? -->
 
 <label for="location">Location:</label>
-<input type="text" name="location" id="location" value="{{@POST.location}}">
+<input type="text" name="location" id="location" value="{{@location}}">
 
 <label for="blurb">Short blurb:</label>
-<textarea name="blurb" id="blurb" rows="4" cols="40">{{@POST.blurb}}</textarea>
+<textarea name="blurb" id="blurb" rows="4" cols="40">{{@blurb}}</textarea>
 
 <label for="email">Your email:</label>
-<input type="text" name="email" id="email" value="{{@POST.email}}">
+<input type="text" name="email" id="email" value="{{@email}}">
 
 <!-- XXX facebook, more info URL -->
 

@@ -1,10 +1,11 @@
 <div class="event">
-<h4 id="{{@event.id}}">{{@event.title}}</h4>
-<p class="wherewhen">{{@event.time}} @ {{@event.location}}</p>
-<p class="desc"><F3:check if="{{@event.facebook_id}}">
+<h4 id="{{@event->id}}">{{@event->title}}</h4>
+<p class="wherewhen">{{@event->datetime->format("H:M")}} @ {{@event->location}}</p>
+<p class="desc">{{* <F3:check if="{{@event.facebook_id}}">
 <a href="http://facebook.com/events/{{@event.facebook_id}}"><img src="fb.png" alt="Fb"></a>
-</F3:check>{{@event.blurb}}
-<F3:check if="{{@event.url}}">
-<a href="{{@event.url}}">more info</a>
-</F3:check></p>
+</F3:check>*}}
+{{@event->blurb}}
+{{* <F3:check if="{{@event->url}}">
+<a href="{{@event->url}}">more info</a>
+</F3:check> *}}</p>
 </div>

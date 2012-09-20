@@ -109,7 +109,8 @@ function fetch_feed($url) {
 }
 
 /* Connect to DB */
-F3::set('DB', new DB("sqlite:feeds.sqlite"));
+$options = parse_ini_file('echo.ini', true);
+F3::set('DB', new DB("sqlite:" . $options['db']['feeds']));
 
 if ($argc == 2) {
 	/* Fetch the provided feed and dump it */

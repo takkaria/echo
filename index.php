@@ -314,6 +314,47 @@ F3::route('GET /events', function() {
 	echo Template::serve("templates/events.html");
 });
 
+F3::route('GET /feeds', function() {
+	admin_check();
+
+	DB::sql("SELECT * FROM feeds", NULL, 0, 'feeds');
+
+	$results = F3::get('feeds->result');
+//	foreach ($results as &$feeds) {
+//	}
+	F3::set('feeds', $results);
+
+	F3::set('title', "Feeds");
+	echo Template::serve("templates/feeds.html");	
+});
+
+F3::route('POST /feeds/add', function() {
+
+	require_once 'lib/simplepie_1.3.compiled.php';
+
+	$feed = new SimplePie();
+	$feed->set_feed_url($_POST['url']);
+	$feed->init();
+	$feed->handle_content_type();
+
+	$values = array(
+		':feed' => $feed->feed_url,
+		':site' => $feed->get_link(),
+		':title' => $feed->get_title()
+	);
+
+	DB::sql("INSERT OR IGNORE INTO feeds " .
+			"(feed_url, site_url, title) VALUES (:feed, :site, :title)",
+			$values, 0, 'feeds');
+
+	if (F3::get('DB->result') != 0)
+		$message = "Failed to add feed to database.";
+	else
+		$message = "Feed added.";
+
+	reroute("/feeds?msg=" . $message);
+});
+
 /* admin routing... 
 
 /admin {

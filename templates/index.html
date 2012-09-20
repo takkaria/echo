@@ -12,9 +12,11 @@
 <h2>Events</h2>
 <p class="sublinks"><a href="event/add">add your own event</a>
 
-<F3:repeat group="{{@events}}" key="{{@day}}" value="{{@events}}">
+<F3:repeat group="{{@group_events('l j F')}}" key="{{@day}}" value="{{@events}}">
 <F3:include href="templates/event_week.html" />
 </F3:repeat>
+
+<p><a href="events">more events this month</a></p>
 </div>
 
 <F3:include href="templates/footer.html" />

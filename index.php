@@ -166,6 +166,16 @@ function set_event_data_from_Event($event) {
 
 /* ---------- */
 
+F3::set('group_events', function($format) {
+	$events = F3::get('events');
+	$sorted = array();
+	foreach ($events as $e)
+		$sorted[$e->datetime->format($format)][] = $e;
+	return $sorted;
+});
+
+/* ---------- */
+
 F3::set('DB', new DB("sqlite:" . $options['db']['events']));
 F3::set('feeds', new DB("sqlite:" . $options['db']['feeds']));
 if (isset($_GET['msg']))
@@ -178,12 +188,7 @@ F3::route('GET /', function() {
 			"date <= date('now', 'start of day', '+7 days') AND " .
 			"approved == 0";
 	$results = Event::load($where);
-
-	$sorted = array();
-	foreach ($results as $e)
-		$sorted[$e->datetime->format("l j F")][] = $e;
-
-	F3::set('events', $sorted);
+	F3::set('events', $results);
 
 	/* Feed posts */
 	DB::sql("SELECT *
@@ -291,6 +296,22 @@ F3::route('POST /event/@id', function() {
 		$event->save();
 		reroute("/event/" . $id . "?msg=Event%20saved.");
 	}
+});
+
+F3::route('GET /events', function() {
+
+	$when = F3::get('PARAMS.when');
+
+	// 'when' will look like ''
+
+	/* Events */
+	$where = "date >= date('now', 'start of month') AND " .
+			"date <= date('now', 'start of month', '+30 days') AND " .
+			"approved == 0";
+	$results = Event::load($where);
+	F3::set('events', $results);
+	F3::set('title', "Events");
+	echo Template::serve("templates/events.html");
 });
 
 /* admin routing... 

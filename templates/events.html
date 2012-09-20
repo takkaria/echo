@@ -1,0 +1,27 @@
+<F3:include href="templates/header.html" />
+
+<div id="event">
+<h2>Events</h2>
+<p class="sublinks"><a href="event/add">add your own event</a>
+
+<style scoped>
+h4 { margin: 0; padding: 0; }
+.date { display: block; width: 4em; float: left; clear: both; font-size: 110%; }
+.time { display: block; width: 3em; font-size: 90%; margin-left: 5em; float: left; }
+.title { display: block; font-weight: bold; float: left; }
+</style>
+
+<F3:repeat group="{{@group_events('D j')}}" key="{{@day}}" value="{{@events}}">
+<h4 class="date">{{@day}}</h4>
+
+<F3:repeat group="{{@events}}" value="{{@event}}">
+<div class="event">
+	<span class="time">{{@event->datetime->format("H:i")}}</span>
+	<span class="title" id="{{@event->id}}">{{@event->title}}</span>
+</div>
+</F3:repeat>
+
+</F3:repeat>
+</div>
+
+<F3:include href="templates/footer.html" />

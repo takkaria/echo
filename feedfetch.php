@@ -61,6 +61,8 @@ function summary_from_content($content) {
 }
 
 function find_image($content) {
+	if (!$content) return;
+
 	// find an image
 	$html = str_get_html($content);
 	$img = $html->find('img', 0);

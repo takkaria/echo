@@ -1,35 +1,48 @@
 <!DOCTYPE html>
 <title>{{@title}}</title>
 <style>
-@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro);
-@import url(http://fonts.googleapis.com/css?family=Enriqueta:400,700);
+@import url(http://fonts.googleapis.com/css?family=Raleway:800,500);
 
-html { background-color: #eee; margin: 0; }
+html { background-color: #eee; margin: 0;
+		font-size: 16px; line-height: 1.25; font-family: Arial; }
 
-* { font-family: 'Source Sans Pro';  font-size: 15px; line-height: 1.25; }
+/** Headers */
+h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', 'Source Sans Pro';  }
+h1 { font-size: 150%; margin: 0; margin-bottom: -20px; }
+h2 { margin: 0; font-size: 150%; font-weight: normal; }
 
-h1, h2, h3, h4, h5, h6 { font-family: 'Enriqueta'; }
-
-h1 { font-size: 140%; margin: 0; margin-bottom: -20px; }
-
+/** Message box - hacky but works */
 .msg { width: 40em; margin: 1em 1em 0 1em; padding: 1em 1.5em; box-shadow: 5px 5px 5px #fcc; border-radius: 10px; background-color: #f77; font-size: 120%; font-weight: bold; }
 
-/** Main page formatting **/
+/** Sections are used to contain page content */
+section { float: left; background-color: white; border-radius: 10px; margin: 1em; padding: 1em; box-shadow: 5px 5px 5px #ddd; }
+
+/** Feeds page page **/
+table { margin: 0; padding: 0; border-collapse: collapse; }
+tr, th, td { border: 1px solid #ccc; margin: 0; padding: 2px 6px; }
+th { background-color: #eee; }
+
+/** Front page: formatting **/
 #news { width: 35em; }
 #events { width: 25em; }
-#news, #events { float: left; background-color: white; border-radius: 10px; margin: 1em; padding: 1em; box-shadow: 5px 5px 5px #ddd; }
 
-h2 { margin: 0; font-size: 130%; }
-.sublinks { margin-top: 0; text-align: right; margin-top: -20px; }
+/** Events */
+#events .sublinks { margin-top: 0; text-align: right; margin-top: -20px; }
+#events h3 { letter-spacing: 1px; font-weight: normal; border-bottom: 1px solid black; margin-bottom: 0em; clear: both; font-size: 100%; }
 
-#events h3 { letter-spacing: 1px; font-weight: normal; border-bottom: 1px solid black; margin-bottom: 0em; clear: both; }
+.event .time-s { font-variant: small-caps; font-family: 'Raleway'; font-size: 120%; font-weight: ; float: left; }
+.event .time-l { font-variant: small-caps; font-family: 'Raleway'; font-size: 180%; font-weight: ; float: left; margin-top: -5px; }
+.event .what { margin-left: 4em; }
+.event .where { font-family: Raleway; }
 
 .post .more { font-style: italic; }
 
 .event, .post { margin: 1em 0; clear: both; }
-.event h4, .post h4 { margin: 0; }
+.event h4, .post h4 { margin: 0; font-size: 125%; }
 .event p, .post p { margin: 0; }
-.event p.wherewhen, .post p.date { font-family: 'Enriqueta'; font-style: italic; font-size: 90%; margin-bottom: 0.2em; }
+.event p.where, .post p.date { font-style: italic; font-size: 75%; margin-bottom: 0.5em; }
+
+.event .desc { font-size: 11pt; }
 
 .post img { float: right; padding-left: 10px }
 

@@ -1,13 +1,5 @@
 <F3:include href="templates/header.html" />
 
-<section id="news">
-<h2>News</h2>
-
-<F3:repeat group="{{@posts}}" value="{{@post}}">
-<F3:include href="templates/post.html" />
-</F3:repeat>
-</section>
-
 <section id="events">
 <h2>Upcoming events</h2>
 <p class="sublinks"><a href="event/add">add your own event</a>
@@ -18,5 +10,15 @@
 
 <p><a href="events">more events this month</a></p>
 </section>
+
+
+<section id="news">
+<h2>News</h2>
+
+<F3:repeat group="{{@posts}}" value="{{@post}}">
+<F3:include href="templates/post.html" />
+</F3:repeat>
+</section>
+
 
 <F3:include href="templates/footer.html" />

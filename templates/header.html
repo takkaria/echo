@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <title>{{@title}}</title>
 <style>
-@import url(http://fonts.googleapis.com/css?family=Raleway:800,500);
+@import url(http://fonts.googleapis.com/css?family=Raleway:800,700,500);
 
 html { background-color: #eee; margin: 0;
-		font-size: 16px; line-height: 1.25; font-family: Arial; }
+		font-size: 11pt; line-height: 1.25; font-family: Arial; }
+
+a { text-decoration: none; color: blue; }
+a:hover { text-decoration: underline; }
 
 /** Headers */
 h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', 'Source Sans Pro';  }
-h1 { font-size: 150%; margin: 0; margin-bottom: -20px; }
-h2 { margin: 0; font-size: 150%; font-weight: normal; }
+h1 { font-size: 32px; margin: 0; margin-bottom: -20px; }
+h2 { margin: 0; font-size: 24px; font-weight: normal; }
+h4 { font-size: 16px; }
 
 /** Message box - hacky but works */
 .msg { width: 40em; margin: 1em 1em 0 1em; padding: 1em 1.5em; box-shadow: 5px 5px 5px #fcc; border-radius: 10px; background-color: #f77; font-size: 120%; font-weight: bold; }
@@ -24,26 +28,36 @@ th { background-color: #eee; }
 
 /** Front page: formatting **/
 #news { width: 35em; }
-#events { width: 25em; }
+#events { width: 380px; }
+
+/** Shared events and posts */
+.event, .post { margin: 1em 0; clear: both; }
+.event p, .post p { margin: 0; }
+.event h4, .post h4 { margin: 0; }
+
+/*h2 { background-color: #89CFF0; margin: -12px; border-radius: 10px; padding: 12px; box-shadow: 0 0 3px 3px white inset; } */
 
 /** Events */
 #events .sublinks { margin-top: 0; text-align: right; margin-top: -20px; }
-#events h3 { letter-spacing: 1px; font-weight: normal; border-bottom: 1px solid black; margin-bottom: 0em; clear: both; font-size: 100%; }
+#events h3 { letter-spacing: 1px; font-weight: normal; border-bottom: 1px solid black; margin-bottom: 0em; clear: both; }
 
-.event .time-s { font-variant: small-caps; font-family: 'Raleway'; font-size: 120%; font-weight: ; float: left; }
-.event .time-l { font-variant: small-caps; font-family: 'Raleway'; font-size: 180%; font-weight: ; float: left; margin-top: -5px; }
-.event .what { margin-left: 4em; }
-.event .where { font-family: Raleway; }
+.event .time-s { font-variant: small-caps; font-family: 'Raleway'; font-size: 120%; float: left; padding-right: 10px; padding-bottom: 4px; }
+.event .time-l { font-variant: small-caps; font-family: 'Raleway'; font-size: 180%; float: left; margin-top: -5px; padding-right: 10px; }
+
+.event h4 { font-size: 20px; }
+.event .what { }
+.event .where { font-family: Raleway; font-style: italic; font-size: 75%; margin-bottom: 0.5em; }
+
+.event .desc { }
+
+/** Posts */
+#news h2 { border-bottom: 1px solid black; }
+
+.post { margin-bottom: 2em; }
+.post h4 { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
+.post .date { font-size: 75%; margin-top: 0.5em; text-align: right; }
 
 .post .more { font-style: italic; }
-
-.event, .post { margin: 1em 0; clear: both; }
-.event h4, .post h4 { margin: 0; font-size: 125%; }
-.event p, .post p { margin: 0; }
-.event p.where, .post p.date { font-style: italic; font-size: 75%; margin-bottom: 0.5em; }
-
-.event .desc { font-size: 11pt; }
-
 .post img { float: right; padding-left: 10px }
 
 /** Event add formatting **/

@@ -210,9 +210,9 @@ F3::set('formatdate', function($date) {
 
 	$diff = intval($today->diff($event)->format('%a'));
 
-	if ($diff == 3)
+	if ($diff == 0)
 		return "Today";
-	if ($diff == 4)
+	if ($diff == 1)
 		return "Tomorrow";
 	else
 		return $event->format($format);

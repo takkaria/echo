@@ -1,5 +1,8 @@
+<!DOCTYPE html>
+<title>Echo :: Add an event</title>
 <F3:include href="templates/header.html" />
 
+<section>
 <F3:check if="{{count(@messages)}}">
 <ul>
 <F3:repeat group="{{@messages}}" value="{{@message}}">
@@ -34,5 +37,6 @@
 
 <input type="submit" value="Submit event!">
 </form>
+</section>
 
 <F3:include href="templates/footer.html" />

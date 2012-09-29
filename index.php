@@ -212,12 +212,10 @@ F3::route('GET /', function() {
 	F3::set('posts', $results);
 
 	/* Serve it up! */
-	F3::set("title", "Echo");
 	echo Template::serve("templates/index.html");
 });
 
 F3::route('GET /event/add', function() {
-	F3::set("title", "Add an event");
 	echo Template::serve("templates/event_add.html");
 });
 
@@ -288,7 +286,6 @@ F3::route('POST /event/@id', function() {
 	$messages = $event->parse_form_data($messages);
 
 	if (count($messages) > 0) {
-		F3::set("title", "Edit event");
 		set_event_data_from_POST();
 		F3::set('messages', $messages);
 		echo Template::serve("templates/event_add.html");
@@ -311,7 +308,6 @@ F3::route('GET /events', function() {
 			"approved == 0";
 	$results = Event::load($where);
 	F3::set('events', $results);
-	F3::set('title', "Events");
 	echo Template::serve("templates/events.html");
 });
 
@@ -325,7 +321,6 @@ F3::route('GET /feeds', function() {
 //	}
 	F3::set('feeds', $results);
 
-	F3::set('title', "Feeds");
 	echo Template::serve("templates/feeds.html");	
 });
 

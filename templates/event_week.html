@@ -8,8 +8,7 @@
 <span class="n-{{(@event->datetime->format("i") == "00") ? "l" : "s"}}">{{
 (@event->datetime->format("i") == "00") ?
 	@event->datetime->format("g") :
-	@event->datetime->format("g:i")}}</span>
-<span class="ampm">{{@event->datetime->format("a")}}</span>
+	@event->datetime->format("g:i")}}</span><span class="ampm">{{@event->datetime->format("a")}}</span>
 </div>
 
 <div class="what">

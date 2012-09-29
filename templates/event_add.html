@@ -24,6 +24,12 @@ $("#datepicker").datepicker({
 
 $("#time").timepicker({ step: 15, timeFormat: 'H:i' });
 
+$("#film").click(function() {
+	if ($("#title").hasClass("film"))
+		$("#title").removeClass("film");
+	else
+		$("#title").addClass("film");
+});
 });
 </script>
 
@@ -48,6 +54,12 @@ $("#time").timepicker({ step: 15, timeFormat: 'H:i' });
 <br>
 <label id="flocation" for="location">Where is your event?</label>
 <input type="text" name="location" id="location" {{@value(@location)}}>
+</fieldset>
+
+<fieldset>
+<label id="ffilm" for="film">Is this a film showing?</label>
+<input type="checkbox" name="film" id="film" {{@film?'checked':''}}>
+</fieldset>
 </fieldset>
 
 <fieldset>
@@ -78,11 +90,6 @@ $("#time").timepicker({ step: 15, timeFormat: 'H:i' });
 <fieldset>
 <label id="ffree" for="free">Is this event free?</label>
 <input type="checkbox" name="free" id="free" {{@free?'checked':''}}>
-</fieldset>
-
-<fieldset>
-<label id="ffilm" for="film">Is this a film showing?</label>
-<input type="checkbox" name="film" id="film" {{@film?'checked':''}}>
 </fieldset>
 
 <fieldset>

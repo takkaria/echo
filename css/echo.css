@@ -86,6 +86,8 @@ form #ftitle { vertical-align: middle; }
 form #location { font-family: 'Raleway'; font-style: italic; font-size: 90%; }
 #datepicker { margin-left: 260px; margin-top: 10px; }
 
+form .film { background-image: url(../images/film.png); background-repeat: no-repeat; background-position: 5px 7px; text-indent: 22px; }
+
 /**label, input, textarea { display: block; }
 input, textarea { font-family: Arial; font-size: 14px; border: 1px solid #aaa; padding: 4px; width: 30em; }
 #date, #time { width: 12em; }

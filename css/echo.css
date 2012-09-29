@@ -38,18 +38,24 @@ th { background-color: #eee; }
 
 /** Events */
 #events .sublinks { margin-top: 0; text-align: right; margin-top: -20px; }
-#events h3 { letter-spacing: 1px; font-weight: normal; border-bottom: 1px solid black; margin-bottom: 0em; clear: both; }
+#events h3 { letter-spacing: 1px; font-weight: normal; border-bottom: 1px solid black; margin-bottom: 0em; clear: both; text-transform: uppercase; background-color: #dedede; padding: 2px 2px 0 5px; border-radius: 0 10px 0 0; }
 
-.event .time { font-family: 'Raleway'; float: left; text-align: center; border: 0px solid black; margin-right: 10px; }
-.event .n-s { font-size: 24px; }
-.event .n-l { font-size: 30px; padding: 0 10px; line-height: 30px; }
+.event * { border: px solid #ccc; }
+
+.event .time, .event .what { display: inline-block; font-family: 'Raleway'; }
+.event .time { vertical-align: top; }
+.event .what { vertical-align: middle; }
+
+.event .time { width: 50px; text-align: center; margin: 0 5px 0 0; margin-top: -2px; }
+.event .n-s { font-size: 20px; }
+.event .n-l { font-size: 26px; padding: 0 10px; line-height: 30px; }
 .event .ampm { text-transform: uppercase; display: block; font-size: 18px; }
 
+.event .what { width: 300px; }
 .event h4 { font-size: 20px; }
-.event .what { min-height: 50px; }
-.event .where { font-family: Raleway; font-style: italic; font-size: 75%; margin-bottom: 0.5em; }
+.event .where { font-style: italic; font-size: 75%; }
 
-.event .desc { }
+.event .desc { clear: both; }
 
 .event .fb { border: 1px solid #666; border-radius: 8px; background-color: #3B5998; color: #eee; padding: 0px 6px; }
 .event .fb:hover { text-decoration: none; background-color: #7C90BA; }

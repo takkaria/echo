@@ -193,12 +193,29 @@ function set_event_data_from_Event($event) {
 
 /* ---------- */
 
-F3::set('group_events', function($format) {
+F3::set('group_events', function() {
 	$events = F3::get('events');
 	$sorted = array();
-	foreach ($events as $e)
-		$sorted[$e->datetime->format($format)][] = $e;
+	foreach ($events as $e) {
+		$dt = clone $e->datetime;
+		$sorted[$dt->modify("today")->format("Y-m-d")][] = $e;
+	}
 	return $sorted;
+});
+
+F3::set('formatdate', function($date) {
+	$today = new DateTime("today"); // This gets the beginning of the day
+	$event = new DateTime($date);
+	$format = 'l j F';	// This should be in the templates but for some reason F3 was screwing up with it
+
+	$diff = intval($today->diff($event)->format('%a'));
+
+	if ($diff == 3)
+		return "Today";
+	if ($diff == 4)
+		return "Tomorrow";
+	else
+		return $event->format($format);
 });
 
 // Output 'value' attribute suitable for input tag if arg isn't null

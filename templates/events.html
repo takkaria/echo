@@ -14,8 +14,8 @@ h4 { margin: 0; padding: 0; }
 .event { margin: 0; }
 </style>
 
-<F3:repeat group="{{@group_events('l jS')}}" key="{{@day}}" value="{{@events}}">
-<h4 class="date">{{@day}}</h4>
+<F3:repeat group="{{@group_events()}}" key="{{@day}}" value="{{@events}}">
+<h4 class="date">{{@formatdate(@day, 'l jS')}}</h4>
 
 <F3:repeat group="{{@events}}" value="{{@event}}">
 <div class="event">

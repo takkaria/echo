@@ -1,8 +1,9 @@
-<h3>{{@day}}</h3>
+<h3>{{@formatdate(@day)}}</h3>
 
 <F3:repeat group="{{@events}}" value="{{@event}}">
 
 <div class="event">
+<div>
 <div class="time">
 <span class="n-{{(@event->datetime->format("i") == "00") ? "l" : "s"}}">{{
 (@event->datetime->format("i") == "00") ?
@@ -14,6 +15,7 @@
 <div class="what">
 <h4 id="{{@event->id}}"><F3:check if="{{@event->film}}"><img src="{{@baseurl}}/images/film.png" alt="Film showing: "></F3:check> {{@event->title}}</h4>
 <p class="where">{{@event->location}}</p>
+</div>
 </div>
 
 <p class="desc">

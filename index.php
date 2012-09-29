@@ -180,12 +180,13 @@ F3::set('DB', new DB("sqlite:" . $options['db']['events']));
 F3::set('feeds', new DB("sqlite:" . $options['db']['feeds']));
 if (isset($_GET['msg']))
 	F3::set('message', strip_tags($_GET['msg']));
+F3::set('baseurl', $options['web']['echo_root']);
 
 F3::route('GET /', function() {
 
 	/* Events */
 	$where = "date >= date('now', 'start of day') AND " .
-			"date <= date('now', 'start of day', '+7 days') AND " .
+			"date <= date('now', 'start of day', '+14 days') AND " .
 			"approved == 0";
 	$results = Event::load($where);
 	F3::set('events', $results);
@@ -305,8 +306,8 @@ F3::route('GET /events', function() {
 	// 'when' will look like ''
 
 	/* Events */
-	$where = "date >= date('now', 'start of month') AND " .
-			"date <= date('now', 'start of month', '+30 days') AND " .
+	$where = "date >= date('now', 'start of month', '+1 month') AND " .
+			"date <= date('now', '+2 months', '-1 day') AND " .
 			"approved == 0";
 	$results = Event::load($where);
 	F3::set('events', $results);

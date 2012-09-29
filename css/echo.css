@@ -1,0 +1,70 @@
+@import url(http://fonts.googleapis.com/css?family=Raleway:800,700,500);
+
+/* XXX include dyslexic stylesheets! */
+
+html { background-color: #ddd; color: #222; margin: 0;
+		font-size: 11pt; line-height: 1.25; font-family: Arial; 		
+		word-spacing: -0.1em;
+}
+	
+
+a { text-decoration: none; color: blue; }
+a:hover { text-decoration: underline; }
+
+/** Headers */
+h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', 'Source Sans Pro';  }
+h1 { font-size: 32px; margin: 0; margin-bottom: -20px; }
+h2 { margin: 0; font-size: 24px; font-weight: normal; }
+h4 { font-size: 16px; }
+
+/** Message box - hacky but works */
+.msg { width: 40em; margin: 1em 1em 0 1em; padding: 1em 1.5em; box-shadow: 5px 5px 5px #fcc; border-radius: 10px; background-color: #f77; font-size: 120%; font-weight: bold; }
+
+/** Sections are used to contain page content */
+section { float: left; background-color: white; border-radius: 10px; margin: 1em; padding: 1em; box-shadow: 5px 5px 5px #ccc; }
+
+/** Feeds page page **/
+table { margin: 0; padding: 0; border-collapse: collapse; }
+tr, th, td { border: 1px solid #ccc; margin: 0; padding: 2px 6px; }
+th { background-color: #eee; }
+
+/** Front page: formatting **/
+#news { width: 35em; }
+#events { width: 380px; }
+
+/** Shared events and posts */
+.event, .post { margin: 1em 0; clear: both; }
+.event p, .post p { margin: 0; }
+.event h4, .post h4 { margin: 0; }
+
+/*h2 { background-color: #89CFF0; margin: -12px; border-radius: 10px; padding: 12px; box-shadow: 0 0 3px 3px white inset; } */
+
+/** Events */
+#events .sublinks { margin-top: 0; text-align: right; margin-top: -20px; }
+#events h3 { letter-spacing: 1px; font-weight: normal; border-bottom: 1px solid black; margin-bottom: 0em; clear: both; }
+
+.event .time { font-family: 'Raleway'; float: left; text-align: center; border: 0px solid black; margin-right: 10px; }
+.event .n-s { font-size: 24px; }
+.event .n-l { font-size: 30px; padding: 0 10px; line-height: 30px; }
+.event .ampm { text-transform: uppercase; display: block; font-size: 18px; }
+
+.event h4 { font-size: 20px; }
+.event .what { min-height: 50px; }
+.event .where { font-family: Raleway; font-style: italic; font-size: 75%; margin-bottom: 0.5em; }
+
+.event .desc { }
+
+/** Posts */
+#news h2 { border-bottom: 1px solid black; }
+
+.post { margin-bottom: 2em; }
+.post h4 { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
+.post .date { font-size: 75%; margin-top: 0.5em; text-align: right; clear: both; }
+
+.post .more { font-style: italic; }
+.post img { float: right; padding: 1px 2px 2px 10px; }
+
+/** Event add formatting **/
+label, input, textarea { display: block; }
+input, textarea { font-family: Arial; font-size: 14px; border: 1px solid #aaa; padding: 4px; width: 30em; }
+#date, #time { width: 12em; }

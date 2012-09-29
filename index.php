@@ -36,8 +36,13 @@ class Event {
 	public $datetime;
 	public $location;
 	public $blurb;
+	public $url;
+	public $free;
+	public $film;
+
 	public $email;
-	public $approved;
+	public $key;
+	public $state;
 
 	function __construct($id = NULL) {
 		if ($id) {
@@ -53,8 +58,13 @@ class Event {
 					DateTime::createFromFormat("Y-m-j H:i", $r['date']);
 			$this->location = $r['location'];
 			$this->blurb = $r['blurb'];
+			$this->url = $r['url'];
+			$this->free = $r['free'] ? TRUE : FALSE;
+			$this->film = $r['type'] == "film" ? TRUE : FALSE;
+
+			$this->state = $r['state'];
 			$this->email = $r['email'];
-			$this->approved = $r['approved'];
+			$this->key = $r['key'];
 		}
 	}
 
@@ -107,20 +117,25 @@ class Event {
 		});
 	
 		/* XXX need to make sure location and blurb are provided */
+		/* XXX validate these */
 		$this->location = $_POST['location'];
 		$this->blurb = $_POST['blurb'];
+		$this->url = $_POST['url'];
+
+		$this->free = isset($_POST['free']) ? TRUE : FALSE;
+		$this->film = isset($_POST['film']) ? TRUE : FALSE;
 
 		return $messages;
 	}
 
-	public function generate_approved() {
-		$this->approved = md5($this->email . rand());
+	public function generate_key() {
+		$this->key = md5($this->email . rand());
 	}
 
 	public function send_confirm_mail() {
 		global $options;
 
-		F3::set("approved_id", $this->approved);
+		F3::set("approved_id", $this->key);
 		$message = Template::serve('templates/event_confirm_mail.txt');
 	
 		$subject = $options['general']['name'] . ": Please confirm your event";
@@ -139,8 +154,14 @@ class Event {
 		$e->date = $this->datetime->format("Y-m-d H:i");
 		$e->location = $this->location;
 		$e->blurb = $this->blurb;
+		$e->url = $this->url;
+		$e->free = $this->free ? 1 : 0;
+		if ($this->film)
+			$e->type = "film";
+
 		$e->email = $this->email;
-		$e->approved = $this->approved;
+		$e->key = $this->key;
+		$e->state = $this->state;
 
 		return $e->save();
 	}
@@ -148,19 +169,25 @@ class Event {
 
 function set_event_data_from_POST() {
 	F3::set('title', F3::scrub($_POST['title']));
+	F3::set('location', F3::scrub($_POST['location']));
 	F3::set('date', F3::scrub($_POST['date']));
 	F3::set('time', F3::scrub($_POST['time']));
-	F3::set('location', F3::scrub($_POST['location']));
 	F3::set('blurb', F3::scrub($_POST['blurb']));
+	F3::set('url', F3::scrub($_POST['url']));
+	F3::set('free', isset($_POST['free']) ? TRUE : FALSE);
+	F3::set('film', isset($_POST['film']) ? TRUE : FALSE);
 	F3::set('email', F3::scrub($_POST['email']));
 }
 
 function set_event_data_from_Event($event) {
 	F3::set('title', $event->title);
+	F3::set('location', $event->location);
 	F3::set('date', $event->datetime->format("Y-m-d"));
 	F3::set('time', $event->datetime->format("H:i"));
-	F3::set('location', $event->location);
 	F3::set('blurb', $event->blurb);
+	F3::set('url', $event->url);
+	F3::set('free', $event->free);
+	F3::set('film', $event->film);
 	F3::set('email', $event->email);
 }
 
@@ -172,6 +199,17 @@ F3::set('group_events', function($format) {
 	foreach ($events as $e)
 		$sorted[$e->datetime->format($format)][] = $e;
 	return $sorted;
+});
+
+// Output 'value' attribute suitable for input tag if arg isn't null
+F3::set('value', function($arg) {
+	if ($arg)
+		return 'value="' . $arg . '"';
+});
+
+// Check if URL is a Facebook URL
+F3::set('facebook', function($url) {
+	return strpos($url, "facebook.com") !== FALSE;
 });
 
 /* ---------- */
@@ -187,7 +225,7 @@ F3::route('GET /', function() {
 	/* Events */
 	$where = "date >= date('now', 'start of day') AND " .
 			"date <= date('now', 'start of day', '+14 days') AND " .
-			"approved == 0";
+			"state <> 'submitted'";
 	$results = Event::load($where);
 	F3::set('events', $results);
 
@@ -242,7 +280,7 @@ F3::route('POST /event/add', function() {
 
 		/* XXX should check the event hasn't already been saved */
 		/* Make event to save */
-		$event->generate_approved();
+		$event->generate_key();
 		$event->save();
 		$event->send_confirm_mail();
 
@@ -250,15 +288,13 @@ F3::route('POST /event/add', function() {
 	}
 });
 
-F3::route('GET /c/@id', function() {
-	F3::set("title", "Confirm event");
-
-	$id = F3::get('PARAMS.id');
-	if (!ctype_alnum($id))
+F3::route('GET /c/@key', function() {
+	$key = F3::get('PARAMS.key');
+	if (!ctype_alnum($key))
 		$id = "";
 
-	DB::sql("UPDATE events SET approved=0 WHERE approved=:id", 
-			array(':id' => $id));
+	DB::sql("UPDATE events SET key=NULL, state=:state WHERE key=:key", 
+			array(':state' => "validated", ':key' => $key));
 
 	if (F3::get('DB->result') == 0)
 		$message = "No event to approve found!  Maybe you already approved it?";
@@ -283,7 +319,7 @@ F3::route('POST /event/@id', function() {
 	$id = intval(F3::get('PARAMS.id'));
 
 	$event = new Event($id);
-	$messages = $event->parse_form_data($messages);
+	$messages = $event->parse_form_data();
 
 	if (count($messages) > 0) {
 		set_event_data_from_POST();

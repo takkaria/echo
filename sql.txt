@@ -7,7 +7,7 @@ CREATE TABLE venues
 
 CREATE TABLE events
 (
-	id INT PRIMARY KEY,
+	id INTEGER PRIMARY KEY,
 
 	/* Event data */
 	title TEXT,
@@ -16,11 +16,11 @@ CREATE TABLE events
 	blurb TEXT,
 	url TEXT,
 	type TEXT, /* ATM this can only be "film" */
-	free INT	/* 1 = free, 0 = not free */
+	free INTEGER	/* 1 = free, 0 = not free */
 
-	/* State crap *
-	email TEXT,		/* Delete after submitted? */
+	/* State crap */
 	state TEXT,		/* "submitted", "validated", "approved" */
+	email TEXT,		/* Delete after submitted? */
 	key TEXT,		/* key needed for validation */
 );
 

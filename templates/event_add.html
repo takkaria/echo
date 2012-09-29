@@ -1,8 +1,37 @@
 <!DOCTYPE html>
 <title>Echo :: Add an event</title>
+
+<link rel="stylesheet" type="text/css" href="{{@baseurl}}/css/jquery.timepicker.css">
+<link rel="stylesheet" type="text/css" href="{{@baseurl}}/css/jquery-ui-1.8.24.custom.css">
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="../js/jquery-ui-1.8.24.custom.min.js"></script>
+<script src="../js/jquery.timepicker.min.js"></script>
+
+<script>
+$(function() {
+
+$("#date").hide();
+
+$("#datepicker").datepicker({
+	dateFormat: "yy-mm-dd",
+	firstDay: 1,
+	onSelect: function(dt, inst) { $("#date").val(dt); },
+	minDate: 1,
+	maxDate: "+2M",
+	defaultDate: $("#date").val()
+});
+
+$("#time").timepicker({ step: 15, timeFormat: 'H:i' });
+
+});
+</script>
+
 <F3:include href="templates/header.html" />
 
 <section>
+<h2>Add an event</h2>
+
 <F3:check if="{{count(@messages)}}">
 <ul>
 <F3:repeat group="{{@messages}}" value="{{@message}}">
@@ -13,27 +42,55 @@
 
 <form method="POST" action="?">
 
-<label for="title">Title:</label>
-<input type="text" name="title" id="title" value="{{@title}}">
+<fieldset>
+<label id="ftitle" for="title">Event name:</label>
+<input type="text" name="title" id="title" {{@value(@title)}}>
+<br>
+<label id="flocation" for="location">Where is your event?</label>
+<input type="text" name="location" id="location" {{@value(@location)}}>
+</fieldset>
 
-<label for="date">Date:</label>
-<input type="text" name="date" id="date" value="{{@date}}" placeholder="yyyy-mm-dd">
+<fieldset>
+<label id="fdate" for="date">When is your event?</label>
+<input type="text" name="time" id="time" value="{{@time ? @time : '17:00'}}">
+<input type="text" name="date" id="date" {{@value(@date)}} placeholder="yyyy-mm-dd">
+<div id="datepicker"></div>
+</fieldset>
 
-<label for="time">Time:</label>
-<input type="text" name="time" id="time" value="{{@time}}" placeholder="hh:mm">
+<fieldset>
+<div class="g">
+<label id="fblurb" for="blurb">Please describe your event:</label>
+<p class="desc">Please include cost (if not free), the group organising the event and information about booking if you have to book.</p>
+</div>
+
+<textarea name="blurb" id="blurb" rows="8">{{@blurb}}</textarea>
+</fieldset>
+
+<fieldset>
+<div class="g">
+<label for="url">URL for more info:</label>
+<p class="desc">Is there somewhere on the web people can go to get more information, like a blog post / Facebook event?</p>
+</div>
+
+<input type="text" name="url" id="url" {{@value(@url)}}>
+</fieldset>
+
+<fieldset>
+<label id="ffree" for="free">Is this event free?</label>
+<input type="checkbox" name="free" id="free" {{@free?'checked':''}}>
+</fieldset>
+
+<fieldset>
+<label id="ffilm" for="film">Is this a film showing?</label>
+<input type="checkbox" name="film" id="film" {{@film?'checked':''}}>
+</fieldset>
+
+<fieldset>
+<label id="femail" for="email">Your email:</label>
+<input type="text" name="email" id="email" {{@value(@email)}}>
+</fieldset>
+
 <!-- XXX all day? -->
-
-<label for="location">Location:</label>
-<input type="text" name="location" id="location" value="{{@location}}">
-
-<label for="blurb">Short blurb:</label>
-<textarea name="blurb" id="blurb" rows="4" cols="40">{{@blurb}}</textarea>
-
-<label for="email">Your email:</label>
-<input type="text" name="email" id="email" value="{{@email}}">
-
-<!-- XXX facebook, more info URL -->
-
 
 <input type="submit" value="Submit event!">
 </form>

@@ -28,7 +28,8 @@ CREATE TABLE users
 (
 	email TEXT PRIMARY KEY,
 	banned BOOLEAN,
-	password TEXT
+	salt TEXT,
+	digest TEXT
 );
 
 -- 

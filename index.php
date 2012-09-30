@@ -34,12 +34,25 @@ function spam_check() {
 	}
 }
 
+// F3 only lets us do temporary re-routing when submitting a form using POST, so here is alternative logic...
 function reroute($where) {
-	F3::reroute($where);
+	global $options;
+
+	F3::status(303);
+	if (session_id())
+		session_commit();
+	header('Location: ' . $options['web']['echo_root'] . $where);
+	die;
 }
 
 function admin_check() {
-	// XXX fill this in
+	session_start();
+	if (!isset($_SESSION['admin'])) {
+		reroute("/admin/login");
+		exit();
+	}
+
+	F3::set("admin", TRUE);
 }
 
 
@@ -96,6 +109,7 @@ F3::route('GET /events', function() {
 });
 
 F3::route('GET /events/unapproved', function() {
+	admin_check();
 	F3::set('events', Event::load("state == 'validated'"));
 	F3::set('admin', TRUE);
 	echo Template::serve("templates/events_unapproved.html");
@@ -237,7 +251,6 @@ F3::route('POST /event/@id/delete', function() {
 		echo "Approved";
 });
 
-
 /********************************/
 /**** Feed display & editing ****/
 /********************************/
@@ -283,30 +296,71 @@ F3::route('POST /feeds/add', function() {
 	reroute("/feeds?msg=" . $message);
 });
 
-/* admin routing... 
+/******************************/
+/**** Admin login & logout ****/
+/******************************/
 
-/admin {
+F3::route('GET /admin', function() {
+	admin_check();
 
-	if not logged in:
-		silent redir /admin/login
-	else:
-		
-}
+	// Show some kind of dashboard?
+});
 
-/admin/login GET {
-	display form
-}
+F3::route('GET /admin/login', function() {
+	echo 'helo?';
+	echo Template::serve("templates/admin_login.html");
+});
 
-/admin/login POST {
-	validate form
-	check pass = "pw" & email = "em"
-	if worked:
-		create session
-		session.loggedin = true
-		redir /admin
-}
+F3::route('POST /admin/login', function() {
 
-*/
+	/* Get the salt */
+	DB::sql("SELECT * FROM users WHERE email=:email",
+		array(':email' => $_POST['email']));
+
+	/* No such user! */
+	if (sizeof(F3::get('DB->result')) == 0) {
+		F3::set('message', "FAIL.");
+		echo Template::serve("templates/admin_login.html");
+		exit();
+	}
+
+	$r = F3::get("DB->result");
+	$r = $r[0];
+
+	/* Now take the salt and the user's input and compare it to the digest */
+	if ($r['digest'] != hash("sha256", $r['salt'] . $_POST['password'])) {
+		F3::set('message', "FAIL.");
+		echo Template::serve("templates/admin_login.html");
+		exit();	
+	}
+
+	// We're in!
+	session_start();
+	$_SESSION['admin'] = TRUE;
+	$_SESSION['email'] = $r['email'];
+	session_commit();
+
+	reroute("/admin");
+});
+
+F3::route('GET /admin/logout', function() {
+
+	session_start();
+
+	// Nuke the session cookie
+	$params = session_get_cookie_params();
+	setcookie(session_name(), '', time() - 42000,
+		$params["path"], $params["domain"],
+		$params["secure"], $params["httponly"]
+	);
+
+	// Delete server-side data
+	unset($_SESSION['admin']);
+	unset($_SESSION['email']);
+	session_destroy();
+
+	reroute("/");
+});
 
 F3::run();
 

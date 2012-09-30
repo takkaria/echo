@@ -26,10 +26,19 @@ The following need to be in a web-accessible folder:
 The following do not:
 	* lib
 	* feedfetch.php
+	* templates
 
 3. Set up the config file.
 
 An initial config file is in the package.  It should be called 'doormat.ini'.
+
+4. Set up a temp directory for F3:
+
+mkdir temp
+chgrp -R www-data temp
+chmod -R g+w temp
+
+5. Set up web rewrite rules.
 
 
 -- Andi Sidwell

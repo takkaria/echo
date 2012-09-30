@@ -39,7 +39,7 @@ th { background-color: #eee; }
 
 /** Events */
 #events .sublinks { margin-top: 0; text-align: right; margin-top: -20px; }
-#events h3 { letter-spacing: 1px; font-weight: bold; border-bottom: 1px solid black; margin-bottom: -5px; clear: both; text-transform: uppercase; background-color: #dedede; padding: 2px 2px 0 5px; border-radius: 0 10px 0 0; }
+#events h3 { letter-spacing: 1px; font-weight: normal; border-bottom: 1px solid black; margin-bottom: -5px; clear: both; background-color: #dedede; padding: 2px 2px 0 5px; border-radius: 0 10px 0 0; }
 
 .event * { border: px solid #ccc; }
 

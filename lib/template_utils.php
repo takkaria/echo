@@ -17,11 +17,15 @@ F3::set('formatdate', function($date) {
 	$event = new DateTime($date);
 	$format = 'l j F';	// This should be in the templates but for some reason F3 was screwing up with it
 
-	$diff = intval($today->diff($event)->format('%a'));
+	$diff = intval($today->diff($event)->format('%R%a'));
 
-	if ($diff == 0)
+	if ($diff < -1)
+		return -$diff . " days ago";
+	else if ($diff == -1)
+		return "1 day ago";
+	else if ($diff == 0)
 		return "Today";
-	if ($diff == 1)
+	else if ($diff == 1)
 		return "Tomorrow";
 	else
 		return $event->format($format);

@@ -2,6 +2,6 @@
 <h4 data-id="{{@post.id}}">{{@post.title}}</h4>
 <F3:check if="{{@post.image}}"><img src="{{@post.image}}" width="25%"></F3:check>
 <p class="desc">{{@post.summary}} ... <a href="{{@post.link}}" class="more">read more</a>
-<p class="date">2 days ago {{*{{@post.date}} {{@post.time}}*}}
+<p class="date">{{@formatdate(@post.date)}}
 <F3:check if="{{@post.feed.site}}"> from <a href="{{@post.feed.site}}">{{@post.feed.title}}</a></F3:check></p>
 </div>

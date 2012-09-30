@@ -63,7 +63,16 @@ th { background-color: #eee; }
 .event .fb { border: 1px solid #666; border-radius: 8px; background-color: #3B5998; color: #eee; padding: 0px 6px; }
 .event .fb:hover { text-decoration: none; background-color: #7C90BA; }
 
-/** Posts */
+/** Admin controls **/
+
+.admin { display: block; margin-top: 10px; }
+.admin form { display: inline; clear: both; }
+.admin p { display: inline-block; }
+.admin input, .admin a { display: inline-block; border: none; background-color: white; color: black; text-align: center; float: left; padding: 0 10px; margin: 0; margin-bottom: 15px; }
+.admin input:hover { text-decoration: underline; cursor: pointer; }
+.event+* { clear: both; }
+
+/** Posts **/
 #news h2 { border-bottom: 1px solid black; }
 
 .post { margin-bottom: 2em; }
@@ -75,30 +84,24 @@ th { background-color: #eee; }
 
 /** Event add formatting **/
 
-form { margin-top: 1em; }
-form, form input { font-size: 13pt; }
-fieldset { border: 0; margin: 0; padding: 0; padding: 10px 0; border-bottom: 1px solid #ddd; }
-label { display: inline-block; text-align: right; vertical-align: top; padding: 4px; font-weight: bold; }
-input { border: none; border-bottom: 1px solid #ccc; padding: 4px; }
+#add form { margin-top: 1em; }
+#add form, #add form input { font-size: 13pt; }
+#add fieldset { border: 0; margin: 0; padding: 0; padding: 10px 0; border-bottom: 1px solid #ddd; }
+#add label { display: inline-block; text-align: right; vertical-align: top; padding: 4px; font-weight: bold; }
+#add input { border: none; border-bottom: 1px solid #ccc; padding: 4px; }
 
-form .desc { font-size: 80%; font-style: italic; text-align: right; margin: 0; }
+#add form .desc { font-size: 80%; font-style: italic; text-align: right; margin: 0; }
 
-form div.g { display: inline-block; vertical-align: top; }
+#add form div.g { display: inline-block; vertical-align: top; }
 
 /* Width */
-textarea, input { width: 300px; }
-label, form div.g, form p { width: 250px; }
+#add textarea, #add input { width: 300px; }
+#add label, #add form div.g, form p { width: 250px; }
 
 /* Individual fields */
-form #title { font-family: 'Raleway'; font-weight: bold; font-size: 120%; }
-form #ftitle { vertical-align: middle; }
-form #location { font-family: 'Raleway'; font-style: italic; font-size: 90%; }
-#datepicker { margin-left: 260px; margin-top: 10px; }
+#add form #title { font-family: 'Raleway'; font-weight: bold; font-size: 120%; }
+#add form #ftitle { vertical-align: middle; }
+#add form #location { font-family: 'Raleway'; font-style: italic; font-size: 90%; }
+#add #datepicker { margin-left: 260px; margin-top: 10px; }
 
-form .film { background-image: url(../images/film.png); background-repeat: no-repeat; background-position: 5px 7px; text-indent: 22px; }
-
-/**label, input, textarea { display: block; }
-input, textarea { font-family: Arial; font-size: 14px; border: 1px solid #aaa; padding: 4px; width: 30em; }
-#date, #time { width: 12em; }
- */
-
+#add form .film { background-image: url(../images/film.png); background-repeat: no-repeat; background-position: 5px 7px; text-indent: 22px; }

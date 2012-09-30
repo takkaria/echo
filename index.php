@@ -237,12 +237,16 @@ if (isset($_GET['msg']))
 	F3::set('message', strip_tags($_GET['msg']));
 F3::set('baseurl', $options['web']['echo_root']);
 
+/********************/
+/**** Front page ****/
+/********************/
+
 F3::route('GET /', function() {
 
 	/* Events */
 	$where = "date >= date('now', 'start of day') AND " .
 			"date <= date('now', 'start of day', '+14 days') AND " .
-			"state <> 'submitted'";
+			"state == 'approved'";
 	$results = Event::load($where);
 	F3::set('events', $results);
 
@@ -269,6 +273,32 @@ F3::route('GET /', function() {
 	/* Serve it up! */
 	echo Template::serve("templates/index.html");
 });
+
+
+/***************************/
+/**** Displaying events ****/
+/***************************/
+
+F3::route('GET /events', function() {
+
+	/* Events */
+	$where = "date >= date('now', 'start of month', '+1 month') AND " .
+			"date <= date('now', '+2 months', '-1 day') AND " .
+			"approved == 0";
+	$results = Event::load($where);
+	F3::set('events', $results);
+	echo Template::serve("templates/events.html");
+});
+
+F3::route('GET /events/unapproved', function() {
+	F3::set('events', Event::load("state == 'validated'"));
+	F3::set('admin', TRUE);
+	echo Template::serve("templates/events_unapproved.html");
+});
+
+/***************************/
+/**** Adding new events ****/
+/***************************/
 
 F3::route('GET /event/add', function() {
 	echo Template::serve("templates/event_add.html");
@@ -305,6 +335,36 @@ F3::route('POST /event/add', function() {
 	}
 });
 
+/*********************************/
+/**** Editing existing events ****/
+/*********************************/
+
+F3::route('GET /event/@id', function() {
+	admin_check();
+	$id = intval(F3::get('PARAMS.id'));
+
+	$event = new Event($id);
+	set_event_data_from_Event($event);
+	echo Template::serve("templates/event_add.html");
+});
+
+F3::route('POST /event/@id', function() {
+	admin_check();
+	$id = intval(F3::get('PARAMS.id'));
+
+	$event = new Event($id);
+	$messages = $event->parse_form_data();
+
+	if (count($messages) > 0) {
+		set_event_data_from_POST();
+		F3::set('messages', $messages);
+		echo Template::serve("templates/event_add.html");
+	} else {
+		$event->save();
+		reroute("/event/" . $id . "?msg=Event%20saved.");
+	}
+});
+
 F3::route('GET /c/@key', function() {
 	$key = F3::get('PARAMS.key');
 	if (!ctype_alnum($key))
@@ -321,48 +381,61 @@ F3::route('GET /c/@key', function() {
 	reroute("/?msg=" . urlencode($message));
 });
 
-F3::route('GET /event/@id', function() {
+F3::route('POST /event/@id/approve', function() {
 	admin_check();
-
-	$event = new Event(intval(F3::get('PARAMS.id')));
-	set_event_data_from_Event($event);
-	echo Template::serve("templates/event_add.html");
-});
-
-F3::route('POST /event/@id', function() {
-	admin_check();
-	spam_check();
-
 	$id = intval(F3::get('PARAMS.id'));
 
-	$event = new Event($id);
-	$messages = $event->parse_form_data();
+	DB::sql("UPDATE events SET key=NULL, state=:state WHERE id=:id", 
+			array(':state' => "approved", ':id' => $id));
 
-	if (count($messages) > 0) {
-		set_event_data_from_POST();
-		F3::set('messages', $messages);
-		echo Template::serve("templates/event_add.html");
-	} else {
-		/* Load event, modify it, then save it */
-		$event->save();
-		reroute("/event/" . $id . "?msg=Event%20saved.");
-	}
+	if (F3::get('DB->result') == 0)
+		echo "Failure";
+	else
+		echo "Approved";
 });
 
-F3::route('GET /events', function() {
+F3::route('POST /event/@id/unapprove', function() {
+	admin_check();
+	$id = intval(F3::get('PARAMS.id'));
 
-	$when = F3::get('PARAMS.when');
+	DB::sql("UPDATE events SET state=:state WHERE id=:id", 
+			array(':state' => "validated", ':id' => $id));
 
-	// 'when' will look like ''
-
-	/* Events */
-	$where = "date >= date('now', 'start of month', '+1 month') AND " .
-			"date <= date('now', '+2 months', '-1 day') AND " .
-			"approved == 0";
-	$results = Event::load($where);
-	F3::set('events', $results);
-	echo Template::serve("templates/events.html");
+	if (F3::get('DB->result') == 0)
+		echo "Failure";
+	else
+		echo "Unapproved";
 });
+
+F3::route('POST /event/@id/approve', function() {
+	admin_check();
+	$id = intval(F3::get('PARAMS.id'));
+
+	DB::sql("UPDATE events SET key=NULL, state=:state WHERE id=:id", 
+			array(':state' => "approved", ':id' => $id));
+
+	if (F3::get('DB->result') == 0)
+		echo "Failure";
+	else
+		echo "Approved";
+});
+
+F3::route('POST /event/@id/delete', function() {
+	admin_check();
+	$id = intval(F3::get('PARAMS.id'));
+
+	DB::sql("DELETE FROM events WHERE id=:id", array(':id' => $id));
+
+	if (F3::get('DB->result') == 0)
+		echo "Failure";
+	else
+		echo "Approved";
+});
+
+
+/********************************/
+/**** Feed display & editing ****/
+/********************************/
 
 F3::route('GET /feeds', function() {
 	admin_check();

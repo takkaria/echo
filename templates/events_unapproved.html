@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<title>Echo :: Unapproved events</title>
+
+<F3:include href="templates/header.html" />
+
+<section id="events">
+<h2>Unapproved events</h2>
+
+<F3:repeat group="{{@group_events()}}" key="{{@day}}" value="{{@events}}">
+<F3:include href="templates/event_week.html" />
+</F3:repeat>
+
+<p><a href="events">more events this month</a></p>
+</section>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<title>Echo :: Display & edit feeds</title>
+<F3:include href="templates/header.html" />
+
+<section>
+<h2>Feeds</h2>
+
+<table>
+<thead>
+<tr>
+<th>Title
+<th>Feed URL
+<th>Site URL
+</thead>
+
+<F3:repeat group="{{@feeds}}" value="{{@feed}}">
+<tr>
+<td><a href="feeds/delete/{{(urlencode(@feed.feed_url))}}" title="Delete feed">x</a> {{@feed.title}}
+<td><a href="{{@feed.feed_url}}">{{@feed.feed_url}}</a>
+<td><a href="{{@feed.site_url}}">{{@feed.site_url}}</a>
+</F3:repeat>
+
+<tr>
+<td colspan='3'>
+<form method="POST" action="feeds/add">
+Add a new feed: <input type="text" name="url"> <input type="submit" value="Add">
+</form>
+</table>
+
+</section>
+
+<F3:include href="templates/footer.html" />

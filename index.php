@@ -256,6 +256,7 @@ F3::route('GET /feeds', function() {
 });
 
 F3::route('POST /feeds/add', function() {
+	admin_check();
 
 	require_once 'lib/simplepie_1.3.compiled.php';
 

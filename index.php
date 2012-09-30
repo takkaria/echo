@@ -134,24 +134,22 @@ F3::route('POST /event/add', function() {
 		set_event_data_from_POST();
 		F3::set('messages', $messages);
 		echo Template::serve("templates/event_add.html");
-	} else {
-		/* Find the user record */
-		$user = new Axon('users');
-		$user->load('email="' . F3::get('REQUEST.email') . '"'); /* XXX potential injection attack */
-
-		if (!$user->dry() && $user->banned) {
-			Template::serve("templates/spam.html");
-			die;
-		}
-
-		/* XXX should check the event hasn't already been saved */
-		/* Make event to save */
-		$event->generate_key();
-		$event->save();
-		$event->send_confirm_mail();
-
-		reroute("/?msg=Event+submitted.+Please+check+your+email.");
+		die;
 	}
+
+	// Check user isn't banned
+	DB::sql("SELECT banned FROM users WHERE email=:email", 
+		array(':email' => $event->email));
+	if (F3::get("DB->results")) {
+		echo Template::serve("templates/spam.html");
+		die;
+	}
+
+	$event->generate_key();
+	$event->save();
+	$event->send_confirm_mail();
+
+	reroute("/?msg=Event+submitted.+Please+check+your+email.");
 });
 
 /*********************************/

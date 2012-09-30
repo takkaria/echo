@@ -1,8 +1,8 @@
 ; This is an echo config file
 
 [general]
-name = Manchester Echo
-email = echo@manchesterecho.net
+name = Doormat
+email = doormat@localhost
 
 [web]
 domain = localhost

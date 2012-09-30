@@ -1,19 +1,27 @@
 <?php
-require_once 'lib/fatfree/lib/base.php';
+/************************************
+ * Change this to where the ini file and DB folder are kept.
+ ************************************/
+define("BASEPATH", "../");
+
+require_once BASEPATH . 'lib/fatfree/lib/base.php';
 
 // Disable this when in production
 F3::set('DEBUG', 3);
 
+
+F3::set("UI", BASEPATH . "templates/");
+
 /**** Initialise ****/
 
-require_once 'lib/Event.php';
-require_once 'lib/template_utils.php';
+require_once BASEPATH . 'lib/Event.php';
+require_once BASEPATH . 'lib/template_utils.php';
 
 date_default_timezone_set('UTC');
-$options = parse_ini_file('echo.ini', true);
+$options = parse_ini_file(BASEPATH . 'doormat.ini', true);
 
-F3::set('DB', new DB("sqlite:" . $options['db']['events']));
-F3::set('feeds', new DB("sqlite:" . $options['db']['feeds']));
+F3::set('DB', new DB("sqlite:" . BASEPATH . $options['db']['events']));
+F3::set('feeds', new DB("sqlite:" . BASEPATH . $options['db']['feeds']));
 if (isset($_GET['msg']))
 	F3::set('message', strip_tags($_GET['msg']));
 F3::set('baseurl', $options['web']['echo_root']);
@@ -28,7 +36,7 @@ function spam_check() {
 	foreach ($blocklist as $list) {
 		// Check against DNS blacklist
 		if (gethostbyname($quad.'.'.$list) != $quad.'.'.$list) {
-			Template::serve("templates/spam.html");
+			Template::serve("spam.html");
 			die;
 		}
 	}
@@ -90,7 +98,7 @@ F3::route('GET /', function() {
 	F3::set('posts', $results);
 
 	/* Serve it up! */
-	echo Template::serve("templates/index.html");
+	echo Template::serve("index.html");
 });
 
 /***************************/
@@ -105,14 +113,14 @@ F3::route('GET /events', function() {
 			"approved == 0";
 	$results = Event::load($where);
 	F3::set('events', $results);
-	echo Template::serve("templates/events.html");
+	echo Template::serve("events.html");
 });
 
 F3::route('GET /events/unapproved', function() {
 	admin_check();
 	F3::set('events', Event::load("state == 'validated'"));
 	F3::set('admin', TRUE);
-	echo Template::serve("templates/events_unapproved.html");
+	echo Template::serve("events_unapproved.html");
 });
 
 /***************************/
@@ -120,7 +128,7 @@ F3::route('GET /events/unapproved', function() {
 /***************************/
 
 F3::route('GET /event/add', function() {
-	echo Template::serve("templates/event_add.html");
+	echo Template::serve("event_add.html");
 });
 
 F3::route('POST /event/add', function() {
@@ -133,7 +141,7 @@ F3::route('POST /event/add', function() {
 		F3::set("title", "Add an event");
 		set_event_data_from_POST();
 		F3::set('messages', $messages);
-		echo Template::serve("templates/event_add.html");
+		echo Template::serve("event_add.html");
 		die;
 	}
 
@@ -141,7 +149,7 @@ F3::route('POST /event/add', function() {
 	DB::sql("SELECT banned FROM users WHERE email=:email", 
 		array(':email' => $event->email));
 	if (F3::get("DB->results")) {
-		echo Template::serve("templates/spam.html");
+		echo Template::serve("spam.html");
 		die;
 	}
 
@@ -162,7 +170,7 @@ F3::route('GET /event/@id', function() {
 
 	$event = new Event($id);
 	set_event_data_from_Event($event);
-	echo Template::serve("templates/event_add.html");
+	echo Template::serve("event_add.html");
 });
 
 F3::route('POST /event/@id', function() {
@@ -175,7 +183,7 @@ F3::route('POST /event/@id', function() {
 	if (count($messages) > 0) {
 		set_event_data_from_POST();
 		F3::set('messages', $messages);
-		echo Template::serve("templates/event_add.html");
+		echo Template::serve("event_add.html");
 	} else {
 		$event->save();
 		reroute("/event/" . $id . "?msg=Event%20saved.");
@@ -263,7 +271,7 @@ F3::route('GET /feeds', function() {
 //	}
 	F3::set('feeds', $results);
 
-	echo Template::serve("templates/feeds.html");	
+	echo Template::serve("feeds.html");	
 });
 
 F3::route('POST /feeds/add', function() {
@@ -306,7 +314,7 @@ F3::route('GET /admin', function() {
 
 F3::route('GET /admin/login', function() {
 	echo 'helo?';
-	echo Template::serve("templates/admin_login.html");
+	echo Template::serve("admin_login.html");
 });
 
 F3::route('POST /admin/login', function() {
@@ -322,7 +330,7 @@ F3::route('POST /admin/login', function() {
 	/* No such user! */
 	if (sizeof(F3::get('DB->result')) == 0) {
 		F3::set('message', "FAIL.");
-		echo Template::serve("templates/admin_login.html");
+		echo Template::serve("admin_login.html");
 		exit();
 	}
 
@@ -332,7 +340,7 @@ F3::route('POST /admin/login', function() {
 	/* Now take the salt and the user's input and compare it to the digest */
 	if ($r['digest'] != hash("sha256", $r['salt'] . $_POST['password'])) {
 		F3::set('message', "FAIL.");
-		echo Template::serve("templates/admin_login.html");
+		echo Template::serve("admin_login.html");
 		exit();	
 	}
 

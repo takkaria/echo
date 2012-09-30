@@ -1,0 +1,17 @@
+CREATE TABLE posts (
+	id TEXT PRIMARY KEY,
+	title TEXT,
+	link TEXT,
+	date DATETIME,
+	summary TEXT,
+	image TEXT,	 /* this is an URL... maybe make it a data: link? */
+	feed_url TEXT
+);
+
+CREATE TABLE feeds (
+	feed_url TEXT PRIMARY KEY,
+	site_url TEXT,
+	title TEXT
+);
+
+CREATE VIEW post_info AS SELECT * FROM posts LEFT OUTER JOIN feeds ON posts.feed_url = feeds.feed_url;

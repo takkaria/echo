@@ -1,0 +1,30 @@
+CREATE TABLE venues (
+	name TEXT PRIMARY KEY,
+	address TEXT,
+	info TEXT
+);
+
+CREATE TABLE events (
+	id INTEGER PRIMARY KEY,
+
+	/* Event data */
+	title TEXT,
+	date DATETIME,
+	location TEXT,
+	blurb TEXT,
+	url TEXT,
+	type TEXT,		/* ATM this can only be "film" */
+	free INTEGER,	/* 1 = free, 0 = not free */
+
+	/* State crap */
+	state TEXT,		/* "submitted", "validated", "approved" */
+	email TEXT,		/* Delete after submitted? */
+	key TEXT			/* key needed for validation */
+);
+
+CREATE TABLE users (
+	email TEXT PRIMARY KEY,
+	banned BOOLEAN,
+	salt TEXT,
+	digest TEXT
+);

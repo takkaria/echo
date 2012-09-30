@@ -3,7 +3,33 @@ Doormat README
 
 To set this up you will need to:
 
-<fill this in!>
+1. Initialise the databases:
+1a. Create the databases from SQL:
+
+	mkdir db
+	sqlite3 db/events.sqlite < sql-events.txt
+	sqlite3 db/feeds.sqlite < sql-feeds.txt
+
+1b. Make sure they are writable by the web server.  This might mean doing something like:
+
+	chgrp -R www-data db
+	chmod -R g+w db
+
+2. Move the right files into place.
+
+The following need to be in a web-accessible folder:
+	* css
+	* images
+	* js
+	* index.php
+
+The following do not:
+	* lib
+	* feedfetch.php
+
+3. Set up the config file.
+
+An initial config file is in the package.  It should be called 'doormat.ini'.
 
 
 -- Andi Sidwell

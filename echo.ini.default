@@ -4,11 +4,17 @@
 name = Manchester Echo
 email = echo@manchesterecho.net
 
+[web]
+domain = localhost
+
+; no trailing slash.  You only need to set this if your install is not at /
+echo_root = ""
+
 [spam]
 blocklist[] = dnsbl.sorbs.net
 blocklist[] = xbl.spamhaus.org
 blocklist[] = ubl.lashback.com
 
 [db]
-events = events.sqlite
-feeds = feeds.sqlite
+events = db/events.sqlite
+feeds = db/feeds.sqlite

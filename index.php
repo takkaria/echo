@@ -2,7 +2,7 @@
 /************************************
  * Change this to where the ini file and DB folder are kept.
  ************************************/
-define("BASEPATH", "../");
+define("BASEPATH", "");
 
 require_once BASEPATH . 'lib/fatfree/lib/base.php';
 
@@ -108,9 +108,9 @@ F3::route('GET /', function() {
 F3::route('GET /events', function() {
 
 	/* Events */
-	$where = "date >= date('now', 'start of month', '+1 month') AND " .
-			"date <= date('now', '+2 months', '-1 day') AND " .
-			"approved == 0";
+	$where = "date >= date('now', 'start of month') AND " .
+			"date <= date('now', 'start of month', '+2 month', '-1 day') AND " .
+			"state == 'approved'";
 	$results = Event::load($where);
 	F3::set('events', $results);
 	echo Template::serve("events.html");

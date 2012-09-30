@@ -38,7 +38,7 @@ th { background-color: #eee; }
 /*h2 { background-color: #89CFF0; margin: -12px; border-radius: 10px; padding: 12px; box-shadow: 0 0 3px 3px white inset; } */
 
 /** Events */
-#events .sublinks { margin-top: 0; text-align: right; margin-top: -20px; }
+.sublinks { margin-top: 0; text-align: right; margin-top: -20px; }
 #events h3 { letter-spacing: 1px; font-weight: normal; border-bottom: 1px solid black; margin-bottom: -5px; clear: both; background-color: #dedede; padding: 2px 2px 0 5px; border-radius: 0 10px 0 0; }
 
 .event * { border: px solid #ccc; }

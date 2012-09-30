@@ -313,6 +313,10 @@ F3::route('GET /admin/login', function() {
 
 F3::route('POST /admin/login', function() {
 
+	// XXX do the other stuff mentioned in this article:
+	// http://throwingfire.com/storing-passwords-securely/
+	// and perhaps add in nth character of a passphrase type stuff
+
 	/* Get the salt */
 	DB::sql("SELECT * FROM users WHERE email=:email",
 		array(':email' => $_POST['email']));

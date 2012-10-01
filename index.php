@@ -201,7 +201,7 @@ F3::route('GET /c/@key', function() {
 	if (F3::get('DB->result') == 0)
 		$message = "No event to approve found!  Maybe you already approved it?";
 	else
-		$message = "Event approved :)";
+		$message = "Event submitted.  Please await approval :)";
 
 	reroute("/?msg=" . urlencode($message));
 });

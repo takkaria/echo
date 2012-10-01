@@ -111,7 +111,7 @@ function fetch_feed($url) {
 }
 
 /* Connect to DB */
-$options = parse_ini_file('echo.ini', true);
+$options = parse_ini_file('doormat.ini', true);
 F3::set('DB', new DB("sqlite:" . $options['db']['feeds']));
 
 if ($argc == 2) {

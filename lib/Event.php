@@ -106,8 +106,9 @@ class Event {
 		global $options;
 
 		F3::set("approved_id", $this->key);
-		$message = Template::serve('templates/event_confirm_mail.txt');
-	
+		F3::set("domain", $options['web']['domain']);
+		$message = Template::serve('event_confirm_mail.txt');
+
 		$subject = $options['general']['name'] . ": Please confirm your event";
 		$headers = "From: " . $options['general']['email'];
 		mail($this->email, $subject, $message, $headers);

@@ -4,8 +4,8 @@
 <F3:include href="header.html" />
 
 <section id="events">
-<h2>Upcoming events</h2>
-<p class="sublinks"><a href="event/add">add your own event</a>
+<h2>EVENTS</h2>
+<p class="sublinks"><a href="event/add">(+ add yours here)</a>
 
 <F3:repeat group="{{@group_events()}}" key="{{@day}}" value="{{@events}}">
 <F3:include href="event_week.html" />
@@ -16,7 +16,7 @@
 
 
 <section id="news">
-<h2>News</h2>
+<h2>NEWS</h2>
 
 <F3:repeat group="{{@posts}}" value="{{@post}}">
 <F3:include href="post.html" />

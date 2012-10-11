@@ -101,6 +101,12 @@ F3::route('GET /', function() {
 	echo Template::serve("index.html");
 });
 
+/* XXX need to work out a better way to do this that is generic, no time now though */
+/* maybe a var 'passthrough' in the ini which just makes pages listed in it serve up <page>.html */
+F3::route('GET /about', function() {
+	echo Template::serve("about.html");
+});
+
 /***************************/
 /**** Displaying events ****/
 /***************************/

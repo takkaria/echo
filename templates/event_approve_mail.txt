@@ -1,0 +1,6 @@
+Hi there!
+
+Your event, {{@title}}, has been approved for display on Echo.  Thanks
+for submitting it!
+
+Manchester Echo Automaton

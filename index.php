@@ -251,7 +251,7 @@ F3::route('POST /event/@id/approve', function() {
 		echo "Approved";
 
 		$e = new Event($id);
-		$e->send_approve_email();
+		$e->send_approve_mail();
 	}
 });
 

@@ -18,3 +18,4 @@ blocklist[] = ubl.lashback.com
 [db]
 events = db/events.sqlite
 feeds = db/feeds.sqlite
+readonly = false

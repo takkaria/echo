@@ -20,11 +20,13 @@ require_once BASEPATH . 'lib/template_utils.php';
 date_default_timezone_set('UTC');
 $options = parse_ini_file(BASEPATH . 'doormat.ini', true);
 
+define("READONLY", $options['db']['readonly']);
 F3::set('DB', new DB("sqlite:" . BASEPATH . $options['db']['events']));
 F3::set('feeds', new DB("sqlite:" . BASEPATH . $options['db']['feeds']));
 if (isset($_GET['msg']))
 	F3::set('message', strip_tags($_GET['msg']));
 F3::set('baseurl', $options['web']['echo_root']);
+F3::set('readonly', READONLY);
 
 function spam_check() {
 	global $options;
@@ -63,6 +65,12 @@ function admin_check() {
 	F3::set("admin", TRUE);
 }
 
+function readonly_check() {
+	if (READONLY) {
+		reroute("/?msg=Sorry,+can't+do+that.+Database+in+read-only+mode.");
+		die;
+	}
+}
 
 /********************/
 /**** Front page ****/
@@ -139,6 +147,7 @@ F3::route('GET /event/add', function() {
 
 F3::route('POST /event/add', function() {
 	spam_check();
+	readonly_check();
 
 	$event = new Event();
 	$messages = $event->parse_form_data();
@@ -181,6 +190,7 @@ F3::route('GET /event/@id', function() {
 
 F3::route('POST /event/@id', function() {
 	admin_check();
+	readonly_check();
 	$id = intval(F3::get('PARAMS.id'));
 
 	$event = new Event($id);
@@ -214,6 +224,7 @@ F3::route('GET /c/@key', function() {
 
 F3::route('POST /event/@id/approve', function() {
 	admin_check();
+	readonly_check();
 	$id = intval(F3::get('PARAMS.id'));
 
 	DB::sql("UPDATE events SET key=NULL, state=:state WHERE id=:id", 
@@ -227,6 +238,7 @@ F3::route('POST /event/@id/approve', function() {
 
 F3::route('POST /event/@id/unapprove', function() {
 	admin_check();
+	readonly_check();
 	$id = intval(F3::get('PARAMS.id'));
 
 	DB::sql("UPDATE events SET state=:state WHERE id=:id", 
@@ -240,6 +252,7 @@ F3::route('POST /event/@id/unapprove', function() {
 
 F3::route('POST /event/@id/approve', function() {
 	admin_check();
+	readonly_check();
 	$id = intval(F3::get('PARAMS.id'));
 
 	$e = new Event($id);
@@ -250,6 +263,7 @@ F3::route('POST /event/@id/approve', function() {
 
 F3::route('POST /event/@id/delete', function() {
 	admin_check();
+	readonly_check();
 	$id = intval(F3::get('PARAMS.id'));
 
 	DB::sql("DELETE FROM events WHERE id=:id", array(':id' => $id));
@@ -279,6 +293,7 @@ F3::route('GET /feeds', function() {
 
 F3::route('POST /feeds/add', function() {
 	admin_check();
+	readonly_check();
 
 	require_once 'lib/simplepie_1.3.compiled.php';
 

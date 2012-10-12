@@ -5,7 +5,9 @@
 
 <section id="events">
 <h2>EVENTS</h2>
+<F3:check if="!{{@readonly}}">
 <p class="sublinks"><a href="event/add">(+ add yours here)</a>
+</F3:check>
 
 <F3:repeat group="{{@group_events()}}" key="{{@day}}" value="{{@events}}">
 <F3:include href="event_week.html" />

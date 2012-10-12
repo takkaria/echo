@@ -1,6 +1,13 @@
 Hi there!
 
-Your event, {{@title}}, has been approved for display on Echo.  Thanks
-for submitting it!
+Thanks for registering an event at Manchester Echo.  To have it show
+up on the main site, please follow the link below:
+
+	http://{{@domain}}{{@baseurl}}/c/{{@approved_id}}
+
+If you don't, the event listing won't go live and people won't see
+your event.
+
+Thanks!
 
 Manchester Echo Automaton

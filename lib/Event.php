@@ -19,6 +19,8 @@ class Event {
 			DB::sql("SELECT * FROM events WHERE id=" . $id . " ORDER BY date");
 			$r = F3::get('DB->result');
 
+			// XXX error-check
+
 			// Get the first result
 			$r = $r[0];
 
@@ -117,6 +119,7 @@ class Event {
 	public function send_approve_mail() {
 		global $options;
 
+		F3::set("title", $this->title);
 		F3::set("domain", $options['web']['domain']);
 		$message = Template::serve('event_approve_mail.txt');
 

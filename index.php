@@ -242,16 +242,14 @@ F3::route('POST /event/@id/approve', function() {
 	admin_check();
 	$id = intval(F3::get('PARAMS.id'));
 
-	DB::sql("UPDATE events SET key=NULL, state=:state WHERE id=:id", 
-			array(':state' => "approved", ':id' => $id));
+	$e = new Event($id);
+	$e->state = "approved";
 
-	if (F3::get('DB->result') == 0) {
-		echo "Failure";
-	} else {
+	if ($e->save()) {
 		echo "Approved";
-
-		$e = new Event($id);
 		$e->send_approve_mail();
+	} else {
+		echo "Failure";
 	}
 });
 

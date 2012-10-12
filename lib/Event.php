@@ -148,7 +148,7 @@ class Event {
 		$e->key = $this->key;
 		$e->state = $this->state;
 
-		return $e->save();
+		$e->save();
 	}
 }
 

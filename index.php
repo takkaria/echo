@@ -244,13 +244,8 @@ F3::route('POST /event/@id/approve', function() {
 
 	$e = new Event($id);
 	$e->state = "approved";
-
-	if ($e->save()) {
-		echo "Approved";
-		$e->send_approve_mail();
-	} else {
-		echo "Failure";
-	}
+	$e->save();
+	$e->send_approve_mail();
 });
 
 F3::route('POST /event/@id/delete', function() {

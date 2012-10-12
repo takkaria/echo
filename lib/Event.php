@@ -114,6 +114,17 @@ class Event {
 		mail($this->email, $subject, $message, $headers);
 	}
 
+	public function send_approve_mail() {
+		global $options;
+
+		F3::set("domain", $options['web']['domain']);
+		$message = Template::serve('event_approve_mail.txt');
+
+		$subject = $options['general']['name'] . ": Event approved!";
+		$headers = "From: " . $options['general']['email'];
+		mail($this->email, $subject, $message, $headers);
+	}
+
 	public function save() {
 		$e = new Axon('events');
 

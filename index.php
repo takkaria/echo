@@ -245,10 +245,14 @@ F3::route('POST /event/@id/approve', function() {
 	DB::sql("UPDATE events SET key=NULL, state=:state WHERE id=:id", 
 			array(':state' => "approved", ':id' => $id));
 
-	if (F3::get('DB->result') == 0)
+	if (F3::get('DB->result') == 0) {
 		echo "Failure";
-	else
+	} else {
 		echo "Approved";
+
+		$e = new Event($id);
+		$e->send_approve_email();
+	}
 });
 
 F3::route('POST /event/@id/delete', function() {

@@ -312,11 +312,52 @@ F3::route('POST /feeds/add', function() {
 F3::route('GET /admin', function() {
 	admin_check();
 
-	// Show some kind of dashboard?
+	/** Retrieve event info **/
+	$events_info = array(
+		"submitted" => 0,
+		"validated" => 0,
+		"approved" => 0
+	);
+
+	DB::sql('SELECT count(*) AS count FROM events WHERE state="submitted"');
+	$r = F3::get('DB->result');
+	$events_info['submitted'] = $r[0]['count'];
+
+	DB::sql('SELECT count(*) AS count FROM events WHERE state="validated"');
+	$r = F3::get('DB->result');
+	$events_info['validated'] = $r[0]['count'];
+
+	DB::sql('SELECT count(*) AS count FROM events WHERE state="approved"');
+	$r = F3::get('DB->result');
+	$events_info['approved'] = $r[0]['count'];
+
+	F3::set("events", $events_info);
+
+	$feed_info = array(
+		"feeds" => 0,
+		"posts" => 0,
+		"old_posts" => 0
+	);
+
+	DB::sql('SELECT count(*) AS count FROM feeds', NULL, 0, 'feeds');
+	$r = F3::get('feeds->result');
+	$feed_info['feeds'] = $r[0]['count'];
+
+	DB::sql('SELECT count(*) AS count FROM posts', NULL, 0, 'feeds');
+	$r = F3::get('feeds->result');
+	$feed_info['posts'] = $r[0]['count'];
+
+	DB::sql('SELECT count(*) AS count FROM posts WHERE date < date("now", "-1 month")', NULL, 0, 'feeds');
+	$r = F3::get('feeds->result');
+	$feed_info['old_posts'] = $r[0]['count'];
+
+	F3::set("feeds", $feed_info);
+
+	/** Serve it up! **/
+	echo Template::serve("admin.html");
 });
 
 F3::route('GET /admin/login', function() {
-	echo 'helo?';
 	echo Template::serve("admin_login.html");
 });
 

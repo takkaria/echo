@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<title>Echo :: Admin</title>
+
+<F3:include href="header.html" />
+
+<section id="dashboard">
+<h2>ADMINISTRATION PANEL</h2>
+
+<p><b>EVENTS</b>
+<ul>
+<li>{{@events.submitted}} submitted but not validated events
+<li>{{@events.validated}} <a href="{{@baseurl}}/events/unapproved">validated but unapproved events</a>
+<li>{{@events.approved}} approved events
+</ul>
+
+<p><b>POSTS</b>
+<ul>
+<li>{{@feeds.feeds}} feeds
+<li>{{@feeds.posts}} posts
+<ul>
+<li>with {{@feeds.old_posts}} of those posts over 1 month old
+</ul>
+</ul>
+
+</section>
+
+<F3:include href="footer.html" />

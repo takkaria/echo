@@ -7,12 +7,13 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <script src="{{@baseurl}}/js/jquery-ui-1.8.24.custom.min.js"></script>
 <script src="{{@baseurl}}/js/jquery.timepicker.min.js"></script>
+<script src="{{@baseurl}}/js/venuelist.js"></script>
 
 <script>
 $(function() {
 
+// Datepicker
 $("#date").hide();
-
 $("#datepicker").datepicker({
 	dateFormat: "yy-mm-dd",
 	firstDay: 1,
@@ -22,8 +23,10 @@ $("#datepicker").datepicker({
 	defaultDate: $("#date").val()
 });
 
+// Timepicker
 $("#time").timepicker({ step: 15, timeFormat: 'H:i' });
 
+// Film/free functionality
 $("#film").click(function(e) {
 	if (e.target.checked)
 		$("#title").addClass("film");
@@ -40,6 +43,31 @@ $("#free").change(function(e) {
 
 if (!$("#cost").val())
 	$("#costdiv").hide();
+
+// Venuelist
+var mylist = [
+	// replace with auto-generated version sometime
+	"University of Manchester Students' Union",
+	"Central Halls",
+	"City Art Gallery Lecture Theatre",
+	"Islington Mill",
+	"Kraak Gallery",
+	"On The Eighth Day Café",
+	"Sand Bar",
+	"The Bunker, Plan B",
+	"Antwerp Mansion",
+	"People's History Museum"
+];
+
+venuelist.init(mylist, "#vlist", "#location");
+venuelist.empty = function(empty) {
+	if (empty)
+		$("#venues").addClass("empty");
+	else
+		$("#venues").removeClass("empty");	
+};
+
+$("#venues").show();
 
 });
 </script>
@@ -66,112 +94,9 @@ if (!$("#cost").val())
 <label id="flocation" for="location">Where is your event?</label>
 <input type="text" name="location" id="location" autocomplete="off" {{@value(@location)}}>
 
-<div class="venues">
-<style scoped>
-.x { margin-top: 10px; }
-ul, li { list-style-type: none; padding: 0; margin: 0; }
-ul { height: 104px; border: 1px solid #ccc; border-radius: 4px; }
-li { font-size: 80%; width: 289px; float: left; padding: 4px 5px; cursor: pointer; height: 18px; }
-li.selected { background-color: #eee; }
-li:hover { background-color: #ddd; }
-</style>
-
-<script>
-$(function() {
-
-if (!Array.prototype.forEach) {
-  Array.prototype.forEach = function(fn, scope) {
-    for (var i = 0, len = this.length; i < len; ++i) {
-      fn.call(scope || this, this[i], i, this);
-    }
-  }
-}
-
-var venuelist = [
-	"University of Manchester Students' Union",
-	"Central Halls",
-	"City Art Gallery Lecture Theatre",
-	"Islington Mill",
-	"Kraak Gallery",
-	"On The Eighth Day Café",
-	"Sand Bar",
-	"The Bunker, Plan B"
-];
-
-var list = {
-	"init": function(list, listelement, bindelement) {
-		var t = this;
-
-		this.list = list;
-		this.listElem = $(listelement);
-		this.bindElem = $(bindelement);
-
-		this.populate(this.list);
-
-		var update = function() {
-			t.deselect();
-			t.show_only_with($(this).val());
-		};
-
-		this.bindElem.keydown(update);
-		this.bindElem.keyup(update);
-		this.bindElem.change(update);
-	},
-
-	"depopulate": function() {
-		this.listElem.children().remove();
-	},
-
-	"populate": function(list) {
-		var t = this;
-
-		list.forEach(function(v) {
-			t.listElem.append("<li>" + v + "</li>");
-		});
-	
-		this.listElem.children().each(function(i, e) {
-			$(e).click(function(event) {
-				t.deselect();
-				$(event.target).addClass("selected");
-				t.bindElem.val(this.innerText);
-			});
-		});
-	},
-
-	"deselect": function() {
-		this.listElem.children().each(function(i, e) {
-			$(e).removeClass("selected");
-		});
-	},
-
-	"show_only_with": function(chars) {
-		var chars = chars.toLowerCase();
-		var matches = [];
-
-		this.list.forEach(function(value) {
-			if (value.toLowerCase().indexOf(chars) != -1)
-				matches.push(value);
-		});
-
-		this.depopulate();
-		this.populate(matches);
-	},
-};
-
-list.init(venuelist, "#venuelist", "#location");
-
-});
-</script>
-
-
-Or select from below:
-
-<ul id="venuelist">
-
-</ul>
-
+<div id="venues" style="display: none;">Or select from below:
+<ul id="vlist"></ul>
 </div>
-
 </fieldset>
 
 <fieldset>

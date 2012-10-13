@@ -64,14 +64,14 @@ if (!$("#cost").val())
 <input type="text" name="title" id="title" {{@value(@title)}}>
 <br>
 <label id="flocation" for="location">Where is your event?</label>
-<input type="text" name="location" id="location" {{@value(@location)}}>
+<input type="text" name="location" id="location" autocomplete="off" {{@value(@location)}}>
 
 <div class="venues">
 <style scoped>
 .x { margin-top: 10px; }
 ul, li { list-style-type: none; padding: 0; margin: 0; }
-ul { height: 100px; border: 1px solid black; }
-li { font-size: 80%; width: 288px; float: left; padding: 2px 5px; cursor: pointer; height: 20px; }
+ul { height: 104px; border: 1px solid #ccc; border-radius: 4px; }
+li { font-size: 80%; width: 289px; float: left; padding: 4px 5px; cursor: pointer; height: 18px; }
 li.selected { background-color: #eee; }
 li:hover { background-color: #ddd; }
 </style>
@@ -108,10 +108,18 @@ var list = {
 
 		this.populate(this.list);
 
-		bindElem.keyup(function(e) {
+		var update = function() {
 			t.deselect();
-			show_only_with(bindElem.val());
-		});
+			t.show_only_with($(this).val());
+		};
+
+		this.bindElem.keydown(update);
+		this.bindElem.keyup(update);
+		this.bindElem.change(update);
+	},
+
+	"depopulate": function() {
+		this.listElem.children().remove();
 	},
 
 	"populate": function(list) {
@@ -121,30 +129,32 @@ var list = {
 			t.listElem.append("<li>" + v + "</li>");
 		});
 	
-		$("#venuelist li").click(function(e) {
-			t.deselect();
-			$(e.target).addClass("selected");
-			bindElem.val(this.innerText);
+		this.listElem.children().each(function(i, e) {
+			$(e).click(function(event) {
+				t.deselect();
+				$(event.target).addClass("selected");
+				t.bindElem.val(this.innerText);
+			});
 		});
 	},
 
 	"deselect": function() {
-		$("#venuelist li").each(function(i, e) {
+		this.listElem.children().each(function(i, e) {
 			$(e).removeClass("selected");
 		});
 	},
 
 	"show_only_with": function(chars) {
-		chars = chars.toLowerCase();
-		$("#venuelist li").each(function(i, e) {
-			var there = e.innerText.toLowerCase().indexOf(chars);
-	
-			if (there == -1) {
-				$(e).hide();
-			} else {
-				$(e).show();
-			}
+		var chars = chars.toLowerCase();
+		var matches = [];
+
+		this.list.forEach(function(value) {
+			if (value.toLowerCase().indexOf(chars) != -1)
+				matches.push(value);
 		});
+
+		this.depopulate();
+		this.populate(matches);
 	},
 };
 

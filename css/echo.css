@@ -121,7 +121,7 @@ th { background-color: #eee; }
 
 /* Venues */
 
-#venues ul, li { list-style-type: none; padding: 0; margin: 0; }
+#venues ul, #venues li { list-style-type: none; padding: 0; margin: 0; }
 #venues.empty { color: #bbb; }
 
 #vlist { height: 104px; border: 1px solid #ccc; border-radius: 4px; }

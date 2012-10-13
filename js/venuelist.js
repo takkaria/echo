@@ -17,6 +17,13 @@ venuelist = {
 
 		this.populate(this.initial);
 
+		// Set default value?
+		this.listElem.children().each(function(i, e) {
+			if (e.innerText == t.bindElem.val()) {
+				t.select(e);
+			}
+		});
+
 		var update = function() {
 			t.deselect();
 			t.show_only_with($(this).val().toLowerCase());
@@ -39,13 +46,16 @@ venuelist = {
 	
 		this.listElem.children().each(function(i, e) {
 			$(e).on("click", function(event) {
-				console.log("clicked!");
-				t.deselect();
-				t.listElem.addClass("selected");
-				$(event.target).addClass("selected");
-				t.bindElem.val(this.innerText);
+				t.select(event.target);
 			});
 		});
+	},
+
+	"select" : function(elem) {
+		this.deselect();
+		this.listElem.addClass("selected");
+		$(elem).addClass("selected");
+		this.bindElem.val(elem.innerText);
 	},
 
 	"deselect": function() {

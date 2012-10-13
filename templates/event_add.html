@@ -41,7 +41,7 @@ $("#free").change(function(e) {
 	   $("#costdiv").show();
 });
 
-if (!$("#cost").val())
+if (!$("#cost").val() || document.getElementById("free").checked)
 	$("#costdiv").hide();
 
 // Venuelist
@@ -114,7 +114,7 @@ $("#venues").show();
 
 <fieldset>
 <label id="ffree" for="free">Is it free to get in?</label>
-<input type="checkbox" name="free" id="free" {{(@free||!@cost)?'checked':''}} >
+<input type="checkbox" name="free" id="free" {{@free?'checked':''}} >
 
 <div id="costdiv">
 <label id="fcost" for="cost">How much does it cost?</label>

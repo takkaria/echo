@@ -106,7 +106,7 @@ th { background-color: #eee; }
 #add form div.g { display: inline-block; vertical-align: top; }
 
 /* Width */
-#add textarea, #add input { width: 300px; }
+#add textarea, #add input[type="text"] { width: 300px; }
 #add label, #add form div.g, form p { width: 250px; }
 
 /* Individual fields */

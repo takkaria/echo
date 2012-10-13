@@ -24,12 +24,23 @@ $("#datepicker").datepicker({
 
 $("#time").timepicker({ step: 15, timeFormat: 'H:i' });
 
-$("#film").click(function() {
-	if ($("#title").hasClass("film"))
-		$("#title").removeClass("film");
-	else
+$("#film").click(function(e) {
+	if (e.target.checked)
 		$("#title").addClass("film");
+	else
+		$("#title").removeClass("film");
 });
+
+$("#free").change(function(e) {
+   if (e.target.checked)
+	   $("#costdiv").hide();
+   else
+	   $("#costdiv").show();
+});
+
+if (!$("#cost").val())
+	$("#costdiv").hide();
+
 });
 </script>
 
@@ -70,6 +81,16 @@ $("#film").click(function() {
 </fieldset>
 
 <fieldset>
+<label id="ffree" for="free">Is it free to get in?</label>
+<input type="checkbox" name="free" id="free" {{@free?'checked':''}} >
+
+<div id="costdiv">
+<label id="fcost" for="cost">How much does it cost?</label>
+<input type="text" name="cost" id="cost" {{@value(@cost)}}>
+</div>
+</fieldset>
+
+<fieldset>
 <div class="g">
 <label id="fblurb" for="blurb">Please describe your event:</label>
 <p class="desc">Please include cost (if not free), the group organising the event and information about booking if you have to book.</p>
@@ -85,11 +106,6 @@ $("#film").click(function() {
 </div>
 
 <input type="text" name="url" id="url" {{@value(@url)}}>
-</fieldset>
-
-<fieldset>
-<label id="ffree" for="free">Is this event free?</label>
-<input type="checkbox" name="free" id="free" {{@free?'checked':''}}>
 </fieldset>
 
 <fieldset>

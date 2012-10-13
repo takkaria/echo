@@ -7,7 +7,7 @@ class Event {
 	public $location;
 	public $blurb;
 	public $url;
-	public $free;
+	public $cost;
 	public $film;
 
 	public $email;
@@ -31,7 +31,7 @@ class Event {
 			$this->location = $r['location'];
 			$this->blurb = $r['blurb'];
 			$this->url = $r['url'];
-			$this->free = $r['free'] ? TRUE : FALSE;
+			$this->cost = $r['cost'];
 			$this->film = $r['type'] == "film" ? TRUE : FALSE;
 
 			$this->state = $r['state'];
@@ -90,11 +90,11 @@ class Event {
 	
 		/* XXX need to make sure location and blurb are provided */
 		/* XXX validate these */
-		$this->location = $_POST['location'];
-		$this->blurb = $_POST['blurb'];
-		$this->url = $_POST['url'];
+		$this->location = F3::scrub($_POST['location']);
+		$this->blurb = F3::scrub($_POST['blurb']);
+		$this->url = F3::scrub($_POST['url']);
 
-		$this->free = isset($_POST['free']) ? TRUE : FALSE;
+		$this->cost = isset($_POST['free']) ? NULL : F3::scrub($_POST['cost']);
 		$this->film = isset($_POST['film']) ? TRUE : FALSE;
 
 		return $messages;
@@ -140,7 +140,7 @@ class Event {
 		$e->location = $this->location;
 		$e->blurb = $this->blurb;
 		$e->url = $this->url;
-		$e->free = $this->free ? 1 : 0;
+		$e->cost = $this->cost;
 		if ($this->film)
 			$e->type = "film";
 
@@ -160,6 +160,7 @@ function set_event_data_from_POST() {
 	F3::set('blurb', F3::scrub($_POST['blurb']));
 	F3::set('url', F3::scrub($_POST['url']));
 	F3::set('free', isset($_POST['free']) ? TRUE : FALSE);
+	F3::set('cost', F3::scrub($_POST['cost']));
 	F3::set('film', isset($_POST['film']) ? TRUE : FALSE);
 	F3::set('email', F3::scrub($_POST['email']));
 }
@@ -171,7 +172,8 @@ function set_event_data_from_Event($event) {
 	F3::set('time', $event->datetime->format("H:i"));
 	F3::set('blurb', $event->blurb);
 	F3::set('url', $event->url);
-	F3::set('free', $event->free);
+	F3::set('free', $event->cost ? FALSE : TRUE);
+	F3::set('cost', $event->cost);
 	F3::set('film', $event->film);
 	F3::set('email', $event->email);
 }

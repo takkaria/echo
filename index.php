@@ -55,14 +55,16 @@ function reroute($where) {
 	die;
 }
 
-function admin_check() {
+function admin_check($reroute = TRUE) {
 	session_start();
 	if (!isset($_SESSION['admin'])) {
-		reroute("/admin/login");
-		exit();
+		if ($reroute) {
+			reroute("/admin/login");
+			exit();
+		}
+	} else {
+		F3::set("admin", TRUE);
 	}
-
-	F3::set("admin", TRUE);
 }
 
 function readonly_check() {
@@ -77,6 +79,7 @@ function readonly_check() {
 /********************/
 
 F3::route('GET /', function() {
+	admin_check(FALSE);
 
 	/* Events */
 	$where = "date >= date('now', 'start of day') AND " .
@@ -153,7 +156,6 @@ F3::route('POST /event/add', function() {
 	$messages = $event->parse_form_data();
 
 	if (count($messages) > 0) {
-		F3::set("title", "Add an event");
 		set_event_data_from_POST();
 		F3::set('messages', $messages);
 		echo Template::serve("event_add.html");
@@ -179,7 +181,7 @@ F3::route('POST /event/add', function() {
 /**** Editing existing events ****/
 /*********************************/
 
-F3::route('GET /event/@id', function() {
+F3::route('GET /event/@id/edit', function() {
 	admin_check();
 	$id = intval(F3::get('PARAMS.id'));
 
@@ -188,7 +190,7 @@ F3::route('GET /event/@id', function() {
 	echo Template::serve("event_add.html");
 });
 
-F3::route('POST /event/@id', function() {
+F3::route('POST /event/@id/edit', function() {
 	admin_check();
 	readonly_check();
 	$id = intval(F3::get('PARAMS.id'));

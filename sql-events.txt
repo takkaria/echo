@@ -14,7 +14,7 @@ CREATE TABLE events (
 	blurb TEXT,
 	url TEXT,
 	type TEXT,		/* ATM this can only be "film" */
-	free INTEGER,	/* 1 = free, 0 = not free */
+	cost TEXT,		/* NULL = free */
 
 	/* State crap */
 	state TEXT,		/* "submitted", "validated", "approved" */

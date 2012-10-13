@@ -16,7 +16,10 @@
 </div>
 
 <p class="desc">
-<F3:check if="{{@event->free}}"><i>Free.</i> </F3:check>
+<F3:check if="{{@event->cost}}">
+<F3:false><i>Free.</i></F3:false>
+<F3:true><i>{{@event->cost}}.</i></F3:true>
+</F3:check>
 {{@event->blurb}}
 <F3:check if="{{@event->url}}">
 	<F3:check if="{{@facebook(@event->url)}}">

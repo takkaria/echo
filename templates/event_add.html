@@ -114,7 +114,7 @@ $("#venues").show();
 
 <fieldset>
 <label id="ffree" for="free">Is it free to get in?</label>
-<input type="checkbox" name="free" id="free" {{@free?'checked':''}} >
+<input type="checkbox" name="free" id="free" {{(@free||!@cost)?'checked':''}} >
 
 <div id="costdiv">
 <label id="fcost" for="cost">How much does it cost?</label>

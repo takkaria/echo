@@ -65,6 +65,103 @@ if (!$("#cost").val())
 <br>
 <label id="flocation" for="location">Where is your event?</label>
 <input type="text" name="location" id="location" {{@value(@location)}}>
+
+<div class="venues">
+<style scoped>
+.x { margin-top: 10px; }
+ul, li { list-style-type: none; padding: 0; margin: 0; }
+ul { height: 100px; border: 1px solid black; }
+li { font-size: 80%; width: 288px; float: left; padding: 2px 5px; cursor: pointer; height: 20px; }
+li.selected { background-color: #eee; }
+li:hover { background-color: #ddd; }
+</style>
+
+<script>
+$(function() {
+
+if (!Array.prototype.forEach) {
+  Array.prototype.forEach = function(fn, scope) {
+    for (var i = 0, len = this.length; i < len; ++i) {
+      fn.call(scope || this, this[i], i, this);
+    }
+  }
+}
+
+var venuelist = [
+	"University of Manchester Students' Union",
+	"Central Halls",
+	"City Art Gallery Lecture Theatre",
+	"Islington Mill",
+	"Kraak Gallery",
+	"On The Eighth Day Café",
+	"Sand Bar",
+	"The Bunker, Plan B"
+];
+
+var list = {
+	"init": function(list, listelement, bindelement) {
+		var t = this;
+
+		this.list = list;
+		this.listElem = $(listelement);
+		this.bindElem = $(bindelement);
+
+		this.populate(this.list);
+
+		bindElem.keyup(function(e) {
+			t.deselect();
+			show_only_with(bindElem.val());
+		});
+	},
+
+	"populate": function(list) {
+		var t = this;
+
+		list.forEach(function(v) {
+			t.listElem.append("<li>" + v + "</li>");
+		});
+	
+		$("#venuelist li").click(function(e) {
+			t.deselect();
+			$(e.target).addClass("selected");
+			bindElem.val(this.innerText);
+		});
+	},
+
+	"deselect": function() {
+		$("#venuelist li").each(function(i, e) {
+			$(e).removeClass("selected");
+		});
+	},
+
+	"show_only_with": function(chars) {
+		chars = chars.toLowerCase();
+		$("#venuelist li").each(function(i, e) {
+			var there = e.innerText.toLowerCase().indexOf(chars);
+	
+			if (there == -1) {
+				$(e).hide();
+			} else {
+				$(e).show();
+			}
+		});
+	},
+};
+
+list.init(venuelist, "#venuelist", "#location");
+
+});
+</script>
+
+
+Or select from below:
+
+<ul id="venuelist">
+
+</ul>
+
+</div>
+
 </fieldset>
 
 <fieldset>

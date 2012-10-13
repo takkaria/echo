@@ -95,6 +95,8 @@ th { background-color: #eee; }
 
 /** Event add formatting **/
 
+#add { width: 600px; }
+
 #add form { margin-top: 1em; }
 #add form, #add form input { font-size: 13pt; }
 #add fieldset { border: 0; margin: 0; padding: 0; padding: 10px 0; border-bottom: 1px solid #ddd; }

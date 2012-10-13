@@ -1,6 +1,9 @@
 CREATE TABLE venues (
-	name TEXT PRIMARY KEY,
+	id INTEGER PRIMARY KEY,
+
+	name TEXT,
 	address TEXT,
+	postcode TEXT,
 	info TEXT
 );
 
@@ -10,7 +13,7 @@ CREATE TABLE events (
 	/* Event data */
 	title TEXT,
 	date DATETIME,
-	location TEXT,
+	location TEXT,	/* Either text or numeric reference to venues */
 	blurb TEXT,
 	url TEXT,
 	type TEXT,		/* ATM this can only be "film" */

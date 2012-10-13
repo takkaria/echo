@@ -204,7 +204,7 @@ F3::route('POST /event/@id/edit', function() {
 		echo Template::serve("event_add.html");
 	} else {
 		$event->save();
-		reroute("/event/" . $id . "?msg=Event%20saved.");
+		reroute("/event/" . $id . "/edit?msg=Event%20saved.");
 	}
 });
 

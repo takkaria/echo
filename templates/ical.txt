@@ -1,6 +1,10 @@
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:echomanchester.net
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Echo Manchester
+X-PUBLISHED-TTL:PT12H
 
 <F3:repeat group="{{@events}}" value="{{@event}}">
 BEGIN:VEVENT
@@ -19,7 +23,7 @@ URL:{{@event->url}}
 CATEGORIES:film
 </F3:check>
 
-DTSTART:{{@event->datetime->format('Ymd\THis')}}
+DTSTART;TZID=Europe/London:{{@event->datetime->format('Ymd\THis')}}
 
 END:VEVENT
 

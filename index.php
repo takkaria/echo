@@ -17,7 +17,7 @@ F3::set("UI", BASEPATH . "templates/");
 require_once BASEPATH . 'lib/Event.php';
 require_once BASEPATH . 'lib/template_utils.php';
 
-date_default_timezone_set('UTC');
+date_default_timezone_set('Europe/London');
 $options = parse_ini_file(BASEPATH . 'doormat.ini', true);
 
 define("READONLY", $options['db']['readonly']);

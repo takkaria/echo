@@ -19,7 +19,7 @@ URL:{{@event->url}}
 CATEGORIES:film
 </F3:check>
 
-DTSTART:{{@event->datetime->format('Ymd\THis\Z')}}
+DTSTART:{{@event->datetime->format('Ymd\THis')}}
 
 END:VEVENT
 

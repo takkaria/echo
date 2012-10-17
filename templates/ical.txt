@@ -1,0 +1,28 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:echomanchester.net
+
+<F3:repeat group="{{@events}}" value="{{@event}}">
+BEGIN:VEVENT
+UID:{{@event->id}}@echomanchester.net
+SUMMARY:{{@event->title}}
+
+DESCRIPTION:{{@event->blurb}}
+
+LOCATION:{{@event->location}}
+<F3:check if="{{@event->url}}">
+
+URL:{{@event->url}}
+</F3:check>
+<F3:check if="{{@event->film}}">
+
+CATEGORIES:film
+</F3:check>
+
+DTSTART:{{@event->datetime->format('Ymd\THis\Z')}}
+
+END:VEVENT
+
+</F3:repeat>
+
+END:VCALENDAR

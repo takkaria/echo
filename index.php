@@ -433,6 +433,19 @@ F3::route('GET /admin/logout', function() {
 	reroute("/");
 });
 
+
+/**************************/
+/**** iCalendar format ****/
+/**************************/
+
+F3::route('GET /icalendar', function() {
+	$where = "date >= date('now', 'start of day') AND state == 'approved'";
+	$results = Event::load($where);
+	F3::set('events', $results);
+	echo Template::serve("ical.txt");
+});
+
+
 F3::run();
 
 ?>

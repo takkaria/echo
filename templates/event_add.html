@@ -41,7 +41,7 @@ $("#free").change(function(e) {
 	   $("#costdiv").show();
 });
 
-if (!$("#cost").val() || document.getElementById("free").checked)
+if (document.getElementById("free").checked)
 	$("#costdiv").hide();
 
 // Venuelist

@@ -1,45 +1,5 @@
 <h3>{{@formatdate(@day)}}</h3>
 
 <F3:repeat group="{{@events}}" value="{{@event}}">
-
-<div class="event">
-<div class="time">
-<span class="n-{{(@event->datetime->format("i") == "00") ? "l" : "s"}}">{{
-(@event->datetime->format("i") == "00") ?
-	@event->datetime->format("g") :
-	@event->datetime->format("g:i")}}</span><span class="ampm">{{@event->datetime->format("a")}}</span>
-</div>
-
-<div class="what">
-<h4 id="{{@event->id}}"><F3:check if="{{@event->film}}"><img src="{{@baseurl}}/img/film.png" alt="Film showing: "></F3:check> {{@event->title}}</h4>
-<p class="where">{{@event->location}}</p>
-</div>
-
-<p class="desc">
-<F3:check if="{{@event->cost}}">
-<F3:false><i>Free.</i></F3:false>
-<F3:true><i>{{@event->cost}}.</i></F3:true>
-</F3:check>
-{{@event->blurb}}
-<F3:check if="{{@event->url}}">
-	<F3:check if="{{@facebook(@event->url)}}">
-	<F3:true><a href="{{@event->url}}" class="fb">Fb</a></F3:true>
-	<F3:false> ... <a href="{{@event->url}}">more info</a></F3:false>
-	</F3:check>
-</F3:check>
-</p>
-
-<F3:check if="{{@admin}}">{{* I don't like this being here... *}}
-<div class="admin">
-	<p><a href="{{@baseurl}}/event/{{@event->id}}/edit">Edit</a>
-	<F3:check if="{{@event->state=='approved'}}">
-		<F3:true><form action="{{@baseurl}}/event/{{@event->id}}/unapprove" method="POST"><input type="submit" value="Unapprove"></form></F3:true>
-		<F3:false><form action="{{@baseurl}}/event/{{@event->id}}/approve" method="POST"><input type="submit" value="Approve"></form></F3:false>
-	</F3:check>
-	<form action="{{@baseurl}}/event/{{@event->id}}/delete" method="POST"><input type="submit" value="Delete"></form>
-</div>
-</F3:check>
-
-</div>
-
+<F3:include href="event_fragment.html">
 </F3:repeat>

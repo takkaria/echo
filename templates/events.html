@@ -1,29 +1,64 @@
 <!DOCTYPE html>
 <title>Echo :: Future events</title>
+
+<style>
+#events-simple h4 { margin: 0; padding: 0; }
+#events-simple .date { display: block; clear: both; font-size: 110%; margin-top: 1em; margin-bottom: 0.5em; }
+#events-simple .time { width: 3em; font-size: 90%; margin: 0 1em; }
+#events-simple .e { margin: 0; }
+
+#events-simple .e:hover { background-color: #eee; cursor: pointer; }
+
+#eventinfo { position: absolute; background-color: white; width: 380px; padding: 10px; box-shadow: 5px 5px 5px #aaa; display: none; border: 2px solid  }
+
+#eventinfo #close { float: right; padding: 0 2px; border-radius: 2px; border: 1px solid #aaa; }
+#eventinfo #close:hover { background-color: #eee; cursor: pointer; }
+</style>
+
 <F3:include href="header.html" />
 
-<section>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script>
+$(function() {
+	$(".e").click(function(e) {
+		var id = e.currentTarget.id.slice(1);
+
+		$("#eventinfo div").load("{{@baseurl}}/event/" + id + " #container",
+				function() {
+					var info = $("#eventinfo");
+					info.css('top', e.pageY + "px");
+					info.css('left', e.pageX + "px");
+					info.show();
+				});
+	});
+
+	$("#close").click(function() {
+		$("#eventinfo").hide();
+	});
+});
+</script>
+
+<section id="events-simple">
 <h2>More events this month (and next!)</h2>
 <p class="sublinks"><a href="event/add">add your own event</a>
 
-<style>
-h4 { margin: 0; padding: 0; }
-.date { display: block; clear: both; font-size: 110%; margin-top: 1em; margin-bottom: 0.5em; }
-.time { width: 3em; font-size: 90%; margin: 0 1em; }
-.event { margin: 0; }
-</style>
+<p>Click on an event for more information.</p>
 
 <F3:repeat group="{{@group_events()}}" key="{{@day}}" value="{{@events}}">
 <h4 class="date">{{@formatdate(@day, 'l jS')}}</h4>
 
 <F3:repeat group="{{@events}}" value="{{@event}}">
-<div class="event">
+<div class="e" id="e{{@event->id}}">
 	<span class="time">{{@event->datetime->format("H:i")}}</span>
-	<span class="title" id="{{@event->id}}"><b>{{@event->title}}</b> <small style="padding-left: 1em;">{{@event->location}}</small></span>
+	<span class="title"><b>{{@event->title}}</b> <small style="padding-left: 1em;">{{@event->location}}</small></span>
 </div>
 </F3:repeat>
 
 </F3:repeat>
 </section>
+
+<div id="eventinfo">
+<span id="close">x</span>
+<div></div></div>
 
 <F3:include href="footer.html" />

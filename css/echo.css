@@ -1,10 +1,8 @@
-@import url(http://fonts.googleapis.com/css?family=Raleway:700,500);
-
 /* XXX include dyslexic stylesheets! */
 
-body { margin: 0 20px; width: 1000px; }
+/** Basic styling **/
 
-html { background-color: #eee; color: #222; margin: 0; word-spacing: -0.1em; }
+html { color: #222; margin: 0; word-spacing: -0.1em; }
 html, input, textarea { font-size: 11pt; line-height: 1.25; font-family: Arial; }
 
 a { text-decoration: none; color: blue; }
@@ -15,10 +13,16 @@ h1, h3, h4, h5, h6 { font-family: 'Raleway', Arial;  }
 h1 { font-size: 32px; margin: 0; }
 h2 { margin: 0; font-size: 100%; }
 h3 { font-size: 20px; }
-h4 { font-size: 16px; }
+h4 { font-size: 16px; margin: 0; }
 
 /** A quick word on lists... */
 li { margin-bottom: 10px; }
+
+
+/** Layout **/
+
+body { margin: 0 20px; width: 1000px; }
+html { background-color: #eee; }
 
 /** Message box - hacky but works */
 
@@ -46,23 +50,21 @@ th { background-color: #eee; }
 
 /*<< total width = 380 + 520 + 20 + 4x padding (15) = 980 */
 
-/** Shared events and posts */
-.event, .post { margin: 1em 0; clear: both; }
-.event p, .post p { margin: 0; }
-.event h4, .post h4 { margin: 0; }
-
 /** Events */
 #events h3 { letter-spacing: 1px; font-weight: normal; border-bottom: 1px solid black; margin-bottom: -5px; clear: both; background-color: #dedede; padding: 2px 2px 0 5px; border-radius: 0 10px 0 0; margin-top: 0.5em; }
 
-.event * { border: px solid #ccc; }
-
 .event { margin-bottom: 15px; }
+
+.event { margin: 1em 0; clear: both; }
+.event p { margin: 0; }
+
+.event .date { }
 
 .event .time, .event .what { display: inline-block; }
 .event .time { vertical-align: top; }
 .event .what { vertical-align: middle; }
 
-.event .time { margin: 2px 5px 0 5px; text-align: center; }
+.event .time { margin: 2px 5px 0 5px; text-align: center; float: right; }
 .event .n-l { font-size: 26px; line-height: 26px; }
 .event .n-s { font-size: 20px; }
 .event .ampm { display: block; font-size: 14px; text-transform: uppercase; }
@@ -74,7 +76,7 @@ th { background-color: #eee; }
 .event .desc { clear: both; margin-top: 8px; }
 
 .event .fb { border: 1px solid #666; border-radius: 8px; background-color: #3B5998; color: #eee; padding: 0px 6px; }
-.event .fb:hover { text-decoration: none; background-color: #7C90BA; }
+.event .fb:hover { text-decoration: none; background-color: #7C90BA; }	
 
 /** Admin controls **/
 
@@ -86,9 +88,12 @@ th { background-color: #eee; }
 .event+* { clear: both; }
 
 /** Posts **/
+.post { margin: 1em 0 1em 0; clear: both; }
 .post { margin-top: 0.5em; margin-bottom: 1.5em; }
 .post h4 { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
 .post .date { font-size: 75%; margin-top: 0.5em; text-align: right; clear: both; }
+
+.post p { margin: 0; }
 
 .post .more { font-style: italic; }
 .post img { float: right; padding: 1px 2px 2px 10px; }

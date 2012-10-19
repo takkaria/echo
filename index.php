@@ -125,7 +125,7 @@ F3::route('GET /about', function() {
 F3::route('GET /events', function() {
 
 	/* Events */
-	$where = "date >= date('now', 'start of month') AND " .
+	$where = "date >= date('now', 'start of day') AND " .
 			"date <= date('now', 'start of month', '+2 month', '-1 day') AND " .
 			"state == 'approved'";
 	$results = Event::load($where);
@@ -180,6 +180,14 @@ F3::route('POST /event/add', function() {
 /*********************************/
 /**** Editing existing events ****/
 /*********************************/
+
+F3::route('GET /event/@id', function() {
+	$id = intval(F3::get('PARAMS.id'));
+
+	$event = new Event($id);
+	F3::set("event", $event);
+	echo Template::serve("event.html");
+});
 
 F3::route('GET /event/@id/edit', function() {
 	admin_check();

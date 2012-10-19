@@ -28,7 +28,7 @@ class Event {
 			$this->title = $r['title'];
 			$this->datetime =
 					DateTime::createFromFormat("Y-m-j H:i", $r['date']);
-			$this->location = $r['location'];
+			$this->location = new Venue($r['location']);
 			$this->blurb = $r['blurb'];
 			$this->url = $r['url'];
 			$this->cost = $r['cost'];
@@ -90,7 +90,7 @@ class Event {
 	
 		/* XXX need to make sure location and blurb are provided */
 		/* XXX validate these */
-		$this->location = F3::scrub($_POST['location']);
+		$this->location = new Venue(F3::scrub($_POST['location']));
 		$this->blurb = F3::scrub($_POST['blurb']);
 		$this->url = F3::scrub($_POST['url']);
 
@@ -137,7 +137,7 @@ class Event {
 		$e->id = $this->id;
 		$e->title = $this->title;
 		$e->date = $this->datetime->format("Y-m-d H:i");
-		$e->location = $this->location;
+		$e->location = $this->location->dbname();
 		$e->blurb = $this->blurb;
 		$e->url = $this->url;
 		$e->cost = $this->cost;

@@ -13,7 +13,7 @@ SUMMARY:{{@event->title}}
 
 DESCRIPTION:{{@event->blurb}}
 
-LOCATION:{{@event->location}}
+LOCATION:{{@event->location->short()}}
 <F3:check if="{{@event->url}}">
 
 URL:{{@event->url}}

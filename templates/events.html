@@ -50,7 +50,7 @@ $(function() {
 <F3:repeat group="{{@events}}" value="{{@event}}">
 <div class="e" id="e{{@event->id}}">
 	<span class="time">{{@event->datetime->format("H:i")}}</span>
-	<span class="title"><b>{{@event->title}}</b> <small style="padding-left: 1em;">{{@event->location}}</small></span>
+	<span class="title"><b>{{@event->title}}</b> <small style="padding-left: 1em;">{{@event->location->short()}}</small></span>
 </div>
 </F3:repeat>
 

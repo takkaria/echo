@@ -9,7 +9,7 @@
 
 <div class="what">
 <h4 id="{{@event->id}}"><F3:check if="{{@event->film}}"><img src="{{@baseurl}}/img/film.png" alt="Film showing: "></F3:check> {{@event->title}}</h4>
-<p class="where">{{@event->location}}</p>
+<p class="where">{{@event->location->short()}}</p>
 </div>
 
 <p class="desc">

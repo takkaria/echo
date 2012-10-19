@@ -14,6 +14,7 @@ F3::set("UI", BASEPATH . "templates/");
 
 /**** Initialise ****/
 
+require_once BASEPATH . 'lib/Venue.php';
 require_once BASEPATH . 'lib/Event.php';
 require_once BASEPATH . 'lib/template_utils.php';
 

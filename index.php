@@ -182,6 +182,7 @@ F3::route('POST /event/add', function() {
 /*********************************/
 
 F3::route('GET /event/@id', function() {
+	admin_check(FALSE);
 	$id = intval(F3::get('PARAMS.id'));
 
 	$event = new Event($id);

@@ -286,6 +286,42 @@ F3::route('POST /event/@id/delete', function() {
 		echo "Approved";
 });
 
+/****************/
+/**** Venues ****/
+/****************/
+
+F3::route('GET /venue/@id', function() {
+	$v = new Venue(intval(F3::get('PARAMS.id')));
+	F3::set("venue", $v);
+	echo Template::serve("venue.html");
+});
+
+F3::route('GET /venue/add', function() {
+	readonly_check();
+	echo Template::serve("venue_add.html");
+});
+
+F3::route('POST /venue/add', function() {
+	readonly_check();
+	admin_check();
+
+	$venue = new Venue();
+	$messages = $venue->parse_form_data();
+
+	if (count($messages) > 0) {
+		set_venue_data_from_POST();
+		F3::set('messages', $messages);
+		echo Template::serve("venue_add.html");
+		die;
+	}
+
+	$venue->save();
+
+	reroute("/?msg=Venue+added.");
+});
+
+
+
 /********************************/
 /**** Feed display & editing ****/
 /********************************/

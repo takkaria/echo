@@ -57,6 +57,38 @@ class Venue {
 		else
 			return $this->name;
 	}
+
+	function parse_form_data() {
+		var_dump($_POST);
+
+		$this->name = F3::scrub($_POST['name']);
+		$this->address = F3::scrub($_POST['address']);
+		$this->postcode = F3::scrub($_POST['postcode']);
+		$this->info = F3::scrub($_POST['info']);
+
+		return array();
+	}
+
+	public function save() {
+		$v = new Axon('venues');
+
+		if ($this->id)
+			$v->load('id=' . $this->id);
+
+		$v->name = $this->name;
+		$v->address = $this->address;
+		$v->postcode = $this->postcode;
+		$v->info = $this->info;
+
+		$v->save();
+	}
+}
+
+function set_venue_data_from_POST() {
+	F3::set('name', F3::scrub($_POST['name']));
+	F3::set('address', F3::scrub($_POST['address']));
+	F3::set('postcode', F3::scrub($_POST['postcode']));
+	F3::set('info', F3::scrub($_POST['info']));
 }
 
 ?>

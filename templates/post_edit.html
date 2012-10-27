@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<title>{{@appname}} :: Edit post</title>
+<F3:include href="_stylesheets.html" />
+<link rel="stylesheet" type="text/css" href="{{@baseurl}}/css/editform.css">
+
+<body class="thin">
+<F3:include href="_header.html" />
+
+<section id="venue_add">
+<h2>Edit post</h2>
+
+<F3:check if="{{count(@messages)}}">
+<ul>
+<F3:repeat group="{{@messages}}" value="{{@message}}">
+	<li>{{@message}}
+</F3:repeat>
+</ul>
+</F3:check>
+
+<form method="POST" action="?">
+
+<input type="hidden" name="id" value="{{@id}}">
+
+<fieldset>
+<label id="ftitle" for="title">Title:</label>
+<input type="text" name="title" id="title" {{@value(@title)}}>
+</fieldset>
+
+<fieldset>
+<label id="fsummary" for="summary">Summary:</label>
+<textarea name="summary" id="summary" rows="8">{{@summary}}</textarea>
+</fieldset>
+
+<input type="submit" value="Submit">
+</form>
+</section>
+
+<F3:include href="_footer.html" />

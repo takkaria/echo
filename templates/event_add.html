@@ -48,17 +48,9 @@ if (document.getElementById("free").checked)
 
 // Venuelist
 var mylist = [
-	// replace with auto-generated version sometime
-	"University of Manchester Students' Union",
-	"Central Halls",
-	"City Art Gallery Lecture Theatre",
-	"Islington Mill",
-	"Kraak Gallery",
-	"On The Eighth Day Café",
-	"Sand Bar",
-	"The Bunker, Plan B",
-	"Antwerp Mansion",
-	"People's History Museum"
+<F3:repeat group="{{@get_venues()}}" value="{{@venue}}">
+	"{{@venue.name}}",
+</F3:repeat>
 ];
 
 venuelist.init(mylist, "#vlist", "#location");

@@ -47,4 +47,10 @@ F3::set('comma2br', function($text) {
 	return preg_replace('/, /', '<br>', $text);
 });
 
+// Convert commas into brs
+F3::set('get_venues', function() {
+	DB::sql("SELECT name FROM venues");
+	return F3::get('DB->result');
+});
+
 ?>

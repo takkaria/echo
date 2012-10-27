@@ -331,7 +331,7 @@ F3::route('GET /feeds', function() {
 	DB::sql("SELECT * FROM feeds", NULL, 0, 'feeds');
 	F3::set('feeds', F3::get('feeds->result'));
 
-	echo Template::serve("feeds.html");	
+	echo Template::serve("feeds.html");
 });
 
 F3::route('POST /feeds/add', function() {
@@ -364,7 +364,7 @@ F3::route('POST /feeds/add', function() {
 });
 
 F3::route('POST /feeds/edit', function() {
-	admin_check()
+	admin_check();
 	readonly_check();
 
 	for ($i = 1; $i <= count($_POST["feed_url"]); $i++) {

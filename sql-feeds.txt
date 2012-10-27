@@ -5,7 +5,8 @@ CREATE TABLE posts (
 	date DATETIME,
 	summary TEXT,
 	image TEXT,	 /* this is an URL... maybe make it a data: link? */
-	feed_url TEXT
+	feed_url TEXT,
+	hidden INTEGER
 );
 
 CREATE TABLE feeds (

@@ -1,6 +1,7 @@
 <div class="event">
 
 <div class="time">
+
 <span class="n-{{(@event->datetime->format("i") == "00") ? "l" : "s"}}">{{
 (@event->datetime->format("i") == "00") ?
 	@event->datetime->format("g") :
@@ -8,7 +9,7 @@
 </div>
 
 <div class="what">
-<h4 id="{{@event->id}}"><F3:check if="{{@event->film}}"><img src="{{@baseurl}}/img/film.png" alt="Film showing: "></F3:check> {{@event->title}}</h4>
+<h4 id="e{{@event->id}}"><F3:check if="{{@event->film}}"><img src="{{@baseurl}}/img/film.png" alt="Film showing: "></F3:check> {{@event->title}}</h4>
 <p class="where">
 <F3:check if="{{@event->location->in_db}}">
 <a href="{{@baseurl}}/venue/{{@event->location->id}}">

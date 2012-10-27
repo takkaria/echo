@@ -93,6 +93,7 @@ F3::route('GET /', function() {
 	/* Feed posts */
 	DB::sql("SELECT *
 		FROM post_info
+		WHERE hidden IS NOT 1
 		ORDER BY date DESC
 		LIMIT 0, 10", NULL, 0, 'feeds');
 
@@ -100,6 +101,7 @@ F3::route('GET /', function() {
 	foreach ($results as &$post) {
 		$ts = strtotime($post['date']);
 
+		$post['id'] = $post['id'];
 		$post['time'] = strftime('%H:%M', $ts);
 		$post['date'] = strftime('%a %e %B', $ts);
 		$post['feed'] = array();
@@ -125,8 +127,6 @@ F3::route('GET /about', function() {
 /***************************/
 
 F3::route('GET /events', function() {
-
-	/* Events */
 	$where = "date >= date('now', 'start of day') AND " .
 			"date <= date('now', 'start of month', '+2 month', '-1 day') AND " .
 			"state == 'approved'";
@@ -285,6 +285,49 @@ F3::route('POST /event/@id/delete', function() {
 		echo "Failure";
 	else
 		echo "Approved";
+});
+
+/***********************/
+/**** Editing posts ****/
+/***********************/
+
+F3::route('GET /post/edit', function() {
+	admin_check();
+	readonly_check();
+
+	DB::sql("SELECT id, title, summary FROM posts WHERE id=:id", array(":id" => $_GET['id']), 0, 'feeds');
+	$r = F3::get('feeds->result');
+	$r = $r[0];
+
+	F3::set('id', $r['id']);
+	F3::set('title', $r['title']);
+	F3::set('summary', $r['summary']);
+
+	echo Template::serve("post_edit.html");
+});
+
+F3::route('POST /post/edit', function() {
+	admin_check();
+	readonly_check();
+
+	$values = array(
+		":id" => $_POST['id'],
+		":title" => $_POST['title'],
+		":summary" => $_POST['summary']);
+
+	DB::sql("UPDATE posts SET title=:title, summary=:summary WHERE id=:id", $values, 0, 'feeds');
+
+	reroute("/?msg=Done.");
+});
+
+F3::route('POST /post/hide', function() {
+	admin_check();
+	readonly_check();
+
+	$values = array(":id" => $_GET['id']);
+	DB::sql("UPDATE posts SET hidden=1 WHERE id=:id", $values, 0, 'feeds');
+
+	reroute("/?msg=Hidden!");
 });
 
 /****************/

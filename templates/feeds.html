@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <title>{{@appname}} :: Feeds</title>
 <F3:include href="_stylesheets.html" />
+<style>
+#feeds h3 { margin-top: 10px; }
+#feeds input#url { width: 40em; }
+#feeds input.site_url { width: 20em; }
+#feeds .delete { text-align: center; }
+</style>
 
 <body class="wide">
 <F3:include href="_header.html" />
@@ -8,28 +14,38 @@
 <section id="feeds">
 <h2>Feeds</h2>
 
+<h3>Add a new feed</h3>
+<form method="POST" action="{{@baseurl}}/feeds/add">
+<input type="text" placeholder="URL" id="url" name="url"> <input type="submit" value="Add">
+</form>
+
+<h3>Edit existing feed info</h3>
+
+<form method="POST" action="{{@baseurl}}/feeds/edit">
+
 <table>
 <thead>
 <tr>
-<th>Title
-<th>Feed URL
+<th>Delete
+<th>Name
 <th>Site URL
+<th>Feed URL
 </thead>
 
-<F3:repeat group="{{@feeds}}" value="{{@feed}}">
+<F3:repeat group="{{@feeds}}" value="{{@feed}}" counter="{{@i}}">
 <tr>
-<td><a href="feeds/delete/{{(urlencode(@feed.feed_url))}}" title="Delete feed">x</a> {{@feed.title}}
-<td><a href="{{@feed.feed_url}}">{{@feed.feed_url}}</a>
-<td><a href="{{@feed.site_url}}">{{@feed.site_url}}</a>
+<input type="hidden" name="feed_url[{{@i}}]" value="{{@feed.feed_url}}">
+<td class="delete"><input type="checkbox" class="checkbox" name="delete[{{@i}}]">
+<td><input type="text" class="title" name="title[{{@i}}]" value="{{@feed.title}}">
+<td><input type="text" class="site_url" name="site_url[{{@i}}]" value="{{@feed.site_url}}">
+<td>{{@feed.feed_url}}
 </F3:repeat>
-
-<tr>
-<td colspan='3'>
-<form method="POST" action="feeds/add">
-Add a new feed: <input type="text" name="url"> <input type="submit" value="Add">
-</form>
 </table>
+
+<input type="submit" value="Submit changes">
+
+</form>
 
 </section>
 
-<F3:include href="footer.html" />
+<F3:include href="_footer.html" />

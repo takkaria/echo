@@ -321,8 +321,6 @@ F3::route('POST /venue/add', function() {
 	reroute("/?msg=Venue+added.");
 });
 
-
-
 /********************************/
 /**** Feed display & editing ****/
 /********************************/
@@ -331,11 +329,7 @@ F3::route('GET /feeds', function() {
 	admin_check();
 
 	DB::sql("SELECT * FROM feeds", NULL, 0, 'feeds');
-
-	$results = F3::get('feeds->result');
-//	foreach ($results as &$feeds) {
-//	}
-	F3::set('feeds', $results);
+	F3::set('feeds', F3::get('feeds->result'));
 
 	echo Template::serve("feeds.html");	
 });
@@ -367,6 +361,29 @@ F3::route('POST /feeds/add', function() {
 		$message = "Feed added.";
 
 	reroute("/feeds?msg=" . $message);
+});
+
+F3::route('POST /feeds/edit', function() {
+	admin_check()
+	readonly_check();
+
+	for ($i = 1; $i <= count($_POST["feed_url"]); $i++) {
+		if (isset($_POST["delete"][$i])) {
+			$values = array(":feed_url" => $_POST["feed_url"][$i]);
+			DB::sql("DELETE FROM feeds WHERE feed_url=:feed_url", $values, 0, 'feeds');
+			DB::sql("DELETE FROM posts WHERE feed_url=:feed_url", $values, 0, 'feeds');
+
+		} else {
+			$values = array(
+				":feed_url" => $_POST["feed_url"][$i],
+				":site_url" => $_POST["site_url"][$i],
+				":title" => $_POST["title"][$i]);
+
+			DB::sql("UPDATE feeds SET site_url=:site_url, title=:title WHERE feed_url=:feed_url", $values, 0, 'feeds');
+		}
+	}
+
+	reroute("/feeds");
 });
 
 /******************************/

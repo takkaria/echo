@@ -139,7 +139,17 @@ F3::route('GET /events/unapproved', function() {
 	admin_check();
 	F3::set('events', Event::load("state == 'validated'"));
 	F3::set('admin', TRUE);
-	echo Template::serve("events_unapproved.html");
+	echo Template::serve("events.html");
+});
+
+F3::route('POST /events/purge', function() {
+	admin_check();
+	readonly_check();
+
+	$m = intval($_POST['months']);
+	DB::sql("DELETE FROM events WHERE date < date('now', '-".$m." months')");
+
+	reroute("/admin?msg=Purged.");
 });
 
 /***************************/
@@ -178,10 +188,6 @@ F3::route('POST /event/add', function() {
 
 	reroute("/?msg=Event+submitted.+Please+check+your+email.");
 });
-
-/*********************************/
-/**** Editing existing events ****/
-/*********************************/
 
 F3::route('GET /event/@id', function() {
 	admin_check(FALSE);
@@ -285,6 +291,20 @@ F3::route('POST /event/@id/delete', function() {
 		echo "Failure";
 	else
 		echo "Approved";
+});
+
+/***********************/
+/**** Posts in bulk ****/
+/***********************/
+
+F3::route('POST /posts/purge', function() {
+	admin_check();
+	readonly_check();
+
+	$m = intval($_POST['months']);
+	DB::sql("DELETE FROM posts WHERE date < date('now', '-".$m." months')", NULL, 0, 'feeds');
+
+	reroute("/admin?msg=Purged.");
 });
 
 /***********************/
@@ -440,7 +460,8 @@ F3::route('GET /admin', function() {
 	$events_info = array(
 		"submitted" => 0,
 		"validated" => 0,
-		"approved" => 0
+		"approved" => 0,
+		"old" => 0
 	);
 
 	DB::sql('SELECT count(*) AS count FROM events WHERE state="submitted"');
@@ -454,6 +475,10 @@ F3::route('GET /admin', function() {
 	DB::sql('SELECT count(*) AS count FROM events WHERE state="approved"');
 	$r = F3::get('DB->result');
 	$events_info['approved'] = $r[0]['count'];
+
+	DB::sql('SELECT count(*) AS count FROM events WHERE state="approved" AND date < date("now", "start of day")');
+	$r = F3::get('DB->result');
+	$events_info['old'] = $r[0]['count'];
 
 	F3::set("events", $events_info);
 

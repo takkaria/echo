@@ -1,21 +1,12 @@
 <!DOCTYPE html>
-<title>Echo :: Future events</title>
+<title>{{@appname}} :: Future events</title>
+<F3:include href="_stylesheets.html" />
 
 <style>
-#events-simple h4 { margin: 0; padding: 0; }
-#events-simple .date { display: block; clear: both; font-size: 110%; margin-top: 1em; margin-bottom: 0.5em; }
-#events-simple .time { width: 3em; font-size: 90%; margin: 0 1em; }
-#events-simple .e { margin: 0; }
-
-#events-simple .e:hover { background-color: #eee; cursor: pointer; }
-
-#eventinfo { position: absolute; background-color: white; width: 380px; padding: 10px; box-shadow: 5px 5px 5px #aaa; display: none; border: 2px solid  }
-
+#eventinfo { position: absolute; background-color: white; width: 380px; padding: 10px; box-shadow: 5px 5px 5px #aaa; display: none; border: 2px solid; }
 #eventinfo #close { float: right; padding: 0 2px; border-radius: 2px; border: 1px solid #aaa; }
 #eventinfo #close:hover { background-color: #eee; cursor: pointer; }
 </style>
-
-<F3:include href="header.html" />
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <script>
@@ -38,6 +29,9 @@ $(function() {
 });
 </script>
 
+<body class="thin">
+<F3:include href="_header.html" />
+
 <section id="events-simple">
 <h2>More events this month (and next!)</h2>
 <p class="sublinks"><a href="event/add">add your own event</a>
@@ -59,6 +53,6 @@ $(function() {
 
 <div id="eventinfo">
 <span id="close">x</span>
-<div></div></div>
+<div>
 
-<F3:include href="footer.html" />
+<F3:include href="_footer.html" />

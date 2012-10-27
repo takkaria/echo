@@ -42,4 +42,9 @@ F3::set('facebook', function($url) {
 	return strpos($url, "facebook.com") !== FALSE;
 });
 
+// Convert commas into brs
+F3::set('comma2br', function($text) {
+	return preg_replace('/, /', '<br>', $text);
+});
+
 ?>

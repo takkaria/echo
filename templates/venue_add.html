@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<title>{{@appname}} :: Add a venue</title>
+<F3:include href="_stylesheets.html" />
+<link rel="stylesheet" type="text/css" href="{{@baseurl}}/css/editform.css">
+
+<body class="thin">
+<F3:include href="_header.html" />
+
+<section id="venue_add">
+<h2>Add a venue</h2>
+
+<F3:check if="{{count(@messages)}}">
+<ul>
+<F3:repeat group="{{@messages}}" value="{{@message}}">
+	<li>{{@message}}
+</F3:repeat>
+</ul>
+</F3:check>
+
+<form method="POST" action="?">
+
+<fieldset>
+<label id="fname" for="name">Venue name:</label>
+<input type="text" name="name" id="name" {{@value(@name)}}>
+</fieldset>
+
+<fieldset>
+<label id="faddress" for="address">Address:</label>
+<input type="text" name="address" id="address" {{@value(@address)}}>
+</fieldset>
+
+<fieldset>
+<label id="fpostcode" for="postcode">Postcode:</label>
+<input type="text" name="postcode" id="postcode" {{@value(@postcode)}}>
+</fieldset>
+
+<fieldset>
+<label id="finfo" for="info">Please describe your event:</label>
+<textarea name="info" id="info" rows="8">{{@info}}</textarea>
+</fieldset>
+
+<input type="submit" value="Submit">
+</form>
+</section>
+
+<F3:include href="_footer.html" />

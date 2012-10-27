@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<title>Echo :: Add an event</title>
+<title>{{@appname}} :: Add an event</title>
 
+<F3:include href="_stylesheets.html" />
+<link rel="stylesheet" type="text/css" href="{{@baseurl}}/css/editform.css">
 <link rel="stylesheet" type="text/css" href="{{@baseurl}}/css/jquery.timepicker.css">
 <link rel="stylesheet" type="text/css" href="{{@baseurl}}/css/jquery-ui-1.8.24.custom.css">
 
@@ -72,7 +74,8 @@ $("#venues").show();
 });
 </script>
 
-<F3:include href="header.html" />
+<body class="thin">
+<F3:include href="_header.html" />
 
 <section id="add">
 <h2>Add an event</h2>
@@ -151,4 +154,4 @@ $("#venues").show();
 </form>
 </section>
 
-<F3:include href="footer.html" />
+<F3:include href="_footer.html" />

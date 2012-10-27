@@ -1,19 +1,17 @@
 <!DOCTYPE html>
-<title>Echo :: Admin login</title>
+<title>{{@appname}} :: Administrator login</title>
+<F3:include href="_stylesheets.html" />
 
-<F3:include href="header.html" />
+<body class="thin">
+<F3:include href="_header.html" />
 
 <section id="login">
-
-<h2>Are you an admin or are you an admin?</h2>
+<h2>Administrator login</h2>
 
 <form action="{{@baseurl}}/admin/login" method="POST">
 
-<div><label for="email">Email:</label>
-<input type="email" id="email" name="email"></div>
-
-<div><label for="password">Password:</label>
-<input type="password" id="password" name="password"></div>
+<input type="email" placeholder="Email" id="email" name="email">
+<input type="password" placeholder="Password" id="password" name="password">
 
 <!-- XXX add something to stop replay attacks -->
 
@@ -21,4 +19,4 @@
 
 </form>
 
-<F3:include href="footer.html" />
+<F3:include href="_footer.html" />

@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<title>Echo :: News &amp; Events</title>
+<title>{{@appname}} :: News &amp; Events</title>
+<F3:include href="_stylesheets.html" />
 
-<F3:include href="header.html" />
+<body class="wide" id="index">
+<F3:include href="_header.html" />
 
 <section id="events">
 <h2>EVENTS</h2>
 <F3:check if="!{{@readonly}}">
-<p class="sublinks"><a href="event/add">(+ add yours here)</a>
+<p class="sublinks"><a href="{{@baseurl}}/event/add">(+ add yours here)</a>
 </F3:check>
 
 <F3:repeat group="{{@group_events()}}" key="{{@day}}" value="{{@events}}">
@@ -16,7 +18,6 @@
 <p><a href="events">more events this month</a></p>
 </section>
 
-
 <section id="news">
 <h2>NEWS</h2>
 
@@ -25,4 +26,4 @@
 </F3:repeat>
 </section>
 
-<F3:include href="footer.html" />
+<F3:include href="_footer.html" />

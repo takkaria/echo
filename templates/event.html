@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<title>Event</title>
+<title>{{@appname}} :: {{@event->title}}</title>
+<F3:include href="_stylesheets.html" />
 
-<F3:include href="header.html" />
+<body class="thin">
+<F3:include href="_header.html" />
 
-<section>
+<section id="event">
 
 <div id="container">
-
-<div class="date" style="float: left; font-size: 120%; border-bottom: 2px solid black; margin-bottom: 10px;">
-{{@event->datetime->format("l dS F")}}</div>
-
+<div class="date" style="float: left; font-size: 120%; border-bottom: 2px solid black; margin-bottom: 10px;">{{@event->datetime->format("l dS F")}}</div>
 <F3:include href="event_fragment.html">
-
 </div>
 
 </section>
+
+<F3:include href="_footer.html" />

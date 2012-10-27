@@ -27,6 +27,7 @@ F3::set('feeds', new DB("sqlite:" . BASEPATH . $options['db']['feeds']));
 if (isset($_GET['msg']))
 	F3::set('message', strip_tags($_GET['msg']));
 F3::set('baseurl', $options['web']['echo_root']);
+F3::set('appname', $options['general']['name']);
 F3::set('readonly', READONLY);
 
 function spam_check() {

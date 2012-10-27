@@ -1,56 +1,62 @@
 /* XXX include dyslexic stylesheets! */
 
-/** Basic styling **/
+/** Resets **/
+*, body, h1, h2, h3, h4, h5, h6 { margin: 0; }
 
-html { color: #222; margin: 0; word-spacing: -0.1em; }
-html, input, textarea { font-size: 11pt; line-height: 1.25; font-family: Arial; }
-
+/** Fonts **/
+html, input, textarea { font-size: 11pt; line-height: 1.25; font-family: Arial; word-spacing: -0.1em; }
+header, h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', Arial;  }
 a { text-decoration: none; color: blue; }
 a:hover { text-decoration: underline; }
 
-/** Headers */
-h1, h3, h4, h5, h6 { font-family: 'Raleway', Arial;  }
-h1 { font-size: 32px; margin: 0; }
-h2 { margin: 0; font-size: 100%; }
+/** Header sizing **/
+h1 { font-size: 32px; }
+h2 { font-size: 24px; }
 h3 { font-size: 20px; }
-h4 { font-size: 16px; margin: 0; }
+h4 { font-size: 16px; }
 
-/** A quick word on lists... */
 li { margin-bottom: 10px; }
 
-
 /** Layout **/
+body { margin: 0 20px; }
+body.thin { width: 800px; }
+body.wide { width: 980px; }
+section { width: 100%; }
+header { width: 100%; }
 
-body { margin: 0 20px; width: 1000px; }
-html { background-color: #eee; }
+body.wide header { width: 970px; }
+body.thin header { width: 820px; }
 
-/** Message box - hacky but works */
+/** Tables **/
+table { margin: 0; padding: 0; border-collapse: collapse; }
+tr, th, td { border: 1px solid #ccc; margin: 0; padding: 2px 6px; }
+th { background-color: #eee; }
 
-header { width: 970px; border-bottom: 4px solid black; background-color: darkseagreen; padding-left: 10px; box-shadow: 0 0 20px #ccc; padding-top: 5px; }
-header .about { font-family: Raleway; font-size: 120%; margin: 0 0 10px 0; }
+/** Colours **/
+html { background-color: #eee; color: #222; }
+header { border-bottom: 4px solid black; background-color: darkseagreen; padding-left: 10px; box-shadow: 0 0 20px #ccc; padding-top: 5px; }
+header .about { font-size: 120%; margin: 0 0 10px 0; }
 
+/** Message box */
 p.msg { font-weight: bold; text-align: center; font-size: 120%; width: 980px; }
 p.msg span { background-color: #fff; border-radius: 5px; padding: 2px 10px; }
 
 /** Sections are used to contain page content */
 section { float: left; background-color: white; padding: 10px 15px; box-shadow: 0 0 20px #ccc; }
-section h2 { text-align: center; letter-spacing: 2px; }
 section .sublinks { margin: -18px 0 0 0; text-align: right; }
 
 section.text { float: none; width: 40em; margin: 0 auto; }
 
-/** Feeds page page **/
-table { margin: 0; padding: 0; border-collapse: collapse; }
-tr, th, td { border: 1px solid #ccc; margin: 0; padding: 2px 6px; }
-th { background-color: #eee; }
-
 /** Front page: formatting **/
-#events { width: 380px; }
-#news { width: 520px; margin-left: 20px; }
+#index section h2 { text-align: center; letter-spacing: 2px; }
+#index #events { width: 380px; }
+#index #news { width: 520px; margin-left: 20px; }
 
 /*<< total width = 380 + 520 + 20 + 4x padding (15) = 980 */
 
 /** Events */
+#events h2, #news h2 { font-size: 100%; }
+
 #events h3 { letter-spacing: 1px; font-weight: normal; border-bottom: 1px solid black; margin-bottom: -5px; clear: both; background-color: #dedede; padding: 2px 2px 0 5px; border-radius: 0 10px 0 0; margin-top: 0.5em; }
 
 .event { margin-bottom: 15px; }
@@ -98,40 +104,25 @@ th { background-color: #eee; }
 .post .more { font-style: italic; }
 .post img { float: right; padding: 1px 2px 2px 10px; }
 
-/** Event add formatting **/
+/********/
 
-#add { width: 600px; }
+/** Admin pages **/
+/* Login */
+#login input { display: block; margin: 10px 0; padding: 5px; }
+#login input[type="submit"] { font-size: 120%; font-weight: bold; }
 
-#add form { margin-top: 1em; }
-#add form, #add form input { font-size: 13pt; }
-#add fieldset { border: 0; margin: 0; padding: 0; padding: 10px 0; border-bottom: 1px solid #ddd; }
-#add label { display: inline-block; text-align: right; vertical-align: top; padding: 4px; font-weight: bold; }
-#add input { border: none; border-bottom: 1px solid #ccc; padding: 4px; }
+/* Dashboard */
+#dashboard h2 { margin-bottom: 10px; }
+#dashboard h3 { margin-bottom: 5px; }
 
-#add form .desc { font-size: 80%; font-style: italic; text-align: right; margin: 0; }
+/** Venue pages **/
+/* Display */
+#venue .info { margin-top: 1em; }
 
-#add form div.g { display: inline-block; vertical-align: top; }
-
-/* Width */
-#add textarea, #add input[type="text"] { width: 330px; }
-#add label, #add form div.g, form p { width: 250px; }
-
-/* Individual fields */
-#add form #title { font-family: 'Raleway'; font-weight: bold; font-size: 120%; }
-#add form #ftitle { vertical-align: middle; }
-#add form #location { font-family: 'Raleway'; font-style: italic; font-size: 90%; }
-#add #datepicker { margin-left: 260px; margin-top: 10px; }
-
-#add form .film { background-image: url(../img/film.png); background-repeat: no-repeat; background-position: 5px 7px; text-indent: 22px; }
-
-/* Venues */
-
-#venues ul, #venues li { list-style-type: none; padding: 0; margin: 0; }
-#venues.empty { color: #bbb; }
-
-#vlist { height: 104px; border: 1px solid #ccc; border-radius: 4px; }
-#vlist.selected { color: #bbb; }
-
-#vlist li { font-size: 80%; width: 289px; float: left; padding: 4px 5px; cursor: pointer; height: 18px; }
-#vlist li.selected { background-color: #eee; color: black; }
-#vlist li:hover { background-color: #ddd; }
+/** Event listing pages **/
+/* Simple listing */
+#events-simple h4 { margin: 0; padding: 0; }
+#events-simple .date { display: block; clear: both; font-size: 110%; margin-top: 1em; margin-bottom: 0.5em; }
+#events-simple .time { width: 3em; font-size: 90%; margin: 0 1em; }
+#events-simple .e { margin: 0; }
+#events-simple .e:hover { background-color: #eee; cursor: pointer; }

@@ -33,6 +33,7 @@ F3::set('readonly', READONLY);
 function spam_check() {
 	global $options;
 
+	if (!isset($options['spam']['blocklist'])) return;
 	$blocklist = $options['spam']['blocklist'];
 	$addr = F3::realip();
 	$quad = implode('.', array_reverse(explode('.',$addr)));
@@ -40,7 +41,7 @@ function spam_check() {
 	foreach ($blocklist as $list) {
 		// Check against DNS blacklist
 		if (gethostbyname($quad.'.'.$list) != $quad.'.'.$list) {
-			Template::serve("spam.html");
+			echo Template::serve("spam.html");
 			die;
 		}
 	}

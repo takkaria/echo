@@ -1,7 +1,5 @@
 <?php
 
-// XXX need to build an admin interface to add/remove feeds
-
 if (php_sapi_name() != 'cli')
 	exit(1);
 
@@ -100,9 +98,6 @@ function fetch_feed($url) {
 		else
 			$summary = summary_from_content(deentity($post->get_content(true)));
 
-		// XXX remove title if it's duplicated inside content
-		// and date too?
-
 		$dbstore[':summary'] = $summary;
 
 		DB::sql('INSERT OR IGNORE INTO POSTS ( feed_url, id, title, link, date, image, summary ) VALUES ( :feed_url, :id, :title, :link, :date, :image, :summary );', $dbstore);
@@ -128,6 +123,3 @@ if ($argc == 2) {
 exit(0);
 
 ?>
-
-
-

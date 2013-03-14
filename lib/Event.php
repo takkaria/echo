@@ -62,8 +62,6 @@ class Event {
 			else if (strlen($value) > 140)
 				$messages[] = "Title too long.";
 
-			// XXX de-capitalise
-
 			$self->title = $value;
 		});
 	
@@ -87,12 +85,30 @@ class Event {
 			}
 			$self->email = $value;
 		});
-	
-		/* XXX need to make sure location and blurb are provided */
-		/* XXX validate these */
-		$this->location = new Venue(F3::scrub($_POST['location']));
-		$this->blurb = F3::scrub($_POST['blurb']);
-		$this->url = F3::scrub($_POST['url']);
+
+		F3::input('url', function($url) use(&$self, &$messages) {
+			if (!preg_match('/^[a-zA-Z+]:/', $url))
+				$url = "http://" . $url;
+			if (!filter_var($url, FILTER_VALIDATE_URL))
+				$messages[] = "Invalid web address";
+
+			$self->url = $url;
+		});
+
+		F3::input('title', function($value) use(&$self, &$messages) {
+			$value = F3::scrub($value);
+			if (strlen($value) < 3)
+				$messages[] = "Location too short.";
+
+			$self->location = new Venue($value);
+		});
+
+		F3::input('blurb', function($blurb) use(&$self, &$messages) {
+			$blurb = F3::scrub($blurb);
+			if (strlen($blurb) < 20)
+				$messages[] = "Description too short.";
+			$self->blurb = $blurb;
+		});
 
 		$this->cost = isset($_POST['free']) ? NULL : F3::scrub($_POST['cost']);
 		$this->film = isset($_POST['film']) ? TRUE : FALSE;

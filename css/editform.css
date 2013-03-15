@@ -26,6 +26,12 @@ input[type='submit']:active {
 	box-shadow: 0 1px 4px rgba(0,0,0,0.50);
 }
 
+.count { font-size: 80%; text-align: right; }
+.overcount { color: red; }
+
+.error { color: red; width: 330px; float: right; }
+label.error { font-size: 80%; }
+
 /* Individual fields */
 #datepicker { margin-top: 10px; }
 

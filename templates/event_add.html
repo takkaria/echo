@@ -7,6 +7,7 @@
 <link rel="stylesheet" type="text/css" href="{{@baseurl}}/css/jquery-ui-1.8.24.custom.css">
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
 <script src="{{@baseurl}}/js/jquery-ui-1.8.24.custom.min.js"></script>
 <script src="{{@baseurl}}/js/jquery.timepicker.min.js"></script>
 <script src="{{@baseurl}}/js/venuelist.js"></script>
@@ -21,8 +22,7 @@ $("#datepicker").datepicker({
 	firstDay: 1,
 	onSelect: function(dt, inst) { $("#date").val(dt); },
 	minDate: 1,
-	maxDate: "+2M",
-	defaultDate: $("#date").val()
+	maxDate: "+2M"
 });
 
 // Timepicker
@@ -69,6 +69,61 @@ venuelist.empty = function(empty) {
 
 $("#venues").show();
 
+// Cool word count thing
+function word_count(s) {
+	if (s == "") return 0;
+	return (s.match(/ +/g) || []).length + 1
+}
+
+$(".count").show();
+$("#blurb").on("input", function(e) {
+	var wc = word_count($(e.target).val());
+	if (wc > 250)
+		$("#wordcount").addClass("overcount");
+	else
+		$("#wordcount").removeClass("overcount");
+	$("#wordcount").text(wc);
+})
+
+// validation
+$("form").validate({
+	messages: {
+		title: {
+			required: "You must provide a title.",
+			minlength: "Please use a longer title."
+		},
+		location: {
+			required: "You must provide a location.",
+		},
+		blurb: {
+			required: "You must provide a blurb.",
+		},
+		time: {
+			required: "You must provide a time.",
+		},
+		date: {
+			required: "You must provide a date.",
+		},
+		url: {
+			url: "This link is not valid.  Please provide a valid one.",
+		},
+		email: {
+			required: "You must provide an email",
+			email: "This email address is not valid.  Please use a valid address."
+		}
+	},
+});
+
+$.validator.addMethod("wordcount", function(value, element, params) {
+	return word_count($(element).val()) <= 250
+}, "Your blurb is over the word limit.");
+
+$("#title").rules("add", { minlength: 3 });
+$("#date").rules("add", { dateISO: true });
+$("#blurb").rules("add", { wordcount: 250 });
+$("#url").rules("add", { url: true });
+$("#email").rules("add", { email: true });
+
 });
 </script>
 
@@ -90,7 +145,7 @@ $("#venues").show();
 
 <fieldset>
 <label class="left" for="title">Event name:</label>
-<input class="right" type="text" name="title" id="title" {{@value(@title)}}>
+<input class="right required" type="text" name="title" id="title" {{@value(@title)}}>
 
 <div class="right">
 <input type="checkbox" id="film" name="film" {{@film?'checked':''}}>
@@ -100,7 +155,7 @@ $("#venues").show();
 
 <fieldset>
 <label class="left" for="location">Location:</label>
-<input class="right" type="text" name="location" id="location" autocomplete="off" {{@value(@location)}}>
+<input class="right required" type="text" name="location" id="location" autocomplete="off" {{@value(@location)}}>
 </fieldset>
 
 <div id="venues" style="display: none;">Or select from below:
@@ -110,8 +165,8 @@ $("#venues").show();
 
 <fieldset>
 <label class="left" for="date">Time and date:</label>
-<input class="right" type="text" name="time" id="time" {{@value(@time)}} placeholder="Time (hh:mm)"><br>
-<input class="right" type="text" name="date" id="date" {{@value(@date)}} placeholder="Date (yyyy-mm-dd)">
+<input class="right required" type="text" name="time" id="time" {{@value(@time)}} placeholder="Time (hh:mm)"><br>
+<input class="right required" type="text" name="date" id="date" {{@value(@date)}} placeholder="Date (yyyy-mm-dd)">
 <div class="right" id="datepicker"></div>
 </fieldset>
 
@@ -127,10 +182,11 @@ $("#venues").show();
 <fieldset>
 <div class="left">
 <label for="blurb">Please describe your event:</label>
-<p class="desc">Please include the group organising the event and information about booking if you have to book.</p>
+<p class="desc">Please include the group organising the event and information about booking if you have to book.  Maximum 250 words.</p>
 </div>
 
-<textarea class="right" name="blurb" id="blurb" rows="8">{{@blurb}}</textarea>
+<textarea class="right required" name="blurb" id="blurb" rows="8">{{@blurb}}</textarea>
+<p class="right count" style="display: none;"><i>Word count:</i> <span id="wordcount">0</span> / 250</p>
 </fieldset>
 
 <fieldset>
@@ -144,7 +200,7 @@ $("#venues").show();
 
 <fieldset>
 <label class="left" for="email">Your email:</label>
-<input class="right" type="text" name="email" id="email" {{@value(@email)}}>
+<input class="right required" type="text" name="email" id="email" {{@value(@email)}}>
 </fieldset>
 
 <input type="submit" value="Submit your event!">

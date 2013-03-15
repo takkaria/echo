@@ -104,9 +104,6 @@ $("form").validate({
 		date: {
 			required: "You must provide a date.",
 		},
-		url: {
-			url: "This link is not valid.  Please provide a valid one.",
-		},
 		email: {
 			required: "You must provide an email",
 			email: "This email address is not valid.  Please use a valid address."
@@ -118,10 +115,22 @@ $.validator.addMethod("wordcount", function(value, element, params) {
 	return word_count($(element).val()) <= 250
 }, "Your blurb is over the word limit.");
 
+$.validator.addMethod("permissive_url", function(value, element) {
+	// if no url, don't do anything
+	if (value.length == 0) return true;
+
+	// if user has not entered http[s]:// or ftp:// assume they mean http://
+	if (!/^(https?|ftp):\/\//i.test(value))
+		value = 'http://' + value;
+
+//	return $.validator.methods.url(val, element);
+	return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
+}, "The link is not valid.  Please provide a valid one.");
+
 $("#title").rules("add", { minlength: 3 });
 $("#date").rules("add", { dateISO: true });
 $("#blurb").rules("add", { wordcount: 250 });
-$("#url").rules("add", { url: true });
+$("#url").rules("add", { permissive_url: true });
 $("#email").rules("add", { email: true });
 
 });

@@ -22,7 +22,8 @@ $("#datepicker").datepicker({
 	firstDay: 1,
 	onSelect: function(dt, inst) { $("#date").val(dt); },
 	minDate: 1,
-	maxDate: "+2M"
+	maxDate: "+2M",
+	defaultDate: $("#date").val()
 });
 
 // Timepicker

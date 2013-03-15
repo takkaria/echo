@@ -1,29 +1,41 @@
-form { margin-top: 1em; }
+/* General settings */
+form { margin-top: 1em; line-height: 1.5; width: 600px; margin: auto; }
 form, form input { font-size: 13pt; }
-fieldset { border: 0; margin: 0; padding: 0; padding: 10px 0; border-bottom: 1px solid #ddd; }
-label { display: inline-block; text-align: right; vertical-align: top; padding: 4px; font-weight: bold; }
+fieldset { border: 0; margin: 0; padding: 0; padding: 10px 0; }
+
+/* Alignment */
+.left { width: 250px; float: left; text-align: right; }
+label.left, .left label { font-weight: bold; }
+p.left, .left p { font-size: 80%; font-style: italic; margin: 0; }
+
+.right { width: 330px; float: right; }
 input { border: none; border-bottom: 1px solid #ccc; padding: 4px; }
-
-form .desc { font-size: 80%; font-style: italic; text-align: right; margin: 0; }
-
-form div.g { display: inline-block; vertical-align: top; }
-
-/* Width */
-form { width: 600px; margin: auto; }
-textarea, input[type="text"] { width: 330px; }
-label, form div.g, form p { width: 250px; }
+input[type='submit'] {
+	display: block; margin: 1em auto;
+	padding: 5px 10px 5px;
+	text-shadow: 0 -1px -1px rgba(0,0,0,0.25);
+	box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+	border: 1px solid #888;
+	border-radius: 5px;
+	color: white; background: black;
+}
+input[type='submit']:active {
+	-webkit-transform: translateY(1px);
+	-ms-transform: translateY(1px);
+	-moz-transform: translateY(1px);
+	box-shadow: 0 1px 4px rgba(0,0,0,0.50);
+}
 
 /* Individual fields */
-#title { font-family: 'Raleway'; font-weight: bold; font-size: 120%; }
-#ftitle { vertical-align: middle; }
-#location { font-family: 'Raleway'; font-style: italic; font-size: 90%; }
-#datepicker { margin-left: 260px; margin-top: 10px; }
+#datepicker { margin-top: 10px; }
 
 .film { background-image: url(../img/film.png); background-repeat: no-repeat; background-position: 5px 7px; text-indent: 22px; }
 
 /* Venues */
-#venues ul, #venues li { list-style-type: none; padding: 0; margin: 0; }
+#venues { margin-bottom: 10px; margin-top: -10px; font-size: 12pt; }
 #venues.empty { color: #bbb; }
+
+#venues ul, #venues li { list-style-type: none; padding: 0; margin: 0; }
 
 #vlist { height: 104px; border: 1px solid #ccc; border-radius: 4px; }
 #vlist.selected { color: #bbb; }

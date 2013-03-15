@@ -36,15 +36,21 @@ $("#film").click(function(e) {
 		$("#title").removeClass("film");
 });
 
-$("#free").change(function(e) {
-   if (e.target.checked)
-	   $("#costdiv").hide();
-   else
-	   $("#costdiv").show();
-});
+var update_disabled = function() {
+	if ($("#free").attr('checked') == "checked")
+		$("#cost").attr('disabled', 'disabled');
+	else
+		$("#cost").removeAttr('disabled');
+};
 
-if (document.getElementById("free").checked)
-	$("#costdiv").hide();
+update_disabled();
+$("#free").change(update_disabled);
+$("#costbutton").change(update_disabled);
+
+// Set up an initial value
+if ($('input[name="free"]:checked').length == 0) {
+	$("#free").attr('checked', 'checked');
+}
 
 // Venuelist
 var mylist = [
@@ -83,11 +89,19 @@ $("#venues").show();
 <form method="POST" action="?">
 
 <fieldset>
-<label id="ftitle" for="title">Event name:</label>
-<input type="text" name="title" id="title" {{@value(@title)}}>
-<br>
-<label id="flocation" for="location">Where is your event?</label>
-<input type="text" name="location" id="location" autocomplete="off" {{@value(@location)}}>
+<label class="left" for="title">Event name:</label>
+<input class="right" type="text" name="title" id="title" {{@value(@title)}}>
+
+<div class="right">
+<input type="checkbox" id="film" name="film" {{@film?'checked':''}}>
+<label for="film">This is a film showing</label>
+</div>
+</fieldset>
+
+<fieldset>
+<label class="left" for="location">Location:</label>
+<input class="right" type="text" name="location" id="location" autocomplete="off" {{@value(@location)}}>
+</fieldset>
 
 <div id="venues" style="display: none;">Or select from below:
 <ul id="vlist"></ul>
@@ -95,52 +109,45 @@ $("#venues").show();
 </fieldset>
 
 <fieldset>
-<label id="ffilm" for="film">Is this a film showing?</label>
-<input type="checkbox" name="film" id="film" {{@film?'checked':''}}>
-</fieldset>
-</fieldset>
-
-<fieldset>
-<label id="fdate" for="date">When is your event?</label>
-<input type="text" name="time" id="time" value="{{@time ? @time : '17:00'}}">
-<input type="text" name="date" id="date" {{@value(@date)}} placeholder="yyyy-mm-dd">
-<div id="datepicker"></div>
+<label class="left" for="date">Time and date:</label>
+<input class="right" type="text" name="time" id="time" {{@value(@time)}} placeholder="Time (hh:mm)"><br>
+<input class="right" type="text" name="date" id="date" {{@value(@date)}} placeholder="Date (yyyy-mm-dd)">
+<div class="right" id="datepicker"></div>
 </fieldset>
 
 <fieldset>
-<label id="ffree" for="free">Is it free to get in?</label>
-<input type="checkbox" name="free" id="free" {{@free?'checked':''}} >
+<label class="left">Price:</label>
 
-<div id="costdiv">
-<label id="fcost" for="cost">How much does it cost?</label>
-<input type="text" name="cost" id="cost" {{@value(@cost)}}>
+<div class="right">
+<input type="radio" name="free" id="free" {{@free?'checked':''}} value="free"> <label for="free">Free</label><br>
+<input type="radio" name="free" id="costbutton" {{@cost?'checked':''}}> <label for="costbutton">It costs</label> <input type="text" name="cost" id="cost" style="width: 220px;" {{@value(@cost)}}>
 </div>
 </fieldset>
 
 <fieldset>
-<div class="g">
-<label id="fblurb" for="blurb">Please describe your event:</label>
-<p class="desc">Please include cost (if not free), the group organising the event and information about booking if you have to book.</p>
+<div class="left">
+<label for="blurb">Please describe your event:</label>
+<p class="desc">Please include the group organising the event and information about booking if you have to book.</p>
 </div>
 
-<textarea name="blurb" id="blurb" rows="8">{{@blurb}}</textarea>
+<textarea class="right" name="blurb" id="blurb" rows="8">{{@blurb}}</textarea>
 </fieldset>
 
 <fieldset>
-<div class="g">
+<div class="left">
 <label for="url">URL for more info:</label>
 <p class="desc">Is there somewhere on the web people can go to get more information, like a blog post / Facebook event?</p>
 </div>
 
-<input type="text" name="url" id="url" {{@value(@url)}}>
+<input class="right" type="text" name="url" id="url" {{@value(@url)}}>
 </fieldset>
 
 <fieldset>
-<label id="femail" for="email">Your email:</label>
-<input type="text" name="email" id="email" {{@value(@email)}}>
+<label class="left" for="email">Your email:</label>
+<input class="right" type="text" name="email" id="email" {{@value(@email)}}>
 </fieldset>
 
-<input type="submit" value="Submit event!">
+<input type="submit" value="Submit your event!">
 </form>
 </section>
 

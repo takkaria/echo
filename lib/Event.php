@@ -95,7 +95,7 @@ class Event {
 			$self->url = $url;
 		});
 
-		F3::input('title', function($value) use(&$self, &$messages) {
+		F3::input('location', function($value) use(&$self, &$messages) {
 			$value = F3::scrub($value);
 			if (strlen($value) < 3)
 				$messages[] = "Location too short.";
@@ -110,7 +110,12 @@ class Event {
 			$self->blurb = $blurb;
 		});
 
-		$this->cost = isset($_POST['free']) ? NULL : F3::scrub($_POST['cost']);
+		if (isset($_POST['free']) && $_POST['free'] == 'free') {
+			$this->cost = NULL;
+		} else {
+			$this->cost = F3::scrub($_POST['cost']);
+		}
+
 		$this->film = isset($_POST['film']) ? TRUE : FALSE;
 
 		return $messages;
@@ -176,7 +181,7 @@ function set_event_data_from_POST() {
 	F3::set('blurb', F3::scrub($_POST['blurb']));
 	F3::set('url', F3::scrub($_POST['url']));
 	F3::set('free', isset($_POST['free']) ? TRUE : FALSE);
-	F3::set('cost', F3::scrub($_POST['cost']));
+	F3::set('cost', isset($_POST['cost']) ? F3::scrub($_POST['cost']) : "");
 	F3::set('film', isset($_POST['film']) ? TRUE : FALSE);
 	F3::set('email', F3::scrub($_POST['email']));
 }

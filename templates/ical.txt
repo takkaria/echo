@@ -23,7 +23,11 @@ URL:{{@event->url}}
 CATEGORIES:film
 </F3:check>
 
-DTSTART;TZID=Europe/London:{{@event->datetime->format('Ymd\THis')}}
+DTSTART;TZID=Europe/London:{{@event->startdt->format('Ymd\THis')}}
+<F3:check if="{{@event->enddt}}">
+
+DTEND;TZID=Europe/London:{{@event->enddt->format('Ymd\THis')}}
+</F3:check>
 
 END:VEVENT
 

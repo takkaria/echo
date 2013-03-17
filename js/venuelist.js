@@ -57,7 +57,7 @@ venuelist = {
 		$(elem).addClass("selected");
 		this.bindElem.val(elem.innerText);
 		if ($.validator)
-			$(this.bindElem.get(0).form).valid();
+			this.bindElem.valid();
 	},
 
 	"deselect": function() {

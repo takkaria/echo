@@ -3,7 +3,8 @@
 class Event {
 	public $id;
 	public $title;
-	public $datetime;
+	public $startdt;
+	public $enddt;
 	public $location;
 	public $blurb;
 	public $url;
@@ -26,8 +27,10 @@ class Event {
 
 			$this->id = $r['id'];
 			$this->title = $r['title'];
-			$this->datetime =
-					DateTime::createFromFormat("Y-m-j H:i", $r['date']);
+			$this->startdt =
+					DateTime::createFromFormat("Y-m-j H:i", $r['startdt']);
+			$this->enddt =
+					DateTime::createFromFormat("Y-m-j H:i", $r['enddt']);
 			$this->location = new Venue($r['location']);
 			$this->blurb = $r['blurb'];
 			$this->url = $r['url'];
@@ -43,7 +46,7 @@ class Event {
 	static function load($where) {
 		$events = array();
 
-		DB::sql("SELECT id FROM events WHERE " . $where . " ORDER BY date");
+		DB::sql("SELECT id FROM events WHERE " . $where . " ORDER BY startdt");
 		$r = F3::get('DB->result');
 		foreach ($r as $row) {
 			$events[] = new Event($row['id']);
@@ -65,20 +68,43 @@ class Event {
 			$self->title = $value;
 		});
 	
-		F3::input('date', function($value) use(&$self, &$messages, &$date) {
-			$self->datetime = DateTime::createFromFormat("Y-m-j", $value);
-			if (!$self->datetime)
-				$messages[] = "Invalid date.";
+		F3::input('date1', function($value) use(&$self, &$messages) {
+			$self->startdt = DateTime::createFromFormat("l j F", $value);
+			if (!$self->startdt)
+				$messages[] = "Invalid start date.";
 		});
 	
-		F3::input('time', function($value) use(&$self, &$messages, &$date) {
+		F3::input('time1', function($value) use(&$self, &$messages) {
 			$time = date_parse_from_format("H:i", $value);
 			if ($time['error_count'] > 0)
-				$messages[] = "Invalid time.";
-			if ($self->datetime)
-				$self->datetime->setTime($time['hour'], $time['minute']);
+				$messages[] = "Invalid start time.";
+			if ($self->startdt)
+				$self->startdt->setTime($time['hour'], $time['minute']);
 		});
-	
+
+		if (isset($_POST['date2'])) {
+			F3::input('date2', function($value) use(&$self, &$messages) {
+				$self->enddt = DateTime::createFromFormat("l j F", $value);
+				if (!$self->enddt)
+					$messages[] = "Invalid end date.";
+			});
+		}	
+
+		if (isset($_POST['time2'])) {
+			F3::input('time2', function($value) use(&$self, &$messages) {
+				$time = date_parse_from_format("H:i", $value);
+				if ($time['error_count'] > 0) {
+					$messages[] = "Invalid end time.";
+				} else if ($self->enddt) {
+					$self->enddt->setTime($time['hour'], $time['minute']);
+				}
+			});
+		}
+
+		if (isset($_POST['date2']) != isset($_POST['time2'])) {
+			$messages[] = "Only one of end date / end time given.";
+		}
+
 		F3::input('email', function($value) use(&$self, &$messages) {
 			if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
 				$messages[] = "Invalid email address";
@@ -87,11 +113,14 @@ class Event {
 		});
 
 		F3::input('url', function($url) use(&$self, &$messages) {
-			if (!preg_match('/^[a-zA-Z+]:/', $url))
-				$url = "http://" . $url;
-			if (!filter_var($url, FILTER_VALIDATE_URL))
-				$messages[] = "Invalid web address";
-
+			if (!$url || $url == "") {
+				$self->url = NULL;
+			} else {
+				if (!preg_match('/^[a-zA-Z+]:/', $url))
+					$url = "http://" . $url;
+				if (!filter_var($url, FILTER_VALIDATE_URL))
+					$messages[] = "Invalid web address";
+			}
 			$self->url = $url;
 		});
 
@@ -157,7 +186,11 @@ class Event {
 
 		$e->id = $this->id;
 		$e->title = $this->title;
-		$e->date = $this->datetime->format("Y-m-d H:i");
+		$e->startdt = $this->startdt->format("Y-m-d H:i");
+		if ($e->enddt)
+			$e->enddt = $this->enddt->format("Y-m-d H:i");
+		else
+			$e->enddt = NULL;
 		$e->location = $this->location->dbname();
 		$e->blurb = $this->blurb;
 		$e->url = $this->url;
@@ -176,8 +209,12 @@ class Event {
 function set_event_data_from_POST() {
 	F3::set('title', F3::scrub($_POST['title']));
 	F3::set('location', F3::scrub($_POST['location']));
-	F3::set('date', F3::scrub($_POST['date']));
-	F3::set('time', F3::scrub($_POST['time']));
+	F3::set('date1', F3::scrub($_POST['date1']));
+	F3::set('time1', F3::scrub($_POST['time1']));
+	if (isset($_POST['date2']))
+		F3::set('date2', F3::scrub($_POST['date2']));
+	if (isset($_POST['time2']))
+		F3::set('time2', F3::scrub($_POST['time2']));
 	F3::set('blurb', F3::scrub($_POST['blurb']));
 	F3::set('url', F3::scrub($_POST['url']));
 	F3::set('free', isset($_POST['free']) ? TRUE : FALSE);
@@ -189,8 +226,12 @@ function set_event_data_from_POST() {
 function set_event_data_from_Event($event) {
 	F3::set('title', $event->title);
 	F3::set('location', $event->location);
-	F3::set('date', $event->datetime->format("Y-m-d"));
-	F3::set('time', $event->datetime->format("H:i"));
+	F3::set('date1', $event->startdt->format("l j F"));
+	F3::set('time1', $event->startdt->format("H:i"));
+	if ($event->enddt) {
+		F3::set('date2', $event->enddt->format("l j F"));
+		F3::set('time2', $event->enddt->format("H:i"));
+	}
 	F3::set('blurb', $event->blurb);
 	F3::set('url', $event->url);
 	F3::set('free', $event->cost ? FALSE : TRUE);

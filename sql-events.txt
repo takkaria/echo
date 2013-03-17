@@ -12,7 +12,8 @@ CREATE TABLE events (
 
 	/* Event data */
 	title TEXT,
-	date DATETIME,
+	startdt DATETIME,
+	enddt DATETIME
 	location TEXT,	/* Either text or numeric reference to venues */
 	blurb TEXT,
 	url TEXT,

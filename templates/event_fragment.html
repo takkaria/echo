@@ -2,10 +2,10 @@
 
 <div class="time">
 
-<span class="n-{{(@event->datetime->format("i") == "00") ? "l" : "s"}}">{{
-(@event->datetime->format("i") == "00") ?
-	@event->datetime->format("g") :
-	@event->datetime->format("g:i")}}</span><span class="ampm">{{@event->datetime->format("a")}}</span>
+<span class="n-{{(@event->startdt->format("i") == "00") ? "l" : "s"}}">{{
+(@event->startdt->format("i") == "00") ?
+	@event->startdt->format("g") :
+	@event->startdt->format("g:i")}}</span><span class="ampm">{{@event->startdt->format("a")}}</span>
 </div>
 
 <div class="what">

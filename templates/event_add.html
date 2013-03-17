@@ -5,6 +5,10 @@
 <link rel="stylesheet" type="text/css" href="{{@baseurl}}/css/editform.css">
 <link rel="stylesheet" type="text/css" href="{{@baseurl}}/css/jquery.timepicker.css">
 <link rel="stylesheet" type="text/css" href="{{@baseurl}}/css/jquery-ui-1.8.24.custom.css">
+<style>
+/* This is here because if it went in the CSS file, we couldn't use {{@baseurl}} */
+.date { background-image: url({{@baseurl}}/img/calendar.png); background-repeat: no-repeat; background-position: 98% 50%; }
+</style>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
@@ -15,124 +19,182 @@
 <script>
 $(function() {
 
-// Datepicker
-$("#date").hide();
-$("#datepicker").datepicker({
-	dateFormat: "yy-mm-dd",
-	firstDay: 1,
-	onSelect: function(dt, inst) { $("#date").val(dt); },
-	minDate: 1,
-	maxDate: "+2M",
-	defaultDate: $("#date").val()
-});
-
-// Timepicker
-$("#time").timepicker({ step: 15, timeFormat: 'H:i' });
-
-// Film/free functionality
-$("#film").click(function(e) {
-	if (e.target.checked)
-		$("#title").addClass("film");
-	else
-		$("#title").removeClass("film");
-});
-
-var update_disabled = function() {
-	if ($("#free").attr('checked') == "checked")
-		$("#cost").attr('disabled', 'disabled');
-	else
-		$("#cost").removeAttr('disabled');
-};
-
-update_disabled();
-$("#free").change(update_disabled);
-$("#costbutton").change(update_disabled);
-
-// Set up an initial value
-if ($('input[name="free"]:checked').length == 0) {
-	$("#free").attr('checked', 'checked');
-}
-
-// Venuelist
-var mylist = [
-<F3:repeat group="{{@get_venues()}}" value="{{@venue}}">
-	"{{@venue.name}}",
-</F3:repeat>
-];
-
-venuelist.init(mylist, "#vlist", "#location");
-venuelist.empty = function(empty) {
-	if (empty)
-		$("#venues").addClass("empty");
-	else
-		$("#venues").removeClass("empty");	
-};
-
-$("#venues").show();
-
-// Cool word count thing
+// Word count function (not great but accurate enough)
 function word_count(s) {
 	if (s == "") return 0;
 	return (s.match(/ +/g) || []).length + 1
 }
 
-$(".count").show();
-$("#blurb").on("input", function(e) {
-	var wc = word_count($(e.target).val());
-	if (wc > 250)
-		$("#wordcount").addClass("overcount");
-	else
-		$("#wordcount").removeClass("overcount");
-	$("#wordcount").text(wc);
-})
+// Initialise jQueryUI widgets
+function initWidgets() {
+	var time_options = { step: 30, timeFormat: 'H:i' };
+	var date_options = {
+		dateFormat: "DD d MM",
+		firstDay: 1,
+		minDate: 1,
+		maxDate: "+2M",
+		numberOfMonths: 3
+	};
 
-// validation
-$("form").validate({
-	messages: {
-		title: {
-			required: "You must provide a title.",
-			minlength: "Please use a longer title."
+	// Start time & date
+	$("#time1").timepicker(time_options);
+	$("#time2").timepicker(time_options);
+	$("#date1").datepicker(date_options);
+	$("#date2").datepicker(date_options);
+}
+
+// Initialise venue list
+function initVenues() {
+	var mylist = [
+	<F3:repeat group="{{@get_venues()}}" value="{{@venue}}">
+		"{{@venue.name}}",
+	</F3:repeat>
+	];
+
+	venuelist.init(mylist, "#vlist", "#location");
+	venuelist.empty = function(empty) {
+		if (empty)
+			$("#venues").addClass("empty");
+		else
+			$("#venues").removeClass("empty");	
+	};
+
+	$("#venues").show();
+}
+
+// Initialise form validation
+function initFormValidation() {
+
+	$.validator.addMethod("wordcount", function(value, element, params) {
+		return word_count($(element).val()) <= 250
+	}, "Your blurb is over the word limit.");
+
+	$.validator.addMethod("permissive_url", function(value, element) {
+		// if no url, don't do anything
+		if (value.length == 0) return true;
+
+		// if user has not entered http[s]:// or ftp:// assume they mean http://
+		if (!/^(https?|ftp):\/\//i.test(value))
+			value = 'http://' + value;
+
+		// Chain to the builtin URL validator
+		return $.validator.methods.url.call(this, value, element);
+	}, "The link is not valid.  Please provide a valid one.");
+
+	$("form").validate({
+		errorPlacement: function(error, element) {
+			if (element.attr("name") == "time1" ||
+					element.attr("name") == "date1" ||
+					element.attr("name") == "time2" ||
+					element.attr("name") == "date2")
+				error.insertAfter(element.parent());
+			else
+				error.insertAfter(element);
 		},
-		location: {
-			required: "You must provide a location.",
+		messages: {
+			title: "You must provide a title.",
+			location: "You must provide a location.",
+			blurb: "You must provide a blurb.",
+			time1: "You must provide a time.",
+			date1: "You must provide a date.",
+			time2: "You must provide a time.",
+			date2: "You must provide a date.",
+			email: {
+				required: "You must provide an email",
+				email: "This email address is not valid.  Please use a valid address."
+			}
 		},
-		blurb: {
-			required: "You must provide a blurb.",
-		},
-		time: {
-			required: "You must provide a time.",
-		},
-		date: {
-			required: "You must provide a date.",
-		},
-		email: {
-			required: "You must provide an email",
-			email: "This email address is not valid.  Please use a valid address."
+		rules: {
+			// All other rules are done using classes on the inputs themselves
+			cost: {		
+				required: {
+					depends: function(element) {
+						return $("#costbutton:checked").length != 0
+					}
+				}
+			},
+			blurb: {
+				wordcount: 250
+			}
 		}
-	},
-});
+	});
+}
 
-$.validator.addMethod("wordcount", function(value, element, params) {
-	return word_count($(element).val()) <= 250
-}, "Your blurb is over the word limit.");
+function initWordCount() {
+	$(".count").show();
+	$("#blurb").on("input", function(e) {
+		var wc = word_count($(e.target).val());
+		$("#wordcount").text(wc);
+		if (wc > 250)
+			$("#wordcount").addClass("overcount");
+		else
+			$("#wordcount").removeClass("overcount");
+	})
+}
 
-$.validator.addMethod("permissive_url", function(value, element) {
-	// if no url, don't do anything
-	if (value.length == 0) return true;
+function initEndDatetime() {
+	var end_panel = $("#end");
+	var time2 = $("#time2");
+	var date2 = $("#date2");
+	var update_panel = function() {
+		if ($("#set_end").attr('checked')) {
+			// Use a default value if showing
+			if (!date2.val() || date2.val() == "")
+				date2.val($("#date1").val());
 
-	// if user has not entered http[s]:// or ftp:// assume they mean http://
-	if (!/^(https?|ftp):\/\//i.test(value))
-		value = 'http://' + value;
+			time2.removeAttr('disabled');
+			date2.removeAttr('disabled');
+			end_panel.show();
+		} else {
+			time2.attr('disabled', 'disabled');
+			date2.attr('disabled', 'disabled');
+			end_panel.hide();
+		}
+	};
 
-//	return $.validator.methods.url(val, element);
-	return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
-}, "The link is not valid.  Please provide a valid one.");
+	$("#set_end").change(update_panel);
+	if (time2.val() || date2.val()) {
+		$("#set_end").attr('checked', 'checked');
+		update_panel();
+	}
+}
 
-$("#title").rules("add", { minlength: 3 });
-$("#date").rules("add", { dateISO: true });
-$("#blurb").rules("add", { wordcount: 250 });
-$("#url").rules("add", { permissive_url: true });
-$("#email").rules("add", { email: true });
+function initFilmIcon() {
+	$("#film").click(function(e) {
+		if (e.target.checked)
+			$("#title").addClass("film");
+		else
+			$("#title").removeClass("film");
+	});
+}
+
+function initCostLogic() {
+	function update_disabled() {
+		if ($("#free").attr('checked') == "checked") {
+			$("#cost").attr('disabled', 'disabled');
+			$("#cost").valid();
+		} else {
+			$("#cost").removeAttr('disabled');
+		}
+	};
+
+	update_disabled();
+	$("#free").change(update_disabled);
+	$("#costbutton").change(update_disabled);
+
+	// Set up an initial value
+	if ($('input[name="free"]:checked').length == 0) {
+		$("#free").attr('checked', 'checked');
+	}
+}
+
+initWidgets();
+initVenues();
+initFormValidation();
+initWordCount();
+initEndDatetime();
+initFilmIcon();
+initCostLogic();
 
 });
 </script>
@@ -164,20 +226,30 @@ $("#email").rules("add", { email: true });
 </fieldset>
 
 <fieldset>
-<label class="left" for="location">Location:</label>
-<input class="right required" type="text" name="location" id="location" autocomplete="off" {{@value(@location)}}>
-</fieldset>
-
-<div id="venues" style="display: none;">Or select from below:
-<ul id="vlist"></ul>
+<label class="left" for="date">Time and date:</label>
+<div class="right" id="start">
+Starts <input class="required time" type="text" name="time1" id="time1" {{@value(@time1)}} placeholder="time"> on <input class="required date" type="text" id="date1" name="date1" placeholder="date" {{@value(@date1)}}><br>
+</div>
+<div class="right" id="end" style="display: none;">
+Ends <input class="required time" type="text" name="time2" id="time2" {{@value(@time2)}} placeholder="time"> on <input class="required date" type="text" id="date2" name="date2" placeholder="date" {{@value(@date2)}}>
+</div>
+<div class="right">
+<input type="checkbox" id="set_end"> <label for="set_end">Set an end time and date?</label>
+</div>
 </div>
 </fieldset>
 
 <fieldset>
-<label class="left" for="date">Time and date:</label>
-<input class="right required" type="text" name="time" id="time" {{@value(@time)}} placeholder="Time (hh:mm)"><br>
-<input class="right required" type="text" name="date" id="date" {{@value(@date)}} placeholder="Date (yyyy-mm-dd)">
-<div class="right" id="datepicker"></div>
+<div class="left">
+<label for="location">Location:</label>
+<p class="desc" style="margin-top: 10px">Or select from below:</p>
+</div>
+<input class="right required" type="text" name="location" id="location" autocomplete="off" {{@value(@location)}}>
+</fieldset>
+
+<div id="venues" style="display: none;">
+<ul id="vlist"></ul>
+</div>
 </fieldset>
 
 <fieldset>
@@ -205,12 +277,12 @@ $("#email").rules("add", { email: true });
 <p class="desc">Is there somewhere on the web people can go to get more information, like a blog post / Facebook event?</p>
 </div>
 
-<input class="right" type="text" name="url" id="url" {{@value(@url)}}>
+<input class="right permissive_url" type="text" name="url" id="url" {{@value(@url)}}>
 </fieldset>
 
 <fieldset>
 <label class="left" for="email">Your email:</label>
-<input class="right required" type="text" name="email" id="email" {{@value(@email)}}>
+<input class="right required email" type="text" name="email" id="email" {{@value(@email)}}>
 </fieldset>
 
 <input type="submit" value="Submit your event!">

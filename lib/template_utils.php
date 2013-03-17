@@ -5,7 +5,7 @@ F3::set('group_events', function() {
 	$events = F3::get('events');
 	$sorted = array();
 	foreach ($events as $e) {
-		$dt = clone $e->datetime;
+		$dt = clone $e->startdt;
 		$sorted[$dt->modify("today")->format("Y-m-d")][] = $e;
 	}
 	return $sorted;

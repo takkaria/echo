@@ -10,7 +10,7 @@
 .date { background-image: url({{@baseurl}}/img/calendar.png); background-repeat: no-repeat; background-position: 98% 50%; }
 </style>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
 <script src="{{@baseurl}}/js/jquery-ui-1.8.24.custom.min.js"></script>
 <script src="{{@baseurl}}/js/jquery.timepicker.min.js"></script>
@@ -137,24 +137,24 @@ function initEndDatetime() {
 	var time2 = $("#time2");
 	var date2 = $("#date2");
 	var update_panel = function() {
-		if ($("#set_end").attr('checked')) {
+		if ($("#set_end").prop('checked')) {
 			// Use a default value if showing
 			if (!date2.val() || date2.val() == "")
 				date2.val($("#date1").val());
 
-			time2.removeAttr('disabled');
-			date2.removeAttr('disabled');
+			time2.prop('disabled', false);
+			date2.prop('disabled', false);
 			end_panel.show();
 		} else {
-			time2.attr('disabled', 'disabled');
-			date2.attr('disabled', 'disabled');
+			time2.prop('disabled', true);
+			date2.prop('disabled', true);
 			end_panel.hide();
 		}
 	};
 
 	$("#set_end").change(update_panel);
 	if (time2.val() || date2.val()) {
-		$("#set_end").attr('checked', 'checked');
+		$("#set_end").prop('checked', true);
 		update_panel();
 	}
 }
@@ -170,11 +170,11 @@ function initFilmIcon() {
 
 function initCostLogic() {
 	function update_disabled() {
-		if ($("#free").attr('checked') == "checked") {
-			$("#cost").attr('disabled', 'disabled');
+		if ($("#free").prop('checked') == true) {
+			$("#cost").prop('disabled', true);
 			$("#cost").valid();
 		} else {
-			$("#cost").removeAttr('disabled');
+			$("#cost").prop('disabled', false);
 		}
 	};
 
@@ -184,7 +184,7 @@ function initCostLogic() {
 
 	// Set up an initial value
 	if ($('input[name="free"]:checked').length == 0) {
-		$("#free").attr('checked', 'checked');
+		$("#free").prop('checked', true);
 	}
 }
 

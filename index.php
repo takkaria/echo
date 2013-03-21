@@ -85,8 +85,8 @@ F3::route('GET /', function() {
 	admin_check(FALSE);
 
 	/* Events */
-	$where = "date >= date('now', 'start of day') AND " .
-			"date <= date('now', 'start of day', '+14 days') AND " .
+	$where = "startdt >= date('now', 'start of day') AND " .
+			"startdt <= date('now', 'start of day', '+14 days') AND " .
 			"state == 'approved'";
 	$results = Event::load($where);
 	F3::set('events', $results);
@@ -128,8 +128,8 @@ F3::route('GET /about', function() {
 /***************************/
 
 F3::route('GET /events', function() {
-	$where = "date >= date('now', 'start of day') AND " .
-			"date <= date('now', 'start of month', '+2 month', '-1 day') AND " .
+	$where = "startdt >= date('now', 'start of day') AND " .
+			"startdt <= date('now', 'start of month', '+2 month', '-1 day') AND " .
 			"state == 'approved'";
 	$results = Event::load($where);
 	F3::set('events', $results);
@@ -148,7 +148,7 @@ F3::route('POST /events/purge', function() {
 	readonly_check();
 
 	$m = intval($_POST['months']);
-	DB::sql("DELETE FROM events WHERE date < date('now', '-".$m." months')");
+	DB::sql("DELETE FROM events WHERE startdt < date('now', '-".$m." months')");
 
 	reroute("/admin?msg=Purged.");
 });

@@ -948,12 +948,12 @@ final class Base {
 		@return NULL
 		@param $uri string
 	**/
-	function reroute($uri) {
+	function reroute($uri, $permanent=FALSE) {
 		if (PHP_SAPI!='cli') {
 			@session_commit();
 			header('Location: '.(preg_match('/^https?:\/\//',$uri)?
 				$uri:($this->hive['BASE'].$uri)));
-			$this->status($this->hive['VERB']=='GET'?301:303);
+			$this->status($permanent?301:303);
 			die;
 		}
 		$this->mock('GET '.$uri);

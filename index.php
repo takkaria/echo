@@ -47,24 +47,12 @@ function spam_check() {
 	}
 }
 
-// F3 only lets us do temporary re-routing when submitting a form using POST, so here is alternative logic...
-function reroute($where) {
-	global $options;
-	global $f3;
-
-	$f3->status(303);
-	if (session_id())
-		session_commit();
-	header('Location: ' . $options['web']['echo_root'] . $where);
-	die;
-}
-
 function admin_check($reroute = TRUE) {
 	global $f3;
 	session_start();
 	if (!isset($_SESSION['admin'])) {
 		if ($reroute) {
-			reroute("/admin/login");
+			$f3->reroute("/admin/login");
 			exit();
 		}
 	} else {
@@ -73,8 +61,9 @@ function admin_check($reroute = TRUE) {
 }
 
 function readonly_check() {
+	global $f3;
 	if (READONLY) {
-		reroute("/?msg=Sorry,+can't+do+that.+Database+in+read-only+mode.");
+		$f3->reroute("/?msg=Sorry,+can't+do+that.+Database+in+read-only+mode.");
 		die;
 	}
 }
@@ -152,7 +141,7 @@ $f3->route('POST /events/purge', function($f3) {
 	$m = intval($_POST['months']);
 	DB::sql("DELETE FROM events WHERE startdt < date('now', '-".$m." months')");
 
-	reroute("/admin?msg=Purged.");
+	$f3->reroute("/admin?msg=Purged.");
 });
 
 /***************************/
@@ -191,7 +180,7 @@ $f3->route('POST /event/add', function($f3) {
 	$event->save();
 	$event->send_confirm_mail();
 
-	reroute("/?msg=Event+submitted.+Please+check+your+email.");
+	$f3->reroute("/?msg=Event+submitted.+Please+check+your+email.");
 });
 
 $f3->route('GET /event/@id', function($f3) {
@@ -226,7 +215,7 @@ $f3->route('POST /event/@id/edit', function($f3) {
 		echo Template::instance()->render("event_add.html");
 	} else {
 		$event->save();
-		reroute("/event/" . $id . "/edit?msg=Event%20saved.");
+		$f3->reroute("/event/" . $id . "/edit?msg=Event%20saved.");
 	}
 });
 
@@ -246,7 +235,7 @@ $f3->route('GET /c/@key', function($f3) {
 	else
 		$message = "Event submitted.  Please await approval :)";
 
-	reroute("/?msg=" . urlencode($message));
+	$f3->reroute("/?msg=" . urlencode($message));
 });
 
 $f3->route('POST /event/@id/approve', function($f3) {
@@ -312,7 +301,7 @@ $f3->route('POST /posts/purge', function($f3) {
 	$m = intval($_POST['months']);
 	DB::sql("DELETE FROM posts WHERE date < date('now', '-".$m." months')", NULL, 0, 'feeds');
 
-	reroute("/admin?msg=Purged.");
+	$f3->reroute("/admin?msg=Purged.");
 });
 
 /***********************/
@@ -345,7 +334,7 @@ $f3->route('POST /post/edit', function($f3) {
 
 	DB::sql("UPDATE posts SET title=:title, summary=:summary WHERE id=:id", $values, 0, 'feeds');
 
-	reroute("/?msg=Done.");
+	$f3->reroute("/?msg=Done.");
 });
 
 $f3->route('POST /post/hide', function($f3) {
@@ -355,7 +344,7 @@ $f3->route('POST /post/hide', function($f3) {
 	$values = array(":id" => $_GET['id']);
 	DB::sql("UPDATE posts SET hidden=1 WHERE id=:id", $values, 0, 'feeds');
 
-	reroute("/?msg=Hidden!");
+	$f3->reroute("/?msg=Hidden!");
 });
 
 /****************/
@@ -389,7 +378,7 @@ $f3->route('POST /venue/add', function($f3) {
 
 	$venue->save();
 
-	reroute("/?msg=Venue+added.");
+	$f3->reroute("/?msg=Venue+added.");
 });
 
 /********************************/
@@ -401,8 +390,7 @@ $f3->route('GET /feeds', function($f3) {
 
 	DB::sql("SELECT * FROM feeds", NULL, 0, 'feeds');
 	$f3->set('feeds', $f3->get('feeds->result'));
-
-		echo Template::instance()->render("feeds.html");
+	echo Template::instance()->render("feeds.html");
 });
 
 $f3->route('POST /feeds/add', function($f3) {
@@ -432,7 +420,7 @@ $f3->route('POST /feeds/add', function($f3) {
 	else
 		$message = "Feed added.";
 
-	reroute("/feeds?msg=" . $message);
+	$f3->reroute("/feeds?msg=" . $message);
 });
 
 $f3->route('POST /feeds/edit', function($f3) {
@@ -455,7 +443,7 @@ $f3->route('POST /feeds/edit', function($f3) {
 		}
 	}
 
-	reroute("/feeds");
+	$f3->reroute("/feeds");
 });
 
 /******************************/
@@ -547,7 +535,7 @@ $f3->route('POST /admin/login', function($f3) {
 	$_SESSION['email'] = $r['email'];
 	session_commit();
 
-	reroute("/admin");
+	$f3->reroute("/admin");
 });
 
 $f3->route('GET /admin/logout', function($f3) {
@@ -566,7 +554,7 @@ $f3->route('GET /admin/logout', function($f3) {
 	unset($_SESSION['email']);
 	session_destroy();
 
-	reroute("/");
+	$f3->reroute("/");
 });
 
 

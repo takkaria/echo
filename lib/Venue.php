@@ -19,14 +19,12 @@ class Venue {
 
 	function lookup($id) {
 		if (is_int($id))
-			DB::sql("SELECT * FROM venues WHERE id=:id", array(":id" => $id));
+			$r = Events::$db->exec("SELECT * FROM venues WHERE id=:id", array(":id" => $id));
 		else
-			DB::sql("SELECT * FROM venues WHERE name=:name",
+			$r = Events::$db->exec("SELECT * FROM venues WHERE name=:name",
 					array(":name" => $id));
 
-		// Get the first result
-		$r = F3::get('DB->result');
-
+		// Get first result
 		if (isset($r[0])) {
 			$r = $r[0];
 	

@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <title>{{@appname}} :: News &amp; Events</title>
-<F3:include href="_stylesheets.html" />
+<include href="_stylesheets.html" />
 
 <body class="wide" id="index">
-<F3:include href="_header.html" />
+<include href="_header.html" />
 
 <section id="events">
 <h2>EVENTS</h2>
-<F3:check if="!{{@readonly}}">
+<check if="!{{@readonly}}">
 <p class="sublinks"><a href="{{@baseurl}}/event/add">(+ add yours here)</a>
-</F3:check>
+</check>
 
-<F3:repeat group="{{@group_events()}}" key="{{@day}}" value="{{@events}}">
-<F3:include href="event_week.html" />
-</F3:repeat>
+<repeat group="{{@group_events()}}" key="{{@day}}" value="{{@events}}">
+<include href="event_week.html" />
+</repeat>
 
 <p><a href="events">more events this month</a></p>
 </section>
@@ -21,9 +21,9 @@
 <section id="news">
 <h2>NEWS</h2>
 
-<F3:repeat group="{{@posts}}" value="{{@post}}">
-<F3:include href="post.html" />
-</F3:repeat>
+<repeat group="{{@posts}}" value="{{@post}}">
+<include href="post.html" />
+</repeat>
 </section>
 
-<F3:include href="_footer.html" />
+<include href="_footer.html" />

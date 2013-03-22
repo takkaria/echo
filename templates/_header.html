@@ -3,7 +3,7 @@
 <p class="about">ECHO is a left & liberation news & events site for Manchester.  <a href="{{@baseurl}}/about">read more</a></p>
 </header>
 
-<F3:check if="{{@message}}">
+<F3:check if="{{isset(@message)}}">
 	<p class="msg"><span>{{@message}}</span></p>
 	<!-- XXX add some kind of 'close message" button -->
 </F3:check>

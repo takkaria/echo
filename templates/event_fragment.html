@@ -34,7 +34,7 @@
 </F3:check>
 </p>
 
-<F3:check if="{{@admin}}">
+<F3:check if="{{isset(@admin)}}">
 <div class="admin">
 	<p><a href="{{@baseurl}}/event/{{@event->id}}/edit">Edit</a>
 	<F3:check if="{{@event->state=='approved'}}">

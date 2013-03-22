@@ -4,13 +4,12 @@
  ************************************/
 define("BASEPATH", "");
 
-require_once BASEPATH . 'lib/fatfree/lib/base.php';
+$f3 = require(BASEPATH . 'lib/fatfree/base.php');
 
 // Disable this when in production
-F3::set('DEBUG', 3);
+$f3->set('DEBUG', TRUE);
 
-
-F3::set("UI", BASEPATH . "templates/");
+$f3->set("UI", BASEPATH . "templates/");
 
 /**** Initialise ****/
 
@@ -22,26 +21,27 @@ date_default_timezone_set('Europe/London');
 $options = parse_ini_file(BASEPATH . 'doormat.ini', true);
 
 define("READONLY", $options['db']['readonly']);
-F3::set('DB', new DB("sqlite:" . BASEPATH . $options['db']['events']));
-F3::set('feeds', new DB("sqlite:" . BASEPATH . $options['db']['feeds']));
+
+Events::init(BASEPATH . $options['db']['events']);
+$feeds = new DB\SQL("sqlite:" . BASEPATH . $options['db']['feeds']);
 if (isset($_GET['msg']))
-	F3::set('message', strip_tags($_GET['msg']));
-F3::set('baseurl', $options['web']['echo_root']);
-F3::set('appname', $options['general']['name']);
-F3::set('readonly', READONLY);
+	$f3->set('message', strip_tags($_GET['msg']));
+$f3->set('baseurl', $options['web']['echo_root']);
+$f3->set('appname', $options['general']['name']);
+$f3->set('readonly', READONLY);
 
 function spam_check() {
 	global $options;
 
 	if (!isset($options['spam']['blocklist'])) return;
 	$blocklist = $options['spam']['blocklist'];
-	$addr = F3::realip();
+	$addr = $f3->realip();
 	$quad = implode('.', array_reverse(explode('.',$addr)));
 
 	foreach ($blocklist as $list) {
 		// Check against DNS blacklist
 		if (gethostbyname($quad.'.'.$list) != $quad.'.'.$list) {
-			echo Template::serve("spam.html");
+						echo Template::instance()->render("spam.html");
 			die;
 		}
 	}
@@ -50,8 +50,9 @@ function spam_check() {
 // F3 only lets us do temporary re-routing when submitting a form using POST, so here is alternative logic...
 function reroute($where) {
 	global $options;
+	global $f3;
 
-	F3::status(303);
+	$f3->status(303);
 	if (session_id())
 		session_commit();
 	header('Location: ' . $options['web']['echo_root'] . $where);
@@ -59,6 +60,7 @@ function reroute($where) {
 }
 
 function admin_check($reroute = TRUE) {
+	global $f3;
 	session_start();
 	if (!isset($_SESSION['admin'])) {
 		if ($reroute) {
@@ -66,7 +68,7 @@ function admin_check($reroute = TRUE) {
 			exit();
 		}
 	} else {
-		F3::set("admin", TRUE);
+		$f3->set("admin", TRUE);
 	}
 }
 
@@ -81,24 +83,24 @@ function readonly_check() {
 /**** Front page ****/
 /********************/
 
-F3::route('GET /', function() {
+$f3->route('GET /', function($f3) {
 	admin_check(FALSE);
 
 	/* Events */
 	$where = "startdt >= date('now', 'start of day') AND " .
 			"startdt <= date('now', 'start of day', '+14 days') AND " .
 			"state == 'approved'";
-	$results = Event::load($where);
-	F3::set('events', $results);
+	$results = Events::load($where);
+	$f3->set('events', $results);
 
 	/* Feed posts */
-	DB::sql("SELECT *
+	global $feeds;
+	$results = $feeds->exec("SELECT *
 		FROM post_info
 		WHERE hidden IS NOT 1
 		ORDER BY date DESC
-		LIMIT 0, 10", NULL, 0, 'feeds');
+		LIMIT 0, 10");
 
-	$results = F3::get('feeds->result');
 	foreach ($results as &$post) {
 		$ts = strtotime($post['date']);
 
@@ -111,39 +113,39 @@ F3::route('GET /', function() {
 		$post['feed']['site'] = $post['site_url'];
 	}
 
-	F3::set('posts', $results);
+	$f3->set('posts', $results);
 
 	/* Serve it up! */
-	echo Template::serve("index.html");
+		echo Template::instance()->render("index.html");
 });
 
 /* XXX need to work out a better way to do this that is generic, no time now though */
 /* maybe a var 'passthrough' in the ini which just makes pages listed in it serve up <page>.html */
-F3::route('GET /about', function() {
-	echo Template::serve("about.html");
+$f3->route('GET /about', function($f3) {
+		echo Template::instance()->render("about.html");
 });
 
 /***************************/
 /**** Displaying events ****/
 /***************************/
 
-F3::route('GET /events', function() {
+$f3->route('GET /events', function($f3) {
 	$where = "startdt >= date('now', 'start of day') AND " .
 			"startdt <= date('now', 'start of month', '+2 month', '-1 day') AND " .
 			"state == 'approved'";
-	$results = Event::load($where);
-	F3::set('events', $results);
-	echo Template::serve("events.html");
+	$results = Events::load($where);
+	$f3->set('events', $results);
+		echo Template::instance()->render("events.html");
 });
 
-F3::route('GET /events/unapproved', function() {
+$f3->route('GET /events/unapproved', function($f3) {
 	admin_check();
-	F3::set('events', Event::load("state == 'validated'"));
-	F3::set('admin', TRUE);
-	echo Template::serve("events.html");
+	$f3->set('events', Events::load("state == 'validated'"));
+	$f3->set('admin', TRUE);
+		echo Template::instance()->render("events.html");
 });
 
-F3::route('POST /events/purge', function() {
+$f3->route('POST /events/purge', function($f3) {
 	admin_check();
 	readonly_check();
 
@@ -157,11 +159,11 @@ F3::route('POST /events/purge', function() {
 /**** Adding new events ****/
 /***************************/
 
-F3::route('GET /event/add', function() {
-	echo Template::serve("event_add.html");
+$f3->route('GET /event/add', function($f3) {
+		echo Template::instance()->render("event_add.html");
 });
 
-F3::route('POST /event/add', function() {
+$f3->route('POST /event/add', function($f3) {
 	spam_check();
 	readonly_check();
 
@@ -169,17 +171,19 @@ F3::route('POST /event/add', function() {
 	$messages = $event->parse_form_data();
 
 	if (count($messages) > 0) {
-		set_event_data_from_POST();
-		F3::set('messages', $messages);
-		echo Template::serve("event_add.html");
+		$event->set_form_data();
+		$f3->set('messages', $messages);
+				echo Template::instance()->render("event_add.html");
 		die;
 	}
 
 	// Check user isn't banned
-	DB::sql("SELECT banned FROM users WHERE email=:email", 
-		array(':email' => $event->email));
-	if (F3::get("DB->results")) {
-		echo Template::serve("spam.html");
+	$r = Events::sql("SELECT banned FROM users" .
+			" WHERE email=:email AND banned = 1",
+			array(':email' => $event->email));
+	if ($r) {
+				echo Template::instance()->render("spam.html");
+		var_dump($r);
 		die;
 	}
 
@@ -190,51 +194,54 @@ F3::route('POST /event/add', function() {
 	reroute("/?msg=Event+submitted.+Please+check+your+email.");
 });
 
-F3::route('GET /event/@id', function() {
+$f3->route('GET /event/@id', function($f3) {
 	admin_check(FALSE);
-	$id = intval(F3::get('PARAMS.id'));
+	$id = intval($f3->get('PARAMS.id'));
 
 	$event = new Event($id);
-	F3::set("event", $event);
-	echo Template::serve("event.html");
+	$f3->set("event", $event);
+	echo Template::instance()->render("event.html");
 });
 
-F3::route('GET /event/@id/edit', function() {
+$f3->route('GET /event/@id/edit', function($f3) {
 	admin_check();
-	$id = intval(F3::get('PARAMS.id'));
+	$id = intval($f3->get('PARAMS.id'));
 
 	$event = new Event($id);
-	set_event_data_from_Event($event);
-	echo Template::serve("event_add.html");
+	$event->set_form_data();
+	echo Template::instance()->render("event_add.html");
 });
 
-F3::route('POST /event/@id/edit', function() {
+$f3->route('POST /event/@id/edit', function($f3) {
 	admin_check();
 	readonly_check();
-	$id = intval(F3::get('PARAMS.id'));
+	$id = intval($f3->get('PARAMS.id'));
 
 	$event = new Event($id);
 	$messages = $event->parse_form_data();
 
 	if (count($messages) > 0) {
-		set_event_data_from_POST();
-		F3::set('messages', $messages);
-		echo Template::serve("event_add.html");
+		$event->set_form_data();
+		$f3->set('messages', $messages);
+		echo Template::instance()->render("event_add.html");
 	} else {
 		$event->save();
 		reroute("/event/" . $id . "/edit?msg=Event%20saved.");
 	}
 });
 
-F3::route('GET /c/@key', function() {
-	$key = F3::get('PARAMS.key');
+$f3->route('GET /c/@key', function($f3) {
+	global $events;
+
+	$key = $f3->get('PARAMS.key');
 	if (!ctype_alnum($key))
 		$id = "";
 
-	DB::sql("UPDATE events SET key=NULL, state=:state WHERE key=:key", 
-			array(':state' => "validated", ':key' => $key));
+	$result = Events::sql("UPDATE events SET key=NULL, state=:state" .
+			" WHERE key=:key", 
+				array(':state' => "validated", ':key' => $key));
 
-	if (F3::get('DB->result') == 0)
+	if (!$result)
 		$message = "No event to approve found!  Maybe you already approved it?";
 	else
 		$message = "Event submitted.  Please await approval :)";
@@ -242,38 +249,38 @@ F3::route('GET /c/@key', function() {
 	reroute("/?msg=" . urlencode($message));
 });
 
-F3::route('POST /event/@id/approve', function() {
+$f3->route('POST /event/@id/approve', function($f3) {
 	admin_check();
 	readonly_check();
-	$id = intval(F3::get('PARAMS.id'));
+	$id = intval($f3->get('PARAMS.id'));
 
 	DB::sql("UPDATE events SET key=NULL, state=:state WHERE id=:id", 
 			array(':state' => "approved", ':id' => $id));
 
-	if (F3::get('DB->result') == 0)
+	if ($f3->get('DB->result') == 0)
 		echo "Failure";
 	else
 		echo "Approved";
 });
 
-F3::route('POST /event/@id/unapprove', function() {
+$f3->route('POST /event/@id/unapprove', function($f3) {
 	admin_check();
 	readonly_check();
-	$id = intval(F3::get('PARAMS.id'));
+	$id = intval($f3->get('PARAMS.id'));
 
 	DB::sql("UPDATE events SET state=:state WHERE id=:id", 
 			array(':state' => "validated", ':id' => $id));
 
-	if (F3::get('DB->result') == 0)
+	if ($f3->get('DB->result') == 0)
 		echo "Failure";
 	else
 		echo "Unapproved";
 });
 
-F3::route('POST /event/@id/approve', function() {
+$f3->route('POST /event/@id/approve', function($f3) {
 	admin_check();
 	readonly_check();
-	$id = intval(F3::get('PARAMS.id'));
+	$id = intval($f3->get('PARAMS.id'));
 
 	$e = new Event($id);
 	$e->state = "approved";
@@ -281,14 +288,14 @@ F3::route('POST /event/@id/approve', function() {
 	$e->send_approve_mail();
 });
 
-F3::route('POST /event/@id/delete', function() {
+$f3->route('POST /event/@id/delete', function($f3) {
 	admin_check();
 	readonly_check();
-	$id = intval(F3::get('PARAMS.id'));
+	$id = intval($f3->get('PARAMS.id'));
 
 	DB::sql("DELETE FROM events WHERE id=:id", array(':id' => $id));
 
-	if (F3::get('DB->result') == 0)
+	if ($f3->get('DB->result') == 0)
 		echo "Failure";
 	else
 		echo "Approved";
@@ -298,7 +305,7 @@ F3::route('POST /event/@id/delete', function() {
 /**** Posts in bulk ****/
 /***********************/
 
-F3::route('POST /posts/purge', function() {
+$f3->route('POST /posts/purge', function($f3) {
 	admin_check();
 	readonly_check();
 
@@ -312,22 +319,22 @@ F3::route('POST /posts/purge', function() {
 /**** Editing posts ****/
 /***********************/
 
-F3::route('GET /post/edit', function() {
+$f3->route('GET /post/edit', function($f3) {
 	admin_check();
 	readonly_check();
 
 	DB::sql("SELECT id, title, summary FROM posts WHERE id=:id", array(":id" => $_GET['id']), 0, 'feeds');
-	$r = F3::get('feeds->result');
+	$r = $f3->get('feeds->result');
 	$r = $r[0];
 
-	F3::set('id', $r['id']);
-	F3::set('title', $r['title']);
-	F3::set('summary', $r['summary']);
+	$f3->set('id', $r['id']);
+	$f3->set('title', $r['title']);
+	$f3->set('summary', $r['summary']);
 
-	echo Template::serve("post_edit.html");
+		echo Template::instance()->render("post_edit.html");
 });
 
-F3::route('POST /post/edit', function() {
+$f3->route('POST /post/edit', function($f3) {
 	admin_check();
 	readonly_check();
 
@@ -341,7 +348,7 @@ F3::route('POST /post/edit', function() {
 	reroute("/?msg=Done.");
 });
 
-F3::route('POST /post/hide', function() {
+$f3->route('POST /post/hide', function($f3) {
 	admin_check();
 	readonly_check();
 
@@ -355,18 +362,18 @@ F3::route('POST /post/hide', function() {
 /**** Venues ****/
 /****************/
 
-F3::route('GET /venue/@id', function() {
-	$v = new Venue(intval(F3::get('PARAMS.id')));
-	F3::set("venue", $v);
-	echo Template::serve("venue.html");
+$f3->route('GET /venue/@id', function($f3) {
+	$v = new Venue(intval($f3->get('PARAMS.id')));
+	$f3->set("venue", $v);
+		echo Template::instance()->render("venue.html");
 });
 
-F3::route('GET /venue/add', function() {
+$f3->route('GET /venue/add', function($f3) {
 	readonly_check();
-	echo Template::serve("venue_add.html");
+		echo Template::instance()->render("venue_add.html");
 });
 
-F3::route('POST /venue/add', function() {
+$f3->route('POST /venue/add', function($f3) {
 	readonly_check();
 	admin_check();
 
@@ -375,8 +382,8 @@ F3::route('POST /venue/add', function() {
 
 	if (count($messages) > 0) {
 		set_venue_data_from_POST();
-		F3::set('messages', $messages);
-		echo Template::serve("venue_add.html");
+		$f3->set('messages', $messages);
+			echo Template::instance()->render("venue_add.html");
 		die;
 	}
 
@@ -389,16 +396,16 @@ F3::route('POST /venue/add', function() {
 /**** Feed display & editing ****/
 /********************************/
 
-F3::route('GET /feeds', function() {
+$f3->route('GET /feeds', function($f3) {
 	admin_check();
 
 	DB::sql("SELECT * FROM feeds", NULL, 0, 'feeds');
-	F3::set('feeds', F3::get('feeds->result'));
+	$f3->set('feeds', $f3->get('feeds->result'));
 
-	echo Template::serve("feeds.html");
+		echo Template::instance()->render("feeds.html");
 });
 
-F3::route('POST /feeds/add', function() {
+$f3->route('POST /feeds/add', function($f3) {
 	admin_check();
 	readonly_check();
 
@@ -420,7 +427,7 @@ F3::route('POST /feeds/add', function() {
 			"(feed_url, site_url, title) VALUES (:feed, :site, :title)",
 			$values, 0, 'feeds');
 
-	if (F3::get('DB->result') != 0)
+	if ($f3->get('DB->result') != 0)
 		$message = "Failed to add feed to database.";
 	else
 		$message = "Feed added.";
@@ -428,7 +435,7 @@ F3::route('POST /feeds/add', function() {
 	reroute("/feeds?msg=" . $message);
 });
 
-F3::route('POST /feeds/edit', function() {
+$f3->route('POST /feeds/edit', function($f3) {
 	admin_check();
 	readonly_check();
 
@@ -455,7 +462,7 @@ F3::route('POST /feeds/edit', function() {
 /**** Admin login & logout ****/
 /******************************/
 
-F3::route('GET /admin', function() {
+$f3->route('GET /admin', function($f3) {
 	admin_check();
 
 	/** Retrieve event info **/
@@ -466,23 +473,19 @@ F3::route('GET /admin', function() {
 		"old" => 0
 	);
 
-	DB::sql('SELECT count(*) AS count FROM events WHERE state="submitted"');
-	$r = F3::get('DB->result');
+	$r = Events::sql('SELECT count(*) AS count FROM events WHERE state="submitted"');
 	$events_info['submitted'] = $r[0]['count'];
 
-	DB::sql('SELECT count(*) AS count FROM events WHERE state="validated"');
-	$r = F3::get('DB->result');
+	$r = Events::sql('SELECT count(*) AS count FROM events WHERE state="validated"');
 	$events_info['validated'] = $r[0]['count'];
 
-	DB::sql('SELECT count(*) AS count FROM events WHERE state="approved"');
-	$r = F3::get('DB->result');
+	$r = Events::sql('SELECT count(*) AS count FROM events WHERE state="approved"');
 	$events_info['approved'] = $r[0]['count'];
 
-	DB::sql('SELECT count(*) AS count FROM events WHERE state="approved" AND date < date("now", "start of day")');
-	$r = F3::get('DB->result');
+	$r = Events::sql('SELECT count(*) AS count FROM events WHERE state="approved" AND date < date("now", "start of day")');
 	$events_info['old'] = $r[0]['count'];
 
-	F3::set("events", $events_info);
+	$f3->set("events", $events_info);
 
 	$feed_info = array(
 		"feeds" => 0,
@@ -490,52 +493,51 @@ F3::route('GET /admin', function() {
 		"old_posts" => 0
 	);
 
-	DB::sql('SELECT count(*) AS count FROM feeds', NULL, 0, 'feeds');
-	$r = F3::get('feeds->result');
+	global $feeds;
+
+	$r = $feeds->exec('SELECT count(*) AS count FROM feeds', NULL, 0, 'feeds');
 	$feed_info['feeds'] = $r[0]['count'];
 
-	DB::sql('SELECT count(*) AS count FROM posts', NULL, 0, 'feeds');
-	$r = F3::get('feeds->result');
+	$r = $feeds->exec('SELECT count(*) AS count FROM posts', NULL, 0, 'feeds');
 	$feed_info['posts'] = $r[0]['count'];
 
-	DB::sql('SELECT count(*) AS count FROM posts WHERE date < date("now", "-1 month")', NULL, 0, 'feeds');
-	$r = F3::get('feeds->result');
+	$r = $feeds->exec('SELECT count(*) AS count FROM posts WHERE date < date("now", "-1 month")');
 	$feed_info['old_posts'] = $r[0]['count'];
 
-	F3::set("feeds", $feed_info);
+	$f3->set("feeds", $feed_info);
 
 	/** Serve it up! **/
-	echo Template::serve("admin.html");
+		echo Template::instance()->render("admin.html");
 });
 
-F3::route('GET /admin/login', function() {
-	echo Template::serve("admin_login.html");
+$f3->route('GET /admin/login', function($f3) {
+		echo Template::instance()->render("admin_login.html");
 });
 
-F3::route('POST /admin/login', function() {
+$f3->route('POST /admin/login', function($f3) {
 
 	// XXX do the other stuff mentioned in this article:
 	// http://throwingfire.com/storing-passwords-securely/
 	// and perhaps add in nth character of a passphrase type stuff
 
 	/* Get the salt */
-	DB::sql("SELECT * FROM users WHERE email=:email",
+	$result = Events::sql("SELECT * FROM users WHERE email=:email",
 		array(':email' => $_POST['email']));
 
 	/* No such user! */
-	if (sizeof(F3::get('DB->result')) == 0) {
-		F3::set('message', "FAIL.");
-		echo Template::serve("admin_login.html");
+	if (sizeof($result) == 0) {
+		$f3->set('message', "FAIL.");
+				echo Template::instance()->render("admin_login.html");
 		exit();
 	}
 
-	$r = F3::get("DB->result");
-	$r = $r[0];
+	/* Take the first row */
+	$r = $result[0];
 
 	/* Now take the salt and the user's input and compare it to the digest */
 	if ($r['digest'] != hash("sha256", $r['salt'] . $_POST['password'])) {
-		F3::set('message', "FAIL.");
-		echo Template::serve("admin_login.html");
+		$f3->set('message', "FAIL.");
+				echo Template::instance()->render("admin_login.html");
 		exit();	
 	}
 
@@ -548,7 +550,7 @@ F3::route('POST /admin/login', function() {
 	reroute("/admin");
 });
 
-F3::route('GET /admin/logout', function() {
+$f3->route('GET /admin/logout', function($f3) {
 
 	session_start();
 
@@ -572,14 +574,12 @@ F3::route('GET /admin/logout', function() {
 /**** iCalendar format ****/
 /**************************/
 
-F3::route('GET /icalendar', function() {
+$f3->route('GET /icalendar', function($f3) {
 	$where = "date >= date('now', 'start of day') AND state == 'approved'";
-	$results = Event::load($where);
-	F3::set('events', $results);
-	echo Template::serve("ical.txt");
+	$f3->set('events', Events::load($where));
+	echo Template::instance()->render("ical.txt");
 });
 
-
-F3::run();
+$f3->run();
 
 ?>

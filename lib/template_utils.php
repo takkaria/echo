@@ -1,8 +1,9 @@
 <?php
 
 // Group events by day
-F3::set('group_events', function() {
-	$events = F3::get('events');
+$f3->set('group_events', function() {
+	global $f3;
+	$events = $f3->get('events');
 	$sorted = array();
 	foreach ($events as $e) {
 		$dt = clone $e->startdt;
@@ -12,7 +13,7 @@ F3::set('group_events', function() {
 });
 
 // Format a nice prettily for the events listing
-F3::set('formatdate', function($date) {
+$f3->set('formatdate', function($date) {
 	$today = new DateTime("today"); // This gets the beginning of the day
 	$event = new DateTime($date);
 	$format = 'l j F';	// This should be in the templates but for some reason F3 was screwing up with it
@@ -32,25 +33,24 @@ F3::set('formatdate', function($date) {
 });
 
 // Output 'value' attribute suitable for input tag if arg isn't null
-F3::set('value', function($arg) {
+$f3->set('value', function($arg) {
 	if ($arg)
 		return 'value="' . $arg . '"';
 });
 
 // Check if URL is a Facebook URL
-F3::set('facebook', function($url) {
+$f3->set('facebook', function($url) {
 	return strpos($url, "facebook.com") !== FALSE;
 });
 
 // Convert commas into brs
-F3::set('comma2br', function($text) {
+$f3->set('comma2br', function($text) {
 	return preg_replace('/, /', '<br>', $text);
 });
 
 // Convert commas into brs
-F3::set('get_venues', function() {
-	DB::sql("SELECT name FROM venues");
-	return F3::get('DB->result');
+$f3->set('get_venues', function() {
+	return Events::$db->exec("SELECT name FROM venues");
 });
 
 ?>

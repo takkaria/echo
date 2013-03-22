@@ -1,15 +1,15 @@
 <div class="post">
 <h4>{{@post.title}}</h4>
-<F3:check if="{{@post.image}}"><img src="{{@post.image}}" width="25%"></F3:check>
+<check if="{{@post.image}}"><img src="{{@post.image}}" width="25%"></check>
 <p class="desc">{{@post.summary}} ... <a href="{{@post.link}}" class="more">read more</a>
 <p class="date">{{@formatdate(@post.date)}}
-<F3:check if="{{@post.feed.site}}"> from <a href="{{@post.feed.site}}">{{@post.feed.title}}</a></F3:check></p>
+<check if="{{@post.feed.site}}"> from <a href="{{@post.feed.site}}">{{@post.feed.title}}</a></check></p>
 
-<F3:check if="{{@admin}}">
+<check if="{{isset(@admin)}}">
 <div class="admin">
 	<p><a href="{{@baseurl}}/post/edit/?id={{urlencode(@post.id)}}">Edit</a>
 	<form action="{{@baseurl}}/post/hide/?id={{urlencode(@post.id)}}" method="POST"><input type="submit" value="Hide"></form>
 </div>
-</F3:check>
+</check>
 
 </div>

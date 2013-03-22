@@ -11,7 +11,7 @@
 </style>
 
 <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
-<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
+<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js" async></script>
 <script src="{{@baseurl}}/js/venuelist.js"></script>
 <script src="{{@baseurl}}/js/jquery-ui-1.10.2.custom.min.js"></script>
 <script src="{{@baseurl}}/js/jquery.timepicker.min.js"></script>
@@ -205,7 +205,7 @@ initCostLogic();
 <section id="add">
 <h2>Add an event</h2>
 
-<F3:check if="{{count(@messages)}}">
+<F3:check if="{{isset(@messages)}}">
 <ul>
 <F3:repeat group="{{@messages}}" value="{{@message}}">
 	<li>{{@message}}
@@ -217,10 +217,10 @@ initCostLogic();
 
 <fieldset>
 <label class="left" for="title">Event name:</label>
-<input class="right required" type="text" name="title" id="title" {{@value(@title)}}>
+<input class="right required" type="text" name="title" id="title" {{isset(@title)?@value(@title):NULL}}>
 
 <div class="right">
-<input type="checkbox" id="film" name="film" {{@film?'checked':''}}>
+<input type="checkbox" id="film" name="film" {{isset(@film)&&@film?'checked':''}}>
 <label for="film">This is a film showing</label>
 </div>
 </fieldset>
@@ -228,10 +228,10 @@ initCostLogic();
 <fieldset>
 <label class="left" for="date">Time and date:</label>
 <div class="right" id="start">
-Starts <input class="required time" type="text" name="time1" id="time1" {{@value(@time1)}} placeholder="time"> on <input class="required date" type="text" id="date1" name="date1" placeholder="date" {{@value(@date1)}}><br>
+Starts <input class="required time" type="text" name="time1" id="time1" {{isset(@time1)?@value(@time1):NULL}} placeholder="time"> on <input class="required date" type="text" id="date1" name="date1" placeholder="date" {{isset(@date1)?@value(@date1):NULL}}><br>
 </div>
 <div class="right" id="end" style="display: none;">
-Ends <input class="required time" type="text" name="time2" id="time2" {{@value(@time2)}} placeholder="time"> on <input class="required date" type="text" id="date2" name="date2" placeholder="date" {{@value(@date2)}}>
+Ends <input class="required time" type="text" name="time2" id="time2" {{isset(@time2)?@value(@time2):NULL}} placeholder="time"> on <input class="required date" type="text" id="date2" name="date2" placeholder="date" {{isset(@date2)?@value(@date2):NULL}}>
 </div>
 <div class="right">
 <input type="checkbox" id="set_end"> <label for="set_end">Set an end time and date?</label>
@@ -244,7 +244,7 @@ Ends <input class="required time" type="text" name="time2" id="time2" {{@value(@
 <label for="location">Location:</label>
 <p class="desc" style="margin-top: 10px">Or select from below:</p>
 </div>
-<input class="right required" type="text" name="location" id="location" autocomplete="off" {{@value(@location)}}>
+<input class="right required" type="text" name="location" id="location" autocomplete="off" {{isset(@location)?@value(@location):NULL}}>
 </fieldset>
 
 <div id="venues" style="display: none;">
@@ -256,8 +256,8 @@ Ends <input class="required time" type="text" name="time2" id="time2" {{@value(@
 <label class="left">Price:</label>
 
 <div class="right">
-<input type="radio" name="free" id="free" {{@free?'checked':''}} value="free"> <label for="free">Free</label><br>
-<input type="radio" name="free" id="costbutton" {{@cost?'checked':''}}> <label for="costbutton">It costs</label> <input type="text" name="cost" id="cost" style="width: 220px;" {{@value(@cost)}}>
+<input type="radio" name="free" id="free" {{isset(@free)&&@free?'checked':''}} value="free"> <label for="free">Free</label><br>
+<input type="radio" name="free" id="costbutton" {{isset(@cost)&&@cost?'checked':''}}> <label for="costbutton">It costs</label> <input type="text" name="cost" id="cost" style="width: 220px;" {{isset(@cost)?@value(@cost):NULL}}>
 </div>
 </fieldset>
 
@@ -267,7 +267,7 @@ Ends <input class="required time" type="text" name="time2" id="time2" {{@value(@
 <p class="desc">Please include the group organising the event and information about booking if you have to book.  Maximum 250 words.</p>
 </div>
 
-<textarea class="right required" name="blurb" id="blurb" rows="8">{{@blurb}}</textarea>
+<textarea class="right required" name="blurb" id="blurb" rows="8">{{isset(@blurb)?@blurb:NULL}}</textarea>
 <p class="right count" style="display: none;"><i>Word count:</i> <span id="wordcount">0</span> / 250</p>
 </fieldset>
 
@@ -277,12 +277,12 @@ Ends <input class="required time" type="text" name="time2" id="time2" {{@value(@
 <p class="desc">Is there somewhere on the web people can go to get more information, like a blog post / Facebook event?</p>
 </div>
 
-<input class="right permissive_url" type="text" name="url" id="url" {{@value(@url)}}>
+<input class="right permissive_url" type="text" name="url" id="url" {{isset(@url)?@value(@url):NULL}}>
 </fieldset>
 
 <fieldset>
 <label class="left" for="email">Your email:</label>
-<input class="right required email" type="text" name="email" id="email" {{@value(@email)}}>
+<input class="right required email" type="text" name="email" id="email" {{isset(@email)?@value(@email):NULL}}>
 </fieldset>
 
 <input type="submit" value="Submit your event!">

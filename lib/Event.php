@@ -20,10 +20,11 @@ class Event {
 			return;
 
 		// Get the first result
-		// XXX error-check
-		$r = Events::$db->exec("SELECT * FROM events WHERE id=" . $id . " ORDER BY date");
-		$r = $r[0];
+		$r = Events::$db->exec("SELECT * FROM events WHERE id=:id", array(":id" => $id));
+		if (sizeof($r) != 1)
+			throw new Exception("Invalid record.");
 
+		$r = $r[0];
 		$this->id = $r['id'];
 		$this->title = $r['title'];
 		$this->startdt =
@@ -181,7 +182,7 @@ class Event {
 		$e = new DB\SQL\Mapper(Events::$db, 'events');
 
 		if ($this->id)
-			$e->load(array('id' => $this->id));
+			$e->load(array('id=?', $this->id));
 
 		$e->id = $this->id;
 		$e->title = $this->title;
@@ -226,8 +227,8 @@ class Event {
 class Events {
 	static public $db;
 
-	static function init($arg) {
-		Events::$db = new DB\SQL("sqlite:" . $arg);
+	static function init($db) {
+		Events::$db = $db;
 	}
 
 	static function load($where) {
@@ -239,6 +240,23 @@ class Events {
 		}
 
 		return $events;
+	}
+
+	static function purge($months) {
+		Events::$db->exec("DELETE FROM events WHERE startdt < date('now', '-".$m." months')");
+	}
+
+	static function validate($key) {
+		$result = Events::$db->exec(
+				"UPDATE events" .
+				" SET key=NULL, state=:state" .
+				" WHERE key=:key",
+				array(':state' => "validated", ':key' => $key));
+		return $result ? TRUE : FALSE;
+	}
+
+	static function delete($id) {
+		Events::$db->sql("DELETE FROM events WHERE id=:id", array(':id' => $id));
 	}
 
 	static function sql($cmds,$args=NULL,$ttl=0) {

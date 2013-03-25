@@ -9,7 +9,7 @@
 <section id="venue_add">
 <h2>Edit post</h2>
 
-<F3:check if="{{count(@messages)}}">
+<F3:check if="{{isset(@messages)}}">
 <ul>
 <F3:repeat group="{{@messages}}" value="{{@message}}">
 	<li>{{@message}}
@@ -22,16 +22,16 @@
 <input type="hidden" name="id" value="{{@id}}">
 
 <fieldset>
-<label id="ftitle" for="title">Title:</label>
-<input type="text" name="title" id="title" {{@value(@title)}}>
+<label class="left" for="title">Title:</label>
+<input class="right" type="text" name="title" id="title" {{@value(@title)}}>
 </fieldset>
 
 <fieldset>
-<label id="fsummary" for="summary">Summary:</label>
-<textarea name="summary" id="summary" rows="8">{{@summary}}</textarea>
+<label class="left" for="summary">Summary:</label>
+<textarea class="right" name="summary" id="summary" rows="8">{{@summary}}</textarea>
 </fieldset>
 
-<input type="submit" value="Submit">
+<input type="submit" value="Alter post">
 </form>
 </section>
 

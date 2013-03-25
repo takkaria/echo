@@ -271,15 +271,14 @@ $f3->route('GET /post/edit', function($f3) {
 	admin_check();
 	readonly_check();
 
-	DB::sql("SELECT id, title, summary FROM posts WHERE id=:id", array(":id" => $_GET['id']), 0, 'feeds');
-	$r = $f3->get('feeds->result');
+	$r = Feeds::$db->exec("SELECT id, title, summary FROM posts WHERE id=:id", array(":id" => $_GET['id']));
 	$r = $r[0];
 
 	$f3->set('id', $r['id']);
 	$f3->set('title', $r['title']);
 	$f3->set('summary', $r['summary']);
 
-		echo Template::instance()->render("post_edit.html");
+	echo Template::instance()->render("post_edit.html");
 });
 
 $f3->route('POST /post/edit', function($f3) {
@@ -291,7 +290,7 @@ $f3->route('POST /post/edit', function($f3) {
 		":title" => $_POST['title'],
 		":summary" => $_POST['summary']);
 
-	DB::sql("UPDATE posts SET title=:title, summary=:summary WHERE id=:id", $values, 0, 'feeds');
+	Feeds::$db->exec("UPDATE posts SET title=:title, summary=:summary WHERE id=:id", $values);
 
 	$f3->reroute("/?msg=Done.");
 });
@@ -301,7 +300,7 @@ $f3->route('POST /post/hide', function($f3) {
 	readonly_check();
 
 	$values = array(":id" => $_GET['id']);
-	DB::sql("UPDATE posts SET hidden=1 WHERE id=:id", $values, 0, 'feeds');
+	Feeds::$db->exec("UPDATE posts SET hidden=1 WHERE id=:id", $values, 0, 'feeds');
 
 	$f3->reroute("/?msg=Hidden!");
 });
@@ -313,12 +312,13 @@ $f3->route('POST /post/hide', function($f3) {
 $f3->route('GET /venue/@id', function($f3) {
 	$v = new Venue(intval($f3->get('PARAMS.id')));
 	$f3->set("venue", $v);
-		echo Template::instance()->render("venue.html");
+	echo Template::instance()->render("venue.html");
 });
 
 $f3->route('GET /venue/add', function($f3) {
+	admin_check();
 	readonly_check();
-		echo Template::instance()->render("venue_add.html");
+	echo Template::instance()->render("venue_add.html");
 });
 
 $f3->route('POST /venue/add', function($f3) {
@@ -420,16 +420,16 @@ $f3->route('GET /admin', function($f3) {
 		"old" => 0
 	);
 
-	$r = Events::sql('SELECT count(*) AS count FROM events WHERE state="submitted"');
+	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state="submitted"');
 	$events_info['submitted'] = $r[0]['count'];
 
-	$r = Events::sql('SELECT count(*) AS count FROM events WHERE state="validated"');
+	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state="validated"');
 	$events_info['validated'] = $r[0]['count'];
 
-	$r = Events::sql('SELECT count(*) AS count FROM events WHERE state="approved"');
+	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state="approved"');
 	$events_info['approved'] = $r[0]['count'];
 
-	$r = Events::sql('SELECT count(*) AS count FROM events WHERE state="approved" AND date < date("now", "start of day")');
+	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state="approved" AND date < date("now", "start of day")');
 	$events_info['old'] = $r[0]['count'];
 
 	$f3->set("events", $events_info);

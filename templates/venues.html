@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<title>{{@appname}} :: Venue list</title>
+<F3:include href="_stylesheets.html" />
+
+<body class="thin">
+<F3:include href="_header.html" />
+
+<section>
+<h2>Unprocessed venue list</h2>
+
+<table>
+<tr>
+	<th>Name
+	<th>Number
+	<th>Make own page
+<F3:repeat group="{{@venues}}" value="{{@venue}}">
+<tr>
+	<td>{{@venue.name}}
+	<td>{{@venue.count}}
+	<td>go
+</F3:repeat>
+</table>
+
+</section>
+
+<F3:include href="_footer.html" />

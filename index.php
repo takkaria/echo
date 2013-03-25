@@ -309,6 +309,15 @@ $f3->route('POST /post/hide', function($f3) {
 /**** Venues ****/
 /****************/
 
+$f3->route('GET /venues', function($f3) {
+	$f3->set("venues", Events::$db->exec(
+		"SELECT location AS name, count(location) AS count ".
+		"FROM events WHERE location != CAST(location AS INTEGER)".
+		"GROUP BY location ORDER BY count DESC;"));
+
+	echo Template::instance()->render("venues.html");
+});
+
 $f3->route('GET /venue/@id', function($f3) {
 	$v = new Venue(intval($f3->get('PARAMS.id')));
 	$f3->set("venue", $v);

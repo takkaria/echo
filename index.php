@@ -406,6 +406,7 @@ F3::route('POST /feeds/add', function() {
 
 	$feed = new SimplePie();
 	$feed->set_feed_url($_POST['url']);
+	$feed->enable_cache(false);
 	$feed->init();
 	$feed->handle_content_type();
 

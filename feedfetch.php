@@ -3,7 +3,9 @@
 if (php_sapi_name() != 'cli')
 	exit(1);
 
-require_once 'lib/fatfree/lib/base.php';
+date_default_timezone_set('Europe/London');
+
+$f3 = require 'lib/fatfree/base.php';
 require_once 'lib/simplepie_1.3.compiled.php';
 require_once 'lib/simple_html_dom.php';
 
@@ -71,7 +73,7 @@ function find_image($content) {
 	}
 }
 
-function fetch_feed($url) {
+function fetch_feed($db, $url) {
 	/* Fetch */
 	$feed = new SimplePie();
 	$feed->set_feed_url($url);
@@ -100,24 +102,23 @@ function fetch_feed($url) {
 
 		$dbstore[':summary'] = $summary;
 
-		DB::sql('INSERT OR IGNORE INTO POSTS ( feed_url, id, title, link, date, image, summary ) VALUES ( :feed_url, :id, :title, :link, :date, :image, :summary );', $dbstore);
+		$db->exec('INSERT OR IGNORE INTO POSTS ( feed_url, id, title, link, date, image, summary ) VALUES ( :feed_url, :id, :title, :link, :date, :image, :summary );', $dbstore);
 	}
 
 }
 
 /* Connect to DB */
 $options = parse_ini_file('doormat.ini', true);
-F3::set('DB', new DB("sqlite:" . $options['db']['feeds']));
+$db = new DB\SQL("sqlite:" . $options['db']['feeds']);
 
 if ($argc == 2) {
 	/* Fetch the provided feed and dump it */
-	fetch_feed($argv[1]);
+	fetch_feed($db, $argv[1]);
 } else {
 	/* Fetch feeds */
-	DB::sql("SELECT * FROM feeds");
-	$results = F3::get('DB->result');
+	$results = $db->exec("SELECT * FROM feeds");
 	foreach ($results as $feed_info)
-		fetch_feed($feed_info['feed_url']);
+		fetch_feed($db, $feed_info['feed_url']);
 }
 
 exit(0);

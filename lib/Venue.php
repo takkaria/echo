@@ -57,18 +57,18 @@ class Venue {
 	}
 
 	function parse_form_data() {
-		var_dump($_POST);
+		global $f3;
 
-		$this->name = F3::scrub($_POST['name']);
-		$this->address = F3::scrub($_POST['address']);
-		$this->postcode = F3::scrub($_POST['postcode']);
-		$this->info = F3::scrub($_POST['info']);
+		$this->name = $f3->scrub($_POST['name']);
+		$this->address = $f3->scrub($_POST['address']);
+		$this->postcode = $f3->scrub($_POST['postcode']);
+		$this->info = $f3->scrub($_POST['info']);
 
 		return array();
 	}
 
 	public function save() {
-		$v = new Axon('venues');
+		$v = new DB\SQL\Mapper(Events::$db, 'venues');
 
 		if ($this->id)
 			$v->load('id=' . $this->id);

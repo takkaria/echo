@@ -140,7 +140,8 @@ class Event {
 		if (isset($_POST['free']) && $_POST['free'] == 'free') {
 			$this->cost = NULL;
 		} else {
-			$this->cost = F3::scrub($_POST['cost']);
+			global $f3;
+			$this->cost = $f3->scrub($_POST['cost']);
 		}
 
 		return $messages;
@@ -148,6 +149,18 @@ class Event {
 
 	public function generate_key() {
 		$this->key = md5($this->email . rand());
+	}
+
+	public function approve() {
+		$this->state = "approved";
+		$this->key = NULL;
+		$this->save();
+		$this->send_approve_mail();
+	}
+
+	public function unapprove() {
+		$this->state = "validated";
+		$this->save();
 	}
 
 	public function send_confirm_mail() {
@@ -242,7 +255,7 @@ class Events {
 		return $events;
 	}
 
-	static function purge($months) {
+	static function purge($m) {
 		Events::$db->exec("DELETE FROM events WHERE startdt < date('now', '-".$m." months')");
 	}
 
@@ -256,7 +269,7 @@ class Events {
 	}
 
 	static function delete($id) {
-		Events::$db->sql("DELETE FROM events WHERE id=:id", array(':id' => $id));
+		Events::$db->exec("DELETE FROM events WHERE id=:id", array(':id' => $id));
 	}
 
 	static function sql($cmds,$args=NULL,$ttl=0) {

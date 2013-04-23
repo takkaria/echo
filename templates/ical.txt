@@ -6,7 +6,7 @@ METHOD:PUBLISH
 X-WR-CALNAME:Echo Manchester
 X-PUBLISHED-TTL:PT12H
 
-<F3:repeat group="{{@events}}" value="{{@event}}">
+<repeat group="{{@events}}" value="{{@event}}">
 BEGIN:VEVENT
 UID:{{@event->id}}@echomanchester.net
 SUMMARY:{{@event->title}}
@@ -14,23 +14,23 @@ SUMMARY:{{@event->title}}
 DESCRIPTION:{{@event->blurb}}
 
 LOCATION:{{@event->location->short()}}
-<F3:check if="{{@event->url}}">
+<check if="{{@event->url}}">
 
 URL:{{@event->url}}
-</F3:check>
-<F3:check if="{{@event->film}}">
+</check>
+<check if="{{@event->film}}">
 
 CATEGORIES:film
-</F3:check>
+</check>
 
 DTSTART;TZID=Europe/London:{{@event->startdt->format('Ymd\THis')}}
-<F3:check if="{{@event->enddt}}">
+<check if="{{@event->enddt}}">
 
 DTEND;TZID=Europe/London:{{@event->enddt->format('Ymd\THis')}}
-</F3:check>
+</check>
 
 END:VEVENT
 
-</F3:repeat>
+</repeat>
 
 END:VCALENDAR

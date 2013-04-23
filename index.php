@@ -188,7 +188,9 @@ $f3->route('POST /event/@id/edit', function($f3) {
 	admin_check();
 	readonly_check();
 
-	$event = new Event(intval($f3->get('PARAMS.id')));
+	$id = intval($f3->get('PARAMS.id'));
+
+	$event = new Event($id);
 	$messages = $event->parse_form_data();
 
 	if (count($messages) > 0) {
@@ -205,10 +207,7 @@ $f3->route('GET /c/@key', function($f3) {
 	global $events;
 
 	$key = $f3->get('PARAMS.key');
-	if (!ctype_alnum($key))
-		$key = "";
-
-	if (Events::validate($key))
+	if (ctype_alnum($key) && Events::validate($key))
 		$message = "Event submitted.  Please await approval :)";
 	else
 		$message = "No event to approve found!  Maybe you already approved it?";
@@ -219,13 +218,9 @@ $f3->route('GET /c/@key', function($f3) {
 $f3->route('POST /event/@id/approve', function($f3) {
 	admin_check();
 	readonly_check();
-	$id = intval($f3->get('PARAMS.id'));
 
-	$e = new Event($id);
-	$e->state = "approved";
-	$e->key = NULL;
-	$e->save();
-	$e->send_approve_mail();
+	$e = new Event(intval($f3->get('PARAMS.id')));
+	$e->approve();
 
 	echo "Approved";
 });
@@ -233,11 +228,9 @@ $f3->route('POST /event/@id/approve', function($f3) {
 $f3->route('POST /event/@id/unapprove', function($f3) {
 	admin_check();
 	readonly_check();
-	$id = intval($f3->get('PARAMS.id'));
 
-	$e = new Event($id);
-	$e->state = "unapproved";
-	$e->save();
+	$e = new Event(intval($f3->get('PARAMS.id')));
+	$e->unapprove();
 
 	echo "Unapproved";
 });
@@ -245,9 +238,7 @@ $f3->route('POST /event/@id/unapprove', function($f3) {
 $f3->route('POST /event/@id/delete', function($f3) {
 	admin_check();
 	readonly_check();
-	$id = intval($f3->get('PARAMS.id'));
-
-	Events::delete($id);
+	Events::delete(intval($f3->get('PARAMS.id')));
 	echo "Deleted";
 });
 
@@ -340,7 +331,7 @@ $f3->route('POST /venue/add', function($f3) {
 	if (count($messages) > 0) {
 		set_venue_data_from_POST();
 		$f3->set('messages', $messages);
-			echo Template::instance()->render("venue_add.html");
+		echo Template::instance()->render("venue_add.html");
 		die;
 	}
 
@@ -356,8 +347,7 @@ $f3->route('POST /venue/add', function($f3) {
 $f3->route('GET /feeds', function($f3) {
 	admin_check();
 
-	DB::sql("SELECT * FROM feeds", NULL, 0, 'feeds');
-	$f3->set('feeds', $f3->get('feeds->result'));
+	$f3->set('feeds', Feeds::getlist());
 	echo Template::instance()->render("feeds.html");
 });
 
@@ -365,50 +355,25 @@ $f3->route('POST /feeds/add', function($f3) {
 	admin_check();
 	readonly_check();
 
-	require_once 'lib/simplepie_1.3.compiled.php';
-
-	$feed = new SimplePie();
-	$feed->set_feed_url($_POST['url']);
-	$feed->enable_cache(false);
-	$feed->init();
-	$feed->handle_content_type();
-
-	$values = array(
-		':feed' => $feed->feed_url,
-		':site' => $feed->get_link(),
-		':title' => $feed->get_title()
-	);
-
-	DB::sql("INSERT OR IGNORE INTO feeds " .
-			"(feed_url, site_url, title) VALUES (:feed, :site, :title)",
-			$values, 0, 'feeds');
-
-	if ($f3->get('DB->result') != 0)
-		$message = "Failed to add feed to database.";
-	else
+	if (Feeds::add($_POST['url']))
 		$message = "Feed added.";
+	else
+		$message = "Failed to add feed to database.";
 
 	$f3->reroute("/feeds?msg=" . $message);
 });
 
 $f3->route('POST /feeds/edit', function($f3) {
+	global $feedsdb;
+
 	admin_check();
 	readonly_check();
 
 	for ($i = 1; $i <= count($_POST["feed_url"]); $i++) {
-		if (isset($_POST["delete"][$i])) {
-			$values = array(":feed_url" => $_POST["feed_url"][$i]);
-			DB::sql("DELETE FROM feeds WHERE feed_url=:feed_url", $values, 0, 'feeds');
-			DB::sql("DELETE FROM posts WHERE feed_url=:feed_url", $values, 0, 'feeds');
-
-		} else {
-			$values = array(
-				":feed_url" => $_POST["feed_url"][$i],
-				":site_url" => $_POST["site_url"][$i],
-				":title" => $_POST["title"][$i]);
-
-			DB::sql("UPDATE feeds SET site_url=:site_url, title=:title WHERE feed_url=:feed_url", $values, 0, 'feeds');
-		}
+		if (isset($_POST["delete"][$i]))
+			Feeds::delete($_POST["feed_url"][$i]);
+		else
+			Feeds::update($_POST["feed_url"][$i], $_POST["title"][$i], $_POST["site_url"][$i]);
 	}
 
 	$f3->reroute("/feeds");
@@ -475,13 +440,13 @@ $f3->route('POST /admin/login', function($f3) {
 	// and perhaps add in nth character of a passphrase type stuff
 
 	/* Get the salt */
-	$result = Events::sql("SELECT * FROM users WHERE email=:email",
+	$result = Events::$db->exec("SELECT * FROM users WHERE email=:email",
 		array(':email' => $_POST['email']));
 
 	/* No such user! */
 	if (sizeof($result) == 0) {
-		$f3->set('message', "FAIL.");
-				echo Template::instance()->render("admin_login.html");
+		$f3->set('message', "Failed login attempt, try again.");
+		echo Template::instance()->render("admin_login.html");
 		exit();
 	}
 
@@ -490,8 +455,8 @@ $f3->route('POST /admin/login', function($f3) {
 
 	/* Now take the salt and the user's input and compare it to the digest */
 	if ($r['digest'] != hash("sha256", $r['salt'] . $_POST['password'])) {
-		$f3->set('message', "FAIL.");
-				echo Template::instance()->render("admin_login.html");
+		$f3->set('message', "Failed login attempt, try again.");
+		echo Template::instance()->render("admin_login.html");
 		exit();	
 	}
 
@@ -529,7 +494,7 @@ $f3->route('GET /admin/logout', function($f3) {
 /**************************/
 
 $f3->route('GET /icalendar', function($f3) {
-	$where = "date >= date('now', 'start of day') AND state == 'approved'";
+	$where = "startdt >= date('now', 'start of day') AND state == 'approved'";
 	$f3->set('events', Events::load($where));
 	echo Template::instance()->render("ical.txt");
 });

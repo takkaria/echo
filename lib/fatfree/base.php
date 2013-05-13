@@ -1464,7 +1464,7 @@ final class Base {
 		$scheme=isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on' ||
 			isset($headers['X-Forwarded-Proto']) &&
 			$headers['X-Forwarded-Proto']=='https'?'https':'http';
-		$base=preg_replace('/\/[^\/]+$/','',$_SERVER['PHP_SELF']);
+		$base=preg_replace('/\/[^\/]+$/','',$_SERVER['SCRIPT_NAME']);
 		call_user_func_array('session_set_cookie_params',
 			$jar=array(
 				'expire'=>0,

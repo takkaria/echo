@@ -12,7 +12,8 @@ CREATE TABLE posts (
 CREATE TABLE feeds (
 	feed_url TEXT PRIMARY KEY,
 	site_url TEXT,
-	title TEXT
+	title TEXT,
+	errors TEXT
 );
 
 CREATE VIEW post_info AS SELECT * FROM posts LEFT OUTER JOIN feeds ON posts.feed_url = feeds.feed_url;

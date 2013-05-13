@@ -80,6 +80,7 @@ function fetch_feed($db, $url) {
 	$feed->enable_cache();
 	$feed->set_cache_location('cache');
 	$feed->init();
+	$db->exec('UPDATE feeds SET errors=:errors WHERE feed_url=:url', array(':url' => $url, 'errors' => $feed->error()));
 
 	foreach ($feed->get_items() as $post) {
 		if (!$post->get_title())

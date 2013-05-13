@@ -1,5 +1,5 @@
 *.ini
 cache
-db
+*.sqlite
 temp
 .htaccess

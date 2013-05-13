@@ -65,8 +65,8 @@ class Feeds
 	static function update($feed_url, $title, $site_url) {
 		$values = array(
 			":feed_url" => $feed_url,
-			":site_url" => $title,
-			":title" => $site_url);
+			":site_url" => $site_url,
+			":title" => $title);
 
 		Feeds::$db->exec("UPDATE feeds SET site_url=:site_url, title=:title WHERE feed_url=:feed_url", $values);
 	}

@@ -164,6 +164,9 @@ $f3->route('POST /event/add', function($f3) {
 		$event->save();
 		$event->send_confirm_mail();
 
+		// XXX This is a hack until we have something better
+		mail($options['general']['notify'], "New Echo event", "As above.", "From: " . $options['general']['email']);
+
 		// XXX How about sending the user to a special 'event added' page?
 		$f3->reroute("/?msg=Event+submitted.+Please+check+your+email.");
 	}

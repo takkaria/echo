@@ -6,6 +6,8 @@
 #feeds input#url { width: 40em; }
 #feeds input.site_url { width: 20em; }
 #feeds .delete { text-align: center; }
+
+.error { background-color: red; }
 </style>
 
 <body class="wide">
@@ -38,8 +40,7 @@
 <td class="delete"><input type="checkbox" class="checkbox" name="delete[{{@i}}]">
 <td><input type="text" class="title" name="title[{{@i}}]" value="{{@feed.title}}">
 <td><input type="text" class="site_url" name="site_url[{{@i}}]" value="{{@feed.site_url}}">
-<td>{{@feed.feed_url}}
-</F3:repeat>
+<td {{@feed.errors?'class="error" title="'.@feed.errors.'"':NULL}}>{{@feed.feed_url}}</F3:repeat>
 </table>
 
 <input type="submit" value="Submit changes">

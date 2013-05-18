@@ -134,10 +134,6 @@ $f3->route('POST /events/purge', function($f3) {
 	$f3->reroute("/admin?msg=Purged.");
 });
 
-$f3->route('GET /events/calendar', function($f3) {
-	echo Template::instance()->render('calendar.html');
-});
-
 /***************************/
 /**** Adding new events ****/
 /***************************/
@@ -497,9 +493,18 @@ $f3->route('GET /admin/logout', function($f3) {
 });
 
 
-/**************************/
-/**** iCalendar format ****/
-/**************************/
+/***********************/
+/**** For embedding ****/
+/***********************/
+
+$f3->route('GET /embed', function($f3) {
+	echo Template::instance()->render('calendar.html');
+});
+
+
+/***********************/
+/**** Other formats ****/
+/***********************/
 
 $f3->route('GET /icalendar', function($f3) {
 	$where = "startdt >= date('now', 'start of day') AND state == 'approved'";

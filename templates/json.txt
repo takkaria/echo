@@ -1,0 +1,13 @@
+{
+<F3:repeat group="{{@events}}" value="{{@event}}">
+	{
+		id: '{{@event->id}}',
+		title: '{{@event->title}}',
+		start: {{@event->startdt->format('U')}},
+		<F3:check if="@event->enddt">end: {{@event->enddt->format('U')}},</F3:check>
+
+		<F3:check if="@event->url">url: "{{@event->url}}",</F3:check>
+
+	},
+</F3:repeat>
+}

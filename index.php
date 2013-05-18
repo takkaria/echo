@@ -13,13 +13,14 @@ $f3->set("UI", BASEPATH . "templates/");
 
 /**** Initialise ****/
 
+date_default_timezone_set('Europe/London');
+
 require_once BASEPATH . 'lib/Venue.php';
 require_once BASEPATH . 'lib/Event.php';
 require_once BASEPATH . 'lib/User.php';
 require_once BASEPATH . 'lib/Feeds.php';
 require_once BASEPATH . 'lib/template_utils.php';
 
-date_default_timezone_set('Europe/London');
 $options = parse_ini_file(BASEPATH . 'doormat.ini', true);
 
 define("READONLY", $options['db']['readonly']);
@@ -131,6 +132,10 @@ $f3->route('POST /events/purge', function($f3) {
 	readonly_check();
 	Events::purge(intval($_POST['months']));
 	$f3->reroute("/admin?msg=Purged.");
+});
+
+$f3->route('GET /events/calendar', function($f3) {
+	echo Template::instance()->render('calendar.html');
 });
 
 /***************************/
@@ -500,6 +505,38 @@ $f3->route('GET /icalendar', function($f3) {
 	$where = "startdt >= date('now', 'start of day') AND state == 'approved'";
 	$f3->set('events', Events::load($where));
 	echo Template::instance()->render("ical.txt");
+});
+
+$f3->route('GET /json', function($f3) {
+	$startts = intval($_GET['start']);
+	$endts = intval($_GET['end']);
+	if (!$startts || !$endts) {
+		echo "No start/end times";
+		exit();
+	}
+
+	$e = Events::load("startdt > datetime(". $startts .",'unixepoch') ".
+		" AND startdt < datetime(". $endts .",'unixepoch')");
+	$f3->set('events', $e);
+
+	$events = array();
+	foreach ($e as $event) {
+		$insert = array(
+			'id' => $event->id,
+			'title' => $event->title,
+			'start' => $event->startdt->format('U'),
+		);
+		if ($event->enddt)
+			$insert['end'] = $event->enddt->format('U');
+		if ($event->url)
+			$insert['url'] = $event->url;
+
+		$events[] = $insert;
+
+	}
+
+	echo json_encode($events);
+	header("Content-Type: application/json");
 });
 
 $f3->run();

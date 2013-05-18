@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<title>{{@appname}} :: About Echo</title>
+<F3:include href="_stylesheets.html" />
+
+<link rel="stylesheet" href="{{@baseurl}}/css/fullcalendar.css" type="text/css">
+
+<script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="{{@baseurl}}/js/jquery-ui-1.10.2.custom.min.js"></script>
+<script src="{{@baseurl}}/js/fullcalendar.js.min"></script>
+
+<script>
+$(document).ready(function() {
+	$('#calendar').fullCalendar({
+		header: {
+			left: '',
+			center: 'title',
+			right: 'prev,next today',
+		},
+		timeFormat: 'h(:mm)tt',
+
+		events: '{{@baseurl}}/json',
+		allDayDefault: false,
+	});
+});
+</script>
+
+<body class="thin">
+
+<p>
+
+<div id="calendar" style="background:white;"></div>

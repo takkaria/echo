@@ -175,6 +175,17 @@ $f3->route('POST /event/add', function($f3) {
 	}
 });
 
+$f3->route('GET /event/@id [ajax]', function($f3) {
+	admin_check(FALSE);
+	$event = new Event(intval($f3->get('PARAMS.id')));
+	if ($event) {
+		$f3->set("event", $event);
+		echo Template::instance()->render("event_box.html");
+	} else {
+		echo "No event found.";
+	}
+});
+
 $f3->route('GET /event/@id', function($f3) {
 	admin_check(FALSE);
 	$event = new Event(intval($f3->get('PARAMS.id')));

@@ -3,28 +3,16 @@
 <F3:include href="_stylesheets.html" />
 
 <style>
-#eventinfo { position: absolute; background-color: white; width: 380px; padding: 10px; box-shadow: 5px 5px 5px #aaa; display: none; border: 2px solid; }
-#eventinfo #close { float: right; padding: 0 2px; border-radius: 2px; border: 1px solid #aaa; }
-#eventinfo #close:hover { background-color: #eee; cursor: pointer; }
+#eventinfo { position: absolute; background-color: white; width: 380px; padding: 10px; box-shadow: 5px 5px 5px #aaa; display: none; border: 2px solid; z-index: 99; }
 </style>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="{{@baseurl}}/js/eventbox.js"></script>
 <script>
 $(function() {
 	$(".e").click(function(e) {
 		var id = e.currentTarget.id.slice(1);
-
-		$("#eventinfo div").load("{{@baseurl}}/event/" + id + " #container",
-				function() {
-					var info = $("#eventinfo");
-					info.css('top', e.pageY + "px");
-					info.css('left', e.pageX + "px");
-					info.show();
-				});
-	});
-
-	$("#close").click(function() {
-		$("#eventinfo").hide();
+		show_event("{{@baseurl}}", id, e);
 	});
 });
 </script>
@@ -51,9 +39,6 @@ $(function() {
 </F3:repeat>
 </section>
 
-<div id="eventinfo">
-<div></div>
-<span id="close">x</span>
-</div>
+<div id="eventinfo"></div>
 
 <F3:include href="_footer.html" />

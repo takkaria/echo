@@ -4,6 +4,7 @@
 <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="{{@baseurl}}/js/jquery-ui-1.10.2.custom.min.js"></script>
 <script src="{{@baseurl}}/js/fullcalendar.min.js"></script>
+<script src="{{@baseurl}}/js/eventbox.js"></script>
 
 <script>
 $(document).ready(function() {
@@ -23,19 +24,7 @@ $(document).ready(function() {
 		eventTextColor: "green",
 
 		eventClick: function(event, jsevent, view) {
-			$("#eventinfo div").load("{{@baseurl}}/event/" + event.id + " #container",
-					function() {
-						var info = $("#eventinfo");
-						info.css('top', jsevent.pageY + "px");
-						info.css('left', jsevent.pageX + "px");
-
-						/* Don't overflow the page */
-						if (jsevent.pageX + info.outerWidth() > $(window).width())
-							info.css('left', $(window).width() - info.outerWidth() - 10);
-
-						info.show();
-					});
-
+			show_event("{{@baseurl}}", event.id, jsevent);
 			return false;
 		},
 	});
@@ -45,6 +34,11 @@ $(document).ready(function() {
 	$("#close").click(function() {
 		$("#eventinfo").hide();
 	});
+
+	$(document).click(function(e) {
+		$("#eventinfo").hide();
+		return false;		
+	})
 });
 </script>
 
@@ -57,9 +51,7 @@ h2 { font-size: 1.2rem; margin: 0; margin-top: 5px !important; }
 .add { display: inline-block; vertical-align: top; font-size: 1.2rem; text-decoration: none; color: blue; padding-left: 20px; margin-top: 5px; }
 .add:hover { text-decoration: underline; }
 
-#eventinfo { position: absolute; background-color: white; width: 380px; padding: 10px; box-shadow:; 5px 5px 5px #aaa; display: none; border: 2px solid; z-index: 99; }
-#eventinfo #close { float: right; padding: 0 2px; border-radius: 2px; border: 1px solid #aaa; }
-#eventinfo #close:hover { background-color: #eee; cursor: pointer; }
+#eventinfo { position: absolute; background-color: white; width: 380px; padding: 10px; box-shadow: 5px 5px 5px #aaa; display: none; border: 2px solid; z-index: 99; }
 </style>
 
 <div id="calendar" style="background:white;"></div>

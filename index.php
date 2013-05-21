@@ -165,6 +165,8 @@ $f3->route('POST /event/add', function($f3) {
 		$event->save();
 		$event->send_confirm_mail();
 
+		global $options;
+
 		// XXX This is a hack until we have something better
 		mail($options['general']['notify'], "New Echo event", "As above.", "From: " . $options['general']['email']);
 

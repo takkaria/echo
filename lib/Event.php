@@ -98,7 +98,7 @@ class Event {
 				if (!$url || $url == "") {
 					$self->url = NULL;
 				} else {
-					if (!preg_match('/^[a-zA-Z]+:/', $url))
+					if (!preg_match('/^[a-zA-Z]+\:/', $url))
 						$url = "http://" . $url;
 					if (!filter_var($url, FILTER_VALIDATE_URL))
 						$messages[] = "Invalid web address";

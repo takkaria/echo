@@ -26,12 +26,12 @@
 </p>
 
 
-<p class="description">{{@event->blurb}}
-
-<F3:check if="{{@event->cost}}">
+<p class="description"><F3:check if="{{@event->cost}}">
 <F3:false>Free event.</F3:false>
 <F3:true><b>Costs {{@event->cost}}.</b></F3:true>
 </F3:check>
+
+{{@event->blurb}}
 </p>
 
 

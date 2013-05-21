@@ -36,14 +36,18 @@ $(document).ready(function() {
 	});
 
 	$(document).click(function(e) {
-		$("#eventinfo").hide();
-		return false;		
+		var box = $("#eventinfo");
+		if (e.pageX > box.offset().left && e.pageX < box.offset().left+box.outerWidth() &&
+			e.pageY > box.offset().top && e.pageY < box.offset().left+box.outerHeight())
+			return false;
+		box.hide();
+		return true;
 	})
 });
 </script>
 
 <style>
-* { font-family: Helvetica; }
+* { font-family: Helvetica, Arial; }
 body { font-size: 14px; }
 h2 { font-size: 1.2rem; margin: 0; margin-top: 5px !important; }
 .fc-grid th { text-align: left; padding-left: 2px; }

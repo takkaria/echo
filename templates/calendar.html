@@ -17,9 +17,34 @@ $(document).ready(function() {
 
 		events: '{{@baseurl}}/json',
 		allDayDefault: false,
+		weekMode: "liquid",
+		eventBackgroundColor: "transparent",
+		eventBorderColor: "transparent",
+		eventTextColor: "green",
+
+		eventClick: function(event, jsevent, view) {
+			$("#eventinfo div").load("{{@baseurl}}/event/" + event.id + " #container",
+					function() {
+						var info = $("#eventinfo");
+						info.css('top', jsevent.pageY + "px");
+						info.css('left', jsevent.pageX + "px");
+
+						/* Don't overflow the page */
+						if (jsevent.pageX + info.outerWidth() > $(window).width())
+							info.css('left', $(window).width() - info.outerWidth() - 10);
+
+						info.show();
+					});
+
+			return false;
+		},
 	});
 
 	$('.fc-header-left').html('<img src="{{@baseurl}}/img/miniecho.png" height=30 title="Powered by Echo Manchester"> <a class="add" href="{{@baseurl}}/event/add" target="_parent">+ add an event</a>');
+
+	$("#close").click(function() {
+		$("#eventinfo").hide();
+	});
 });
 </script>
 
@@ -31,6 +56,15 @@ h2 { font-size: 1.2rem; margin: 0; margin-top: 5px !important; }
 .fc-header-left { vertical-align: bottom; }
 .add { display: inline-block; vertical-align: top; font-size: 1.2rem; text-decoration: none; color: blue; padding-left: 20px; margin-top: 5px; }
 .add:hover { text-decoration: underline; }
+
+#eventinfo { position: absolute; background-color: white; width: 380px; padding: 10px; box-shadow:; 5px 5px 5px #aaa; display: none; border: 2px solid; z-index: 99; }
+#eventinfo #close { float: right; padding: 0 2px; border-radius: 2px; border: 1px solid #aaa; }
+#eventinfo #close:hover { background-color: #eee; cursor: pointer; }
 </style>
 
 <div id="calendar" style="background:white;"></div>
+
+<div id="eventinfo">
+<span id="close">x</span>
+<div></div>
+</div>

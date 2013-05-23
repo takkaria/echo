@@ -1,38 +1,33 @@
 <div class="event">
 
-<div class="time">
+<span class="time">{{@event->startdt->format("H:i")}}</span>
 
-<span class="n-{{(@event->startdt->format("i") == "00") ? "l" : "s"}}">{{
-(@event->startdt->format("i") == "00") ?
-	@event->startdt->format("g") :
-	@event->startdt->format("g:i")}}</span><span class="ampm">{{@event->startdt->format("a")}}</span>
-</div>
+<div class="block">
+<h4 class="title"><F3:check if="{{@event->film}}"><img src="{{@baseurl}}/img/film.png" alt="Film showing: "></F3:check> {{@event->title}}</h4>
 
-<div class="what">
-<h4 id="e{{@event->id}}"><F3:check if="{{@event->film}}"><img src="{{@baseurl}}/img/film.png" alt="Film showing: "></F3:check> {{@event->title}}</h4>
-<p class="where">
+<span class="location">
 <F3:check if="{{@event->location->in_db}}">
-<a href="{{@baseurl}}/venue/{{@event->location->id}}">
+<true><a href="{{@baseurl}}/venue/{{@event->location->id}}">{{@event->location->short()}}</a></true>
+<false>{{@event->location->short()}}</false>
 </F3:check>
-{{@event->location->short()}}
-<F3:check if="{{@event->location->in_db}}"></a></F3:check>
-</p>
+</span>
 
-</div>
-
-<p class="desc">
+<p class="description">
 <F3:check if="{{@event->cost}}">
-<F3:false><i>Free.</i></F3:false>
-<F3:true><i>{{@event->cost}}.</i></F3:true>
+<F3:false>Free event. </F3:false>
+<F3:true><b>Costs {{@event->cost}}.</b> </F3:true>
 </F3:check>
 {{@event->blurb}}
-<F3:check if="{{@event->url}}">
-	<F3:check if="{{@facebook(@event->url)}}">
-	<F3:true><a href="{{@event->url}}" class="fb">Fb</a></F3:true>
-	<F3:false> ... <a href="{{@event->url}}">more info</a></F3:false>
-	</F3:check>
-</F3:check>
 </p>
+
+<F3:check if="{{@event->url}}">
+<span class="more">
+	<F3:check if="{{@facebook(@event->url)}}">
+	<F3:true><a href="{{@event->url}}" class="fb">Facebook event</a></F3:true>
+	<F3:false><a href="{{@event->url}}">more info</a></F3:false>
+	</F3:check>
+</span>
+</F3:check>
 
 <F3:check if="{{isset(@admin)}}">
 <div class="admin">
@@ -44,5 +39,6 @@
 	<form action="{{@baseurl}}/event/{{@event->id}}/delete" method="POST"><input type="submit" value="Delete"></form>
 </div>
 </F3:check>
+</div>
 
 </div>

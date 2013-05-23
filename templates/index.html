@@ -5,6 +5,15 @@
 <body class="wide" id="index">
 <include href="_header.html" />
 
+<section id="news">
+<h2>NEWS</h2>
+<p class="sublinks"><a href="{{@baseurl}}/about#addnews">(want yours here?)</a>
+
+<repeat group="{{@posts}}" value="{{@post}}">
+<include href="post.html" />
+</repeat>
+</section>
+
 <section id="events">
 <h2>EVENTS</h2>
 <check if="!{{@readonly}}">
@@ -16,15 +25,6 @@
 </repeat>
 
 <p><a href="events">more events this month</a></p>
-</section>
-
-<section id="news">
-<h2>NEWS</h2>
-<p class="sublinks"><a href="{{@baseurl}}/about#addnews">(want yours here?)</a>
-
-<repeat group="{{@posts}}" value="{{@post}}">
-<include href="post.html" />
-</repeat>
 </section>
 
 <include href="_footer.html" />

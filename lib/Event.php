@@ -200,7 +200,7 @@ class Event {
 		$e->id = $this->id;
 		$e->title = $this->title;
 		$e->startdt = $this->startdt->format("Y-m-d H:i");
-		if ($e->enddt)
+		if ($this->enddt)
 			$e->enddt = $this->enddt->format("Y-m-d H:i");
 		else
 			$e->enddt = NULL;
@@ -244,10 +244,14 @@ class Events {
 		Events::$db = $db;
 	}
 
-	static function load($where) {
+	static function load($where, $limit = NULL) {
 		$events = array();
-		$r = Events::$db->exec("SELECT id FROM events WHERE " . $where .
-				" ORDER BY startdt");
+		$statement = "SELECT id FROM events WHERE " . $where;
+		$statement .= " ORDER BY startdt";
+		if ($limit)
+			$statement .= " LIMIT ".$limit;
+
+		$r = Events::$db->exec($statement);
 		foreach ($r as $row) {
 			$events[] = new Event($row['id']);
 		}

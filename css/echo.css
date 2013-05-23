@@ -18,14 +18,7 @@ h4 { font-size: 16px; }
 li { margin-bottom: 10px; }
 
 /** Layout **/
-body { margin: 0 20px; }
-body.thin { width: 800px; }
-body.wide { width: 980px; }
-section { width: 100%; }
-header { width: 100%; }
-
-body.wide header { width: 970px; }
-body.thin header { width: 820px; }
+.content { width: 980px; margin: 0 auto; }
 
 p, ul, ol { margin-bottom: 1em; }
 h2 + ol, h3 + ol, h4 + ol, h2 + ul, h3 + ul, h4 + ul { margin-top: 1em; }
@@ -59,39 +52,27 @@ section.text { float: none; width: 40em; margin: 0 auto; }
 
 /** Front page: formatting **/
 #index section h2 { text-align: center; letter-spacing: 2px; }
-#index #events { width: 380px; }
-#index #news { width: 520px; margin-left: 20px; }
+#index #news { width: 380px; font-size: 90%; }
+#index #events { width: 520px; margin-left: 20px; }
 
 /*<< total width = 380 + 520 + 20 + 4x padding (15) = 980 */
 
 /** Events */
 #events h2, #news h2 { font-size: 100%; }
 
-#events h3 { letter-spacing: 1px; font-weight: normal; border-bottom: 1px solid black; margin-bottom: -5px; clear: both; background-color: #dedede; padding: 2px 2px 0 5px; border-radius: 0 10px 0 0; margin-top: 0.5em; }
+#events h3 { letter-spacing: 1px; font-weight: normal;
+	border-bottom: 1px solid black;
+	clear: both;
+	margin-bottom: 0.5em; margin-top: 0.5em; padding: 0; }
 
-.event { margin-bottom: 15px; }
-
-.event { margin: 1em 0; clear: both; }
-.event p { margin: 0; }
-
-.event .date { }
-
-.event .time, .event .what { display: inline-block; }
-.event .time { vertical-align: top; }
-.event .what { vertical-align: middle; }
-
-.event .time { margin: 2px 5px 0 5px; text-align: center; float: right; }
-.event .n-l { font-size: 26px; line-height: 26px; }
-.event .n-s { font-size: 20px; }
-.event .ampm { display: block; font-size: 14px; text-transform: uppercase; }
-
-.event .what { font-family: 'Raleway'; width: 300px; }
-.event h4 { font-size: 22px; font-weight: normal; }
-.event .where { font-style: italic; font-size: 75%; margin-top: 2px; }
-
-.event .desc { clear: both; margin-top: 8px; }
-
-.event .fb { border: 1px solid #666; border-radius: 8px; background-color: #3B5998; color: #eee; padding: 0px 6px; }
+.event { margin-bottom: 1em; }
+.event span { display: block; }
+.event .time { float: left; }
+.event .title { font-weight: bold; }
+.event .location { font-style: italic; margin-bottom: 7px; }
+.event .block { margin-left: 3.2em; }
+.event .more { text-align: right; }
+.event .fb { border: 1px solid #666; border-radius: 3px; background-color: #3B5998; color: #eee; padding: 0px 6px; }
 .event .fb:hover { text-decoration: none; background-color: #7C90BA; }	
 
 /** Admin controls **/

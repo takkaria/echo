@@ -84,10 +84,9 @@ $f3->route('GET /', function($f3) {
 	admin_check(FALSE);
 
 	/* Events */
-	$where = "startdt >= date('now', 'start of day') AND " .
-			"startdt <= date('now', 'start of day', '+14 days') AND " .
-			"state == 'approved'";
-	$f3->set('events', Events::load($where));
+	$where = "startdt >= date('now', 'start of day') AND state == 'approved'";
+	$limit = "0,10";
+	$f3->set('events', Events::load($where, $limit));
 
 	/* Posts */
 	$where = "hidden IS NOT 1 ORDER BY date DESC LIMIT 0, 10";

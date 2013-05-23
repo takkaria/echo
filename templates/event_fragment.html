@@ -29,16 +29,7 @@
 </span>
 </F3:check>
 
-<F3:check if="{{isset(@admin)}}">
-<div class="admin">
-	<p><a href="{{@baseurl}}/event/{{@event->id}}/edit">Edit</a>
-	<F3:check if="{{@event->state=='approved'}}">
-		<F3:true><form action="{{@baseurl}}/event/{{@event->id}}/unapprove" method="POST"><input type="submit" value="Unapprove"></form></F3:true>
-		<F3:false><form action="{{@baseurl}}/event/{{@event->id}}/approve" method="POST"><input type="submit" value="Approve"></form></F3:false>
-	</F3:check>
-	<form action="{{@baseurl}}/event/{{@event->id}}/delete" method="POST"><input type="submit" value="Delete"></form>
-</div>
-</F3:check>
-</div>
+<F3:include href="event_admin.html" />
 
+</div>
 </div>

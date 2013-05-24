@@ -1,44 +1,22 @@
 <!DOCTYPE html>
 <title>{{@appname}} :: Future events</title>
 <F3:include href="_stylesheets.html" />
-
-<style>
-#eventinfo { position: absolute; background-color: white; width: 380px; padding: 10px; box-shadow: 5px 5px 5px #aaa; display: none; border: 2px solid; z-index: 99; }
-</style>
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-<script src="{{@baseurl}}/js/eventbox.js"></script>
-<script>
-$(function() {
-	$(".e").click(function(e) {
-		var id = e.currentTarget.id.slice(1);
-		show_event("{{@baseurl}}", id, e);
-	});
-});
-</script>
-
-<body class="thin">
 <F3:include href="_header.html" />
 
-<section id="events-simple">
+<section id="eventlist">
 <h2>More events this month (and next!)</h2>
 <p class="sublinks"><a href="event/add">add your own event</a>
 
-<p>Click on an event for more information.</p>
-
+<div style="max-width: 45em;">
 <F3:repeat group="{{@group_events()}}" key="{{@day}}" value="{{@events}}">
 <h4 class="date">{{@formatdate(@day, 'l jS')}}</h4>
 
 <F3:repeat group="{{@events}}" value="{{@event}}">
-<div class="e" id="e{{@event->id}}">
-	<span class="time">{{@event->startdt->format("H:i")}}</span>
-	<span class="title"><b>{{@event->title}}</b> <small style="padding-left: 1em;">{{@event->location->short()}}</small></span>
+<F3:include href="event_fragment.html" />
+</F3:repeat>
+
+</F3:repeat>
 </div>
-</F3:repeat>
-
-</F3:repeat>
 </section>
-
-<div id="eventinfo"></div>
 
 <F3:include href="_footer.html" />

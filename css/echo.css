@@ -1,4 +1,4 @@
-/* XXX include dyslexic stylesheets! */
+  /* XXX include dyslexic stylesheets! */
 
 /** Resets **/
 *, body, h1, h2, h3, h4, h5, h6 { margin: 0; }
@@ -109,11 +109,3 @@ section.text { float: none; width: 40em; margin: 0 auto; }
 /** Venue pages **/
 /* Display */
 #venue .info { margin-top: 1em; }
-
-/** Event listing pages **/
-/* Simple listing */
-#events-simple h4 { margin: 0; padding: 0; }
-#events-simple .date { display: block; clear: both; font-size: 110%; margin-top: 1em; margin-bottom: 0.5em; }
-#events-simple .time { width: 3em; font-size: 90%; margin: 0 1em; }
-#events-simple .e { margin: 0; }
-#events-simple .e:hover { background-color: #eee; cursor: pointer; }

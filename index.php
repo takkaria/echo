@@ -606,7 +606,7 @@ if ($f3->get('DEBUG') != 0) {
 	echo '<ul>'.$out."</ul>";
 }
 ?>
-<p><a href="<?=$f3->get('baseurl')?>">← Go back to main site</a>
+<p><a href="<?=$f3->get('baseurl')?>/">← Go back to main site</a>
 <?php
 
 	}

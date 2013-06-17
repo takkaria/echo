@@ -1,5 +1,6 @@
 <?php
 
+$debug = false;
 if (php_sapi_name() != 'cli')
 	exit(1);
 
@@ -18,6 +19,11 @@ function deentity($text) {
 }
 
 function trim_summary($summary) {
+
+	// Get rid of anything after 'The post <a' (ACI)
+	$summary = preg_replace("/The post \<a.*/", "", $summary);
+
+	// Remove tags
 	$summary = strip_tags($summary);
 
 	// apparently we need to strip out any unfinished sentences...
@@ -25,6 +31,9 @@ function trim_summary($summary) {
 	// "borrower a new copy. As citizen demands change [...]"
 	// So we need to strip any ending bits like "[...]"...
 	$summary = preg_replace("/ ?\[\.\.\.\]/i", "", $summary);
+
+	// Reduce to a reasonable size
+	$summary = substr($summary, 0, 500);
 
 	// And now find the bit from the beginning until the last full stop
 	$summary = preg_replace("/^(.*\.)(.*)/", "$1", $summary);
@@ -45,7 +54,6 @@ function summary_from_content($content) {
 		$content = $html->plaintext;
 	}
 
-	$content = substr($content, 0, 500);
 	$content = trim_summary($content);
 
 	// Check for cut-off URLs
@@ -74,6 +82,8 @@ function find_image($content) {
 }
 
 function fetch_feed($db, $url) {
+	global $debug;
+
 	/* Fetch */
 	$feed = new SimplePie();
 	$feed->set_feed_url($url);
@@ -101,6 +111,9 @@ function fetch_feed($db, $url) {
 		else
 			$summary = summary_from_content(deentity($post->get_content(true)));
 
+		if ($debug)
+			echo $summary . "\n\n=====================\n";
+
 		$dbstore[':summary'] = $summary;
 
 		$db->exec('INSERT OR IGNORE INTO POSTS ( feed_url, id, title, link, date, image, summary ) VALUES ( :feed_url, :id, :title, :link, :date, :image, :summary );', $dbstore);
@@ -113,6 +126,7 @@ $options = parse_ini_file('doormat.ini', true);
 $db = new DB\SQL("sqlite:" . $options['db']['feeds']);
 
 if ($argc == 2) {
+	$debug = true;
 	/* Fetch the provided feed and dump it */
 	fetch_feed($db, $argv[1]);
 } else {

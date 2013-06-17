@@ -534,8 +534,9 @@ $f3->route('GET /json', function($f3) {
 		exit();
 	}
 
-	$e = Events::load("startdt > datetime(". $startts .",'unixepoch') ".
-		" AND startdt < datetime(". $endts .",'unixepoch')");
+	$e = Events::load("state == 'approved' AND ".
+		"startdt > datetime(". $startts .",'unixepoch') AND ".
+		"startdt < datetime(". $endts .",'unixepoch')");
 	$f3->set('events', $e);
 
 	$events = array();

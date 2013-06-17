@@ -63,12 +63,12 @@ p.msg { font-weight: bold; text-align: center; font-size: 120%; width: 980px; }
 p.msg span { background-color: #fff; border-radius: 5px; padding: 2px 10px; }
 
 /*** Page layout ***/
-.content { width: 1008px; margin: auto; }
+.content { max-width: 1008px; margin: auto; }
 
 header .content { padding-left: 10px; }
 
 /* Sections are used to contain page content */
-section { display: inline; float: left; width: 960px; margin: 0 10px; padding-left: 14px; padding-right: 14px; background-color: white; margin-bottom: 2em; padding-top: 10px; padding-bottom: 10px; box-shadow: 0 0 20px #ccc; }
+section { display: inline; float: left; width: 95.01587%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; background-color: white; margin-bottom: 2em; padding-top: 10px; padding-bottom: 10px; box-shadow: 0 0 20px #ccc; }
 section .sublinks { margin: -18px 0 0 0; text-align: right; }
 
 .event { margin-bottom: 1em; }
@@ -101,8 +101,8 @@ section .sublinks { margin: -18px 0 0 0; text-align: right; }
 
 /* Individual pages */
 #index h2 { text-align: center; letter-spacing: 2px; font-size: 100%; }
-#index #news { display: inline; float: left; width: 372px; margin: 0 10px; padding-left: 14px; padding-right: 14px; font-size: 90%; }
-#index #events { display: inline; float: left; width: 540px; margin: 0 10px; padding-left: 14px; padding-right: 14px; }
+@media (min-width: 800px) { #index #news { display: inline; float: left; width: 36.68254%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; font-size: 90%; }
+  #index #events { display: inline; float: left; width: 53.34921%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; } }
 #index #events h3 { letter-spacing: 1px; font-weight: normal; border-bottom: 1px solid black; clear: both; margin-bottom: 0.5em; margin-top: 0.5em; padding: 0; }
 
 #login input { display: block; margin: 10px 0; padding: 5px; }
@@ -127,3 +127,6 @@ section .sublinks { margin: -18px 0 0 0; text-align: right; }
 #event_add #vlist li { width: 289px; float: left; padding: 4px 5px; cursor: pointer; height: 18px; }
 #event_add #vlist li.selected { background-color: #eee; color: black; }
 #event_add #vlist li:hover { background-color: #ddd; }
+
+/* Flatten out page on smaller width devices */
+@media (max-width: 800px) { section { display: inline; float: left; width: 94%; margin: 0; padding-left: 3%; padding-right: 3%; margin-left: 0; margin-right: 0; } }

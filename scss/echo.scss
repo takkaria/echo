@@ -76,12 +76,12 @@ p.msg {
 /*** Page layout ***/
 
 $columns: 12;
-$column-width: 64px;
-$gutter-width: 20px;
-$column-pad: 14px;
-$total-width: gridsystem-width($columns);
+$column-width: 64;
+$gutter-width: 20;
+$column-pad: 1.5%;
+$total-width: 100%;
 
-.content { width: $total-width; margin: auto; }
+.content { max-width: 1008px; margin: auto; }
 header .content { padding-left: 10px; } // account for the fact that header .content doesn't use a grid layout but needs a margin to line up with the grid below
 
 /* Sections are used to contain page content */
@@ -142,8 +142,10 @@ section {
 #index {
 	h2 { text-align: center; letter-spacing: 2px; font-size: 100%; }
 
-	#news { @include column(5); font-size: 90%; } //margin-left: 0; }
-	#events { @include column(7); } //margin-right: 0; }
+	@media (min-width: 800px) {
+		#news { @include column(5); font-size: 90%; } //margin-left: 0; }
+		#events { @include column(7); } //margin-right: 0; }
+	}
 
 	#events h3 {
 		letter-spacing: 1px; font-weight: normal;
@@ -187,4 +189,12 @@ section {
 	#vlist li { width: 289px; float: left; padding: 4px 5px; cursor: pointer; height: 18px; }
 	#vlist li.selected { background-color: #eee; color: black; }
 	#vlist li:hover { background-color: #ddd; }
+}
+
+/* Flatten out page on smaller width devices */
+@media (max-width: 800px) {
+	section {
+		$column-pad: 3%;
+		@include column($columns,$columns,false); margin: {left: 0; right: 0; };
+	}
 }

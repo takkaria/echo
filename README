@@ -1,5 +1,5 @@
-Doormat README
-==============
+Echo README
+===========
 
 To set this up you will need to:
 
@@ -40,5 +40,7 @@ chmod -R g+w temp
 
 5. Set up web rewrite rules.
 
+
+To develop, you will need sass, to build CSS files from the source SCSS files.
 
 -- Andi Sidwell

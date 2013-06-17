@@ -3,3 +3,4 @@ cache
 *.sqlite
 temp
 .htaccess
+.sass-cache

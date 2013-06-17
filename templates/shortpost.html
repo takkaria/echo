@@ -1,7 +1,7 @@
-<div class="post">
-<li><a href="{{@post.link}}">{{@post.title}}</a></li>
-<p class="date">{{@formatdate(@post.date)}}
-<check if="{{@post.feed.site}}"> from {{@post.feed.title}}</check></p>
+<div class="post shortpost">
+<h4><a href="{{@post.link}}">{{@post.title}}</a></h4>
+<p><check if="{{@post.feed.site}}">{{@post.feed.title}}, </check>
+{{@formatdate(@post.date)}}</p>
 
 <check if="{{isset(@admin)}}">
 <div class="admin">

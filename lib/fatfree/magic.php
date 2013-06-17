@@ -14,7 +14,7 @@
 */
 
 //! PHP magic wrapper
-abstract class Magic extends Prefab implements ArrayAccess {
+abstract class Magic implements ArrayAccess {
 
 	/**
 	*	Return TRUE if key is not empty
@@ -52,7 +52,7 @@ abstract class Magic extends Prefab implements ArrayAccess {
 	**/
 	private function visible($key) {
 		if (property_exists($this,$key)) {
-			$ref=new \ReflectionProperty(get_class($this),$key);
+			$ref=new ReflectionProperty(get_class($this),$key);
 			$out=$ref->ispublic();
 			unset($ref);
 			return $out;

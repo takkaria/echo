@@ -82,8 +82,9 @@ class SQL extends \PDO {
 	*	@param $cmds string|array
 	*	@param $args string|array
 	*	@param $ttl int
+	*	@param $log bool
 	**/
-	function exec($cmds,$args=NULL,$ttl=0) {
+	function exec($cmds,$args=NULL,$ttl=0,$log=TRUE) {
 		$auto=FALSE;
 		if (is_null($args))
 			$args=array();
@@ -109,7 +110,7 @@ class SQL extends \PDO {
 			$keys=$vals=array();
 			if ($fw->get('CACHE') && $ttl && ($cached=$cache->exists(
 				$hash=$fw->hash($cmd.$fw->stringify($arg)).'.sql',
-				$result)) && $cached+$ttl>microtime(TRUE)) {
+				$result)) && $cached[0]+$ttl>microtime(TRUE)) {
 				foreach ($arg as $key=>$val) {
 					$vals[]=$fw->stringify(is_array($val)?$val[0]:$val);
 					$keys[]='/'.(is_numeric($key)?'\?':preg_quote($key)).'/';
@@ -159,9 +160,10 @@ class SQL extends \PDO {
 					user_error('PDO: '.$error[2]);
 				}
 			}
-			$this->log.=date('r').' ('.
-				sprintf('%.1f',1e3*(microtime(TRUE)-$now)).'ms) '.
-				preg_replace($keys,$vals,$cmd,1).PHP_EOL;
+			if ($log)
+				$this->log.=date('r').' ('.
+					sprintf('%.1f',1e3*(microtime(TRUE)-$now)).'ms) '.
+					preg_replace($keys,$vals,$cmd,1).PHP_EOL;
 		}
 		if ($this->trans && $auto)
 			$this->commit();
@@ -194,10 +196,10 @@ class SQL extends \PDO {
 		// Supported engines
 		$cmd=array(
 			'sqlite2?'=>array(
-				'PRAGMA table_info('.$table.');',
+				'PRAGMA table_info("'.$table.'");',
 				'name','type','dflt_value','notnull',0,'pk',1),
 			'mysql'=>array(
-				'SHOW columns FROM `'.$this->dbname.'`.'.$table.';',
+				'SHOW columns FROM `'.$this->dbname.'`.`'.$table.'`;',
 				'Field','Type','Default','Null','YES','Key','PRI'),
 			'mssql|sqlsrv|sybase|dblib|pgsql|odbc'=>array(
 				'SELECT '.
@@ -227,14 +229,12 @@ class SQL extends \PDO {
 								'k.table_catalog=t.table_catalog':
 								'k.table_schema=t.table_schema').' '):'').
 				'WHERE '.
-					'c.table_name='.
-						($this->quote($table)?:('"'.$table.'"')).' '.
+					'c.table_name='.$this->quote($table).' '.
 					($this->dbname?
 						('AND '.
 							($this->engine=='pgsql'?
 							'c.table_catalog':'c.table_schema').
-							'='.($this->quote($this->dbname)?:
-								('"'.$this->dbname.'"'))):'').
+							'='.$this->quote($this->dbname)):'').
 				';',
 				'field','type','defval','nullable','YES','pkey','PRIMARY KEY')
 		);
@@ -255,6 +255,20 @@ class SQL extends \PDO {
 				return $rows;
 			}
 		return FALSE;
+	}
+
+	/**
+	*	Quote string
+	*	@return string
+	*	@param $val mixed
+	*	@param $type int
+	**/
+	function quote($val,$type=\PDO::PARAM_STR) {
+		return $this->engine=='odbc'?
+			(is_string($val)?
+				\Base::instance()->stringify(str_replace('\'','\'\'',$val)):
+				$val):
+			parent::quote($val,$type);
 	}
 
 	/**
@@ -279,6 +293,25 @@ class SQL extends \PDO {
 	**/
 	function name() {
 		return $this->dbname;
+	}
+
+	/**
+	*	Return quoted identifier name
+	*	@return string
+	*	@param $key
+	**/
+	function quotekey($key) {
+		if ($this->engine=='mysql')
+			$key="`".$key."`";
+		elseif (preg_match('/sybase|dblib/',$this->engine))
+			$key="'".$key."'";
+		elseif (preg_match('/sqlite2?|pgsql/',$this->engine))
+			$key='"'.$key.'"';
+		elseif (preg_match('/mssql|sqlsrv|odbc/',$this->engine))
+			$key="[".$key."]";
+		elseif ($this->engine=='oci')
+			$key='"'.strtoupper($key).'"';
+		return $key;
 	}
 
 	/**

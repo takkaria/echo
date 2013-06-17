@@ -305,7 +305,7 @@ class Markdown extends Prefab {
 	}
 
 	/**
-	*	Process strong/em spans
+	*	Process strong/em/strikethrough spans
 	*	@return string
 	*	@param $str string
 	**/
@@ -313,16 +313,22 @@ class Markdown extends Prefab {
 		$tmp='';
 		while ($str!=$tmp)
 			$str=preg_replace_callback(
-				'/(?<!\\\\)([*_]{1,2})(?=\S)(.*?\S[*_]*)(?!\\\\)\1/',
+				'/(?<!\\\\)([*_]{1,3})(.*?)(?!\\\\)\1(?=[\s[:punct:]]|$)/',
 				function($expr) {
 					switch (strlen($expr[1])) {
 						case 1:
 							return '<em>'.$expr[2].'</em>';
 						case 2:
 							return '<strong>'.$expr[2].'</strong>';
+						case 3:
+							return '<strong><em>'.$expr[2].'</em></strong>';
 					}
 				},
-				$tmp=$str
+				preg_replace(
+					'/(?<!\\\\)~~(.*?)(?!\\\\)~~(?=[\s[:punct:]]|$)/',
+					'<del>\1</del>',
+					$tmp=$str
+				)
 			);
 		return $str;
 	}

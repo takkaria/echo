@@ -72,7 +72,7 @@ class Web extends Prefab {
 				'zip'=>'application/zip'
 			);
 			foreach ($map as $key=>$val)
-				if (preg_match('/'.$key.'/',$ext[0]))
+				if (preg_match('/'.$key.'/',strtolower($ext[0])))
 					return $val;
 		}
 		return 'application/octet-stream';
@@ -122,7 +122,7 @@ class Web extends Prefab {
 		if (!is_file($file))
 			return FALSE;
 		if (PHP_SAPI!='cli') {
-			header('Content-Type: '.$mime?:$this->mime($file));
+			header('Content-Type: '.($mime?:$this->mime($file)));
 			if ($force)
 				header('Content-Disposition: attachment; '.
 					'filename='.basename($file));
@@ -367,18 +367,17 @@ class Web extends Prefab {
 	**/
 	function engine($arg='socket') {
 		$arg=strtolower($arg);
-		if ($arg=='curl' && ($curl=extension_loaded('curl')) ||
-			$arg=='stream' && ($stream=ini_get('allow_url_fopen')) ||
-			$arg=='socket' && ($socket=function_exists('fsockopen')))
-			$this->wrapper=$arg;
-		elseif ($socket)
-			$this->wrapper='socket';
-		elseif ($stream)
-			$this->wrapper='stream';
-		elseif ($curl)
-			$this->wrapper='curl';
-		else
-			user_error(E_Request);
+		$flags=array(
+			'curl'=>extension_loaded('curl'),
+			'stream'=>ini_get('allow_url_fopen'),
+			'socket'=>function_exists('fsockopen')
+		);
+		if ($flags[$arg])
+			return $this->wrapper=$arg;
+		foreach ($flags as $key=>$val)
+			if ($val)
+				return $this->wrapper=$key;
+		user_error(E_Request);
 	}
 
 	/**
@@ -510,7 +509,7 @@ class Web extends Prefab {
 					if ($fw->get('CACHE') &&
 						($cached=$cache->exists(
 							$hash=$fw->hash($save).'.'.$ext[0],$data)) &&
-						$cached>filemtime($save))
+						$cached[0]>filemtime($save))
 						$dst.=$data;
 					else {
 						$data='';
@@ -619,7 +618,7 @@ class Web extends Prefab {
 	}
 
 	/**
-	*	Retrieve RSS/Atom feed and return as an array
+	*	Retrieve RSS feed and return as an array
 	*	@return array|FALSE
 	*	@param $url string
 	*	@param $max int
@@ -637,30 +636,48 @@ class Web extends Prefab {
 		$out=array();
 		if (isset($xml->channel)) {
 			$out['source']=(string)$xml->channel->title;
+			$max=min($max,count($xml->channel->item));
 			for ($i=0;$i<$max;$i++) {
 				$item=$xml->channel->item[$i];
-				$out['feed'][]=array(
-					'title'=>(string)$item->title,
-					'link'=>(string)$item->link,
-					'text'=>(string)$item->description
-				);
-			}
-		}
-		elseif (isset($xml->entry)) {
-			$out['source']=(string)$xml->author->name;
-			for ($i=0;$i<$max;$i++) {
-				$item=$xml->entry[$i];
-				$out['feed'][]=array(
-					'title'=>(string)$item->title,
-					'link'=>(string)$item->link['href'],
-					'text'=>(string)$item->summary
-				);
+				$list=array(''=>NULL)+$item->getnamespaces(TRUE);
+				$fields=array();
+				foreach ($list as $ns=>$uri)
+					foreach ($item->children($uri) as $key=>$val)
+						$fields[$ns.($ns?':':'').$key]=(string)$val;
+				$out['feed'][]=$fields;
 			}
 		}
 		else
 			return FALSE;
 		Base::instance()->scrub($out,$tags);
 		return $out;
+	}
+
+	/**
+	*	Retrieve information from whois server
+	*	@return string|FALSE
+	*	@param $addr string
+	*	@param $server string
+	**/
+	function whois($addr,$server='whois.internic.net') {
+		$socket=@fsockopen($server,43,$errno,$errstr);
+		if (!$socket)
+			// Can't establish connection
+			return FALSE;
+		// Set connection timeout parameters
+		stream_set_blocking($socket,TRUE);
+		stream_set_timeout($socket,ini_get('default_socket_timeout'));
+		// Send request
+		fputs($socket,$addr."\r\n");
+		$info=stream_get_meta_data($socket);
+		// Get response
+		$response='';
+		while (!feof($socket) && !$info['timed_out']) {
+			$response.=fgets($socket,4096); // MDFK97
+			$info=stream_get_meta_data($socket);
+		}
+		fclose($socket);
+		return $info['timed_out']?FALSE:trim($response);
 	}
 
 	/**

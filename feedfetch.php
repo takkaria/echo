@@ -23,8 +23,13 @@ function trim_summary($summary) {
 	// Get rid of anything after 'The post <a' (ACI)
 	$summary = preg_replace("/The post \<a.*/", "", $summary);
 
-	// Remove tags
-	$summary = strip_tags($summary);
+	// Remove tags, one way or another
+	try {
+		$summary = str_get_html($summary);
+		$summary = $summary->plaintext;
+	} catch (Exception $e) {
+		$summary = strip_tags($summary);
+	};
 
 	// apparently we need to strip out any unfinished sentences...
 	// Inside the M60 (wordpress) abbreviates like:

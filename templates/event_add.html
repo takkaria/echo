@@ -5,10 +5,6 @@
 <link rel="stylesheet" type="text/css" href="{{@baseurl}}/css/editform.css">
 <link rel="stylesheet" type="text/css" href="{{@baseurl}}/css/jquery.timepicker.css">
 <link rel="stylesheet" type="text/css" href="{{@baseurl}}/css/jquery-ui-1.8.24.custom.css">
-<style>
-/* This is here because if it went in the CSS file, we couldn't use {{@baseurl}} */
-.date { background-image: url({{@baseurl}}/img/calendar.png); background-repeat: no-repeat; background-position: 98% 50%; }
-</style>
 
 <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
@@ -202,7 +198,7 @@ initCostLogic();
 <body class="thin">
 <F3:include href="_header.html" />
 
-<section id="add">
+<section id="event_add">
 <h2>Add an event</h2>
 
 <F3:check if="{{isset(@messages)}}">

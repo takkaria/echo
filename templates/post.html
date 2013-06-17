@@ -8,7 +8,7 @@
 <check if="{{isset(@admin)}}">
 <div class="admin">
 	<p><a href="{{@baseurl}}/post/edit/?id={{urlencode(@post.id)}}">Edit</a>
-	<form action="{{@baseurl}}/post/hide/?id={{urlencode(@post.id)}}" method="POST"><input type="submit" value="Hide"></form>
+	<form action="{{@baseurl}}/post/hide/?id={{urlencode(@post.id)}}" method="POST"><input class="ajax" type="submit" value="Hide"></form>
 </div>
 </check>
 

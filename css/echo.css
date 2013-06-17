@@ -1,50 +1,7 @@
-/*
-980px grid system ~ Core CSS.
-10 Columns ~ Margin left: 10px ~ Margin right: 10px
+body { width: 100%; *zoom: 1; }
+body:before, body:after { content: ""; display: table; }
+body:after { clear: both; }
 
-Based on the 960.gs grid system - http://960.gs/
-by Nathan Smith
-
-Created by the Grid System Generator - v1.04
-Learn more ~ http://www.gridsystemgenerator.com/
-*/
-/*
-Forces backgrounds to span full width,
-even if there is horizontal scrolling.
-Increase this if your layout is wider.
-
-Note: IE6 works fine without this fix.
-*/
-body { min-width: 980px; }
-
-/* =Containers
---------------------------------------------------------------------------------*/
-.content { margin-left: auto; margin-right: auto; width: 980px; }
-
-/* =Grid >> Global
---------------------------------------------------------------------------------*/
-#index #news, #index #events { display: inline; float: left; margin-left: 10px; margin-right: 10px; }
-
-/* =Grid >> Children (Alpha ~ First, Omega ~ Last)
---------------------------------------------------------------------------------*/
-/* =Grid >> 10 Columns
---------------------------------------------------------------------------------*/
-#index #news { width: 372px; }
-
-#index #events { width: 568px; }
-
-/* =Prefix Extra Space >> 10 Columns
---------------------------------------------------------------------------------*/
-/* =Suffix Extra Space >> 10 Columns
---------------------------------------------------------------------------------*/
-/* `Push Space >> 10 Columns
---------------------------------------------------------------------------------*/
-/* `Pull Space >> 10 Columns
---------------------------------------------------------------------------------*/
-/* `Clear Floated Elements
-----------------------------------------------------------------------------------------------------*/
-/* http://sonspring.com/journal/clearing-floats */
-/* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
 /** Resets **/
 *, body, h1, h2, h3, h4, h5, h6 { margin: 0; }
 
@@ -93,10 +50,18 @@ p.msg span { background-color: #fff; border-radius: 5px; padding: 2px 10px; }
 
 /*** Page styles ***/
 /** Layout **/
+.content { width: 1008px; margin: auto; }
+
+header .content { padding-left: 10px; }
+
+section { display: inline; float: left; width: 960px; margin: 0 10px; padding-left: 14px; padding-right: 14px; }
+
 #index section h2 { text-align: center; letter-spacing: 2px; }
+#index #news { display: inline; float: left; width: 372px; margin: 0 10px; padding-left: 14px; padding-right: 14px; font-size: 90%; }
+#index #events { display: inline; float: left; width: 540px; margin: 0 10px; padding-left: 14px; padding-right: 14px; }
 
 /** Sections are used to contain page content */
-section { float: left; background-color: white; padding: 10px 0; box-shadow: 0 0 20px #ccc; margin-bottom: 2em; }
+section { float: left; background-color: white; padding-top: 10px; padding-bottom: 10px; box-shadow: 0 0 20px #ccc; margin-bottom: 2em; }
 
 section .sublinks { margin: -18px 0 0 0; text-align: right; }
 

@@ -37,18 +37,27 @@ p.msg {
 
 /*** Page styles ***/
 
+$columns: 12;
+$column-width: 64px;
+$gutter-width: 20px;
+$column-pad: 14px;
+$total-width: gridsystem-width($columns);
+
 /** Layout **/
-.content { @extend %container_10; }
+.content { width: $total-width; margin: auto; }
+header .content { padding-left: 10px; } // account for the fact that header .content doesn't use a grid layout but needs a margin to line up with the grid below
+
+section { @include column($columns); }
 
 #index {
 	section h2 { text-align: center; letter-spacing: 2px; }
 
-	#news { @extend %grid_4; }
-	#events { @extend %grid_6; }
+	#news { @include column(5); font-size: 90%; } //margin-left: 0; }
+	#events { @include column(7); } //margin-right: 0; }
 }
 
 /** Sections are used to contain page content */
- section { float: left; background-color: white; padding: 10px /* 15px; */ 0; box-shadow: 0 0 20px #ccc; margin-bottom: 2em; }
+section { float: left; background-color: white; padding: { top: 10px; bottom: 10px; } box-shadow: 0 0 20px #ccc; margin-bottom: 2em; }
 section .sublinks { margin: -18px 0 0 0; text-align: right; }
 
 section.text { float: none; width: 40em; margin: 0 auto; }

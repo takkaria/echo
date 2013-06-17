@@ -1,0 +1,145 @@
+/*
+980px grid system ~ Core CSS.
+10 Columns ~ Margin left: 10px ~ Margin right: 10px
+
+Based on the 960.gs grid system - http://960.gs/
+by Nathan Smith
+
+Created by the Grid System Generator - v1.04
+Learn more ~ http://www.gridsystemgenerator.com/
+*/
+
+/*
+Forces backgrounds to span full width,
+even if there is horizontal scrolling.
+Increase this if your layout is wider.
+
+Note: IE6 works fine without this fix.
+*/
+body { min-width: 980px; }
+
+/* =Containers
+--------------------------------------------------------------------------------*/
+%container_10 { margin-left: auto; margin-right: auto; width: 980px; }
+
+/* =Grid >> Global
+--------------------------------------------------------------------------------*/
+%grid_1,
+%grid_2,
+%grid_3,
+%grid_4,
+%grid_5,
+%grid_6,
+%grid_7,
+%grid_8,
+%grid_9,
+%grid_10 {
+        display: inline;
+        float: left;
+        margin-left: 10px;
+        margin-right: 10px;
+}
+
+%push_1, %pull_1,
+%push_2, %pull_2,
+%push_3, %pull_3,
+%push_4, %pull_4,
+%push_5, %pull_5,
+%push_6, %pull_6,
+%push_7, %pull_7,
+%push_8, %pull_8,
+%push_9, %pull_9 {
+        position: relative;
+}
+
+/* =Grid >> Children (Alpha ~ First, Omega ~ Last)
+--------------------------------------------------------------------------------*/
+%alpha {margin-left: 0;}
+%omega {margin-right: 0;}
+
+/* =Grid >> 10 Columns
+--------------------------------------------------------------------------------*/
+%grid_1 {width: 78px;}
+%grid_2 {width: 176px;}
+%grid_3 {width: 274px;}   
+%grid_4 {width: 372px;}
+%grid_5 {width: 470px;}
+%grid_6 {width: 568px;}
+%grid_7 {width: 666px;}
+%grid_8 {width: 764px;}
+%grid_9 {width: 862px;}
+%grid_10 {width: 960px;}
+
+/* =Prefix Extra Space >> 10 Columns
+--------------------------------------------------------------------------------*/
+%prefix_1 {padding-left: 98px;}
+%prefix_2 {padding-left: 196px;}
+%prefix_3 {padding-left: 294px;}
+%prefix_4 {padding-left: 392px;}
+%prefix_5 {padding-left: 490px;}
+%prefix_6 {padding-left: 588px;}
+%prefix_7 {padding-left: 686px;}
+%prefix_8 {padding-left: 784px;}
+%prefix_9 {padding-left: 882px;}
+
+/* =Suffix Extra Space >> 10 Columns
+--------------------------------------------------------------------------------*/
+%suffix_1 {padding-right: 98px;}
+%suffix_2 {padding-right: 196px;}
+%suffix_3 {padding-right: 294px;}
+%suffix_4 {padding-right: 392px;}
+%suffix_5 {padding-right: 490px;}
+%suffix_6 {padding-right: 588px;}
+%suffix_7 {padding-right: 686px;}
+%suffix_8 {padding-right: 784px;}
+%suffix_9 {padding-right: 882px;}
+
+/* `Push Space >> 10 Columns
+--------------------------------------------------------------------------------*/
+%push_1 {left: 98px;}
+%push_2 {left: 196px;}
+%push_3 {left: 294px;}
+%push_4 {left: 392px;}
+%push_5 {left: 490px;}
+%push_6 {left: 588px;}
+%push_7 {left: 686px;}
+%push_8 {left: 784px;}
+%push_9 {left: 882px;}
+
+/* `Pull Space >> 10 Columns
+--------------------------------------------------------------------------------*/
+%pull_1 {left: -98px;}
+%pull_2 {left: -196px;}
+%pull_3 {left: -294px;}
+%pull_4 {left: -392px;}
+%pull_5 {left: -490px;}
+%pull_6 {left: -588px;}
+%pull_7 {left: -686px;}
+%pull_8 {left: -784px;}
+%pull_9 {left: -882px;}
+
+/* `Clear Floated Elements
+----------------------------------------------------------------------------------------------------*/
+/* http://sonspring.com/journal/clearing-floats */
+%clear {
+        clear: both;
+        display: block;
+        overflow: hidden;
+        visibility: hidden;
+        width: 0;
+        height: 0;
+}
+
+/* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
+%clearfix:before,
+%clearfix:after {
+        content: "\0020";
+        display: block;
+        overflow: hidden;
+        visibility: hidden;
+        width: 0;
+        height: 0;
+}
+%clearfix:after {
+        clear: both;
+}

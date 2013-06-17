@@ -93,6 +93,8 @@ section .sublinks { margin: -18px 0 0 0; text-align: right; }
 .post p { margin: 0; }
 .post .more { font-style: italic; }
 .post .date { margin-bottom: 0.5em; }
+.post .date a { color: inherit; }
+.post:hover .date a { color: blue; }
 
 .shortpost h4 { font-size: 100%; }
 

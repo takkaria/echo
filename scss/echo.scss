@@ -139,6 +139,9 @@ section {
 	p { margin: 0; }
 	.more { font-style: italic; }
 	.date { margin-bottom: 0.5em; }
+
+	.date a { color: inherit; }
+	&:hover .date a { color: blue; }
 }
 
 .shortpost {

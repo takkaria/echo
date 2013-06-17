@@ -90,7 +90,9 @@ section {
 	background-color: white;
 	margin-bottom: 2em;
 	padding: { top: 10px; bottom: 10px; }
-	box-shadow: 0 0 20px #ccc;
+	@media (min-width: 800px) {
+		box-shadow: 0 0 20px #ccc;
+	}
 
 	.sublinks { margin: -18px 0 0 0; text-align: right; }
 }
@@ -145,6 +147,10 @@ section {
 	@media (min-width: 800px) {
 		#news { @include column(5); font-size: 90%; } //margin-left: 0; }
 		#events { @include column(7); } //margin-right: 0; }
+	}
+
+	@media (max-width: 800px) {
+		#events { border-top: 2px solid black; }
 	}
 
 	#events h3 {

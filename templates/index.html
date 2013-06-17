@@ -9,8 +9,9 @@
 <h2>NEWS</h2>
 <p class="sublinks"><a href="{{@baseurl}}/about#addnews">(want yours here?)</a>
 
-<repeat group="{{@posts}}" value="{{@post}}">
-<include href="post.html" />
+<repeat group="{{@posts}}" key="{{@i}}" value="{{@post}}">
+<include if="@i < 5" href="post.html" />
+<include if="@i >= 5" href="shortpost.html" />
 </repeat>
 </section>
 

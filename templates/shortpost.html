@@ -1,0 +1,13 @@
+<div class="post">
+<li><a href="{{@post.link}}">{{@post.title}}</a></li>
+<p class="date">{{@formatdate(@post.date)}}
+<check if="{{@post.feed.site}}"> from {{@post.feed.title}}</check></p>
+
+<check if="{{isset(@admin)}}">
+<div class="admin">
+	<p><a href="{{@baseurl}}/post/edit/?id={{urlencode(@post.id)}}">Edit</a>
+	<form action="{{@baseurl}}/post/hide/?id={{urlencode(@post.id)}}" method="POST"><input class="ajax" type="submit" value="Hide"></form>
+</div>
+</check>
+
+</div>

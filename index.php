@@ -85,7 +85,7 @@ $f3->route('GET /', function($f3) {
 	$f3->set('events', Events::load($where, $limit));
 
 	/* Posts */
-	$where = "hidden IS NOT 1 ORDER BY date DESC LIMIT 0, 10";
+	$where = "hidden IS NOT 1 ORDER BY date DESC LIMIT 0, 15";
 	$f3->set('posts', Feeds::load($where));
 
 	echo Template::instance()->render("index.html");

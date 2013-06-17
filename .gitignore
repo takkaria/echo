@@ -4,3 +4,4 @@ cache
 temp
 .htaccess
 .sass-cache
+tmp

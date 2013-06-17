@@ -111,7 +111,7 @@ section .sublinks { margin: -18px 0 0 0; text-align: right; }
 @media (min-width: 800px) { #index #news { display: inline; float: left; width: 36.68254%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; font-size: 90%; }
   #index #events { display: inline; float: left; width: 53.34921%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; } }
 @media (max-width: 800px) { #index #events { border-top: 2px solid black; } }
-#index #events h3 { letter-spacing: 1px; font-weight: normal; border-bottom: 1px solid black; clear: both; margin-bottom: 0.5em; margin-top: 0.5em; padding: 0; }
+#index #events h3 { font-weight: normal; border-bottom: 1px solid black; clear: both; margin-bottom: 0.5em; margin-top: 0.5em; padding: 0; }
 
 #login input { display: block; margin: 10px 0; padding: 5px; }
 #login input[type="submit"] { font-size: 120%; font-weight: bold; }

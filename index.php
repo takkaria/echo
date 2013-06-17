@@ -172,25 +172,27 @@ $f3->route('POST /event/add', function($f3) {
 
 $f3->route('GET /event/@id [ajax]', function($f3) {
 	admin_check(FALSE);
-	$event = new Event(intval($f3->get('PARAMS.id')));
-	if ($event) {
-		$f3->set("event", $event);
-		echo Template::instance()->render("event_box.html");
-	} else {
-		echo "No event found.";
-	}
+	try { $event = new Event(intval($f3->get('PARAMS.id'))); }
+	catch (Exception $e) { $f3->error(404); }
+
+	$f3->set("event", $event);
+	echo Template::instance()->render("event_box.html");
 });
 
 $f3->route('GET /event/@id', function($f3) {
 	admin_check(FALSE);
-	$event = new Event(intval($f3->get('PARAMS.id')));
+	try { $event = new Event(intval($f3->get('PARAMS.id'))); }
+	catch (Exception $e) { $f3->error(404); }
+
 	$f3->set("event", $event);
 	echo Template::instance()->render("event.html");
 });
 
 $f3->route('GET /event/@id/edit', function($f3) {
 	admin_check();
-	$event = new Event(intval($f3->get('PARAMS.id')));
+	try { $event = new Event(intval($f3->get('PARAMS.id'))); }
+	catch (Exception $e) { $f3->error(404); }
+
 	$event->set_form_data();
 	// XXX need to fix this - an event edited by an admin shouldn't have a required 'email' field
 	echo Template::instance()->render("event_add.html");
@@ -202,7 +204,9 @@ $f3->route('POST /event/@id/edit', function($f3) {
 
 	$id = intval($f3->get('PARAMS.id'));
 
-	$event = new Event($id);
+	try { $event = new Event(intval($f3->get('PARAMS.id'))); }
+	catch (Exception $e) { $f3->error(404); }
+
 	$messages = $event->parse_form_data();
 
 	if (count($messages) > 0) {
@@ -231,7 +235,8 @@ $f3->route('POST /event/@id/approve', function($f3) {
 	admin_check();
 	readonly_check();
 
-	$e = new Event(intval($f3->get('PARAMS.id')));
+	try { $e = new Event(intval($f3->get('PARAMS.id'))); }
+	catch (Exception $e) { $f3->error(404); }
 	$e->approve();
 
 	echo "Approved";
@@ -241,7 +246,8 @@ $f3->route('POST /event/@id/unapprove', function($f3) {
 	admin_check();
 	readonly_check();
 
-	$e = new Event(intval($f3->get('PARAMS.id')));
+	try { $e = new Event(intval($f3->get('PARAMS.id'))); }
+	catch (Exception $e) { $f3->error(404); }
 	$e->unapprove();
 
 	echo "Unapproved";
@@ -552,6 +558,64 @@ $f3->route('GET /json', function($f3) {
 	header("Content-Type: application/json");
 });
 
-$f3->run();
+$f3->set('ONERROR',
+	function($f3) {
+		$code = $f3->get('ERROR.code');
+		$title = $f3->get('ERROR.title');
+		$text = $f3->get('ERROR.text');
+		$trace = $f3->get('ERROR.trace');
+		$eol = "\n";
+		$out = '';
+		$highlight = true;
+
+		if ($code == 404)
+			$msg = "File not found.";
+		else if ($code == 500)
+			$msg = "There's been a server error.  There's nothing you can do about this, sorry.  Please retry whatever you were doing.";
+		else
+			$msg = "";
+
+		foreach ($trace as $frame) {
+			$line='';
+			if (isset($frame['class']))
+				$line.=$frame['class'].$frame['type'];
+			if (isset($frame['function']))
+				$line.=$frame['function'].' ('.(isset($frame['args'])?
+					$f3->csvspace($frame['args']):'').')';
+			$src=$f3->fixslashes($frame['file']).':'.$frame['line'].' ';
+			error_log('- '.$src.$line);
+			$out.='<li> '.($highlight?
+				($f3->highlight($src).' '.$f3->highlight($line)):
+				($src.$line)).$eol;
+		}
+
+?>
+<!DOCTYPE html>
+<title><?=$code?></title>
+<style>
+body { background: #eee; width: 40em; margin: auto; margin-top: 5em; }
+ul { overflow-x: auto; }
+</style>
+
+<h1><img src="<?=$f3->get('baseurl')?>/img/header.png" alt="Echo" width="100%"></h1>
+<h2>Error <?=$code?></h2>
+<p><?=$msg?>
+<?php
+if ($f3->get('DEBUG') != 0) {
+	echo '<p>'.$text.'</p>';
+	echo '<ul>'.$out."</ul>";
+}
+?>
+<p><a href="<?=$f3->get('baseurl')?>">← Go back to main site</a>
+<?php
+
+	}
+);
+
+try {
+	$f3->run();
+} catch (Exception $e) {
+	$f3->error(500, $e->getmessage(), $e->gettrace());
+}
 
 ?>

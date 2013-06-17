@@ -467,6 +467,11 @@ final class Base {
 		return implode(',',array_map('stripcslashes',
 			array_map(array($this,'stringify'),$args)));
 	}
+	function csvspace(array $args) {
+		return implode(', ',array_map('stripcslashes',
+			array_map(array($this,'stringify'),$args)));
+	}
+
 
 	/**
 	*	Convert snakecase string to camelcase
@@ -1431,11 +1436,6 @@ final class Base {
 		// Intercept errors/exceptions; PHP5.3-compatible
 		error_reporting(E_ALL|E_STRICT);
 		$fw=$this;
-		set_exception_handler(
-			function($obj) use($fw) {
-				$fw->error(500,$obj->getmessage(),$obj->gettrace());
-			}
-		);
 		set_error_handler(
 			function($code,$text) use($fw) {
 				if (error_reporting())

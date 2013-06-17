@@ -60,7 +60,7 @@ function initVenues() {
 function initFormValidation() {
 
 	$.validator.addMethod("wordcount", function(value, element, params) {
-		return word_count($(element).val()) <= 250
+		return word_count($(element).val()) <= 120
 	}, "Your blurb is over the word limit.");
 
 	$.validator.addMethod("permissive_url", function(value, element) {
@@ -108,7 +108,7 @@ function initFormValidation() {
 				}
 			},
 			blurb: {
-				wordcount: 250
+				wordcount: 120
 			}
 		}
 	});
@@ -119,7 +119,7 @@ function initWordCount() {
 	$("#blurb").on("input", function(e) {
 		var wc = word_count($(e.target).val());
 		$("#wordcount").text(wc);
-		if (wc > 250)
+		if (wc > 120)
 			$("#wordcount").addClass("overcount");
 		else
 			$("#wordcount").removeClass("overcount");
@@ -257,7 +257,7 @@ Ends <input class="required time" type="text" name="time2" id="time2" {{isset(@t
 <fieldset>
 <div class="left">
 <label for="blurb">Please describe your event:</label>
-<p class="desc">Please include the group organising the event and information about booking if you have to book.  Maximum 250 words.</p>
+<p class="desc">Please include the group organising the event and information about booking if you have to book.  Maximum 120 words.</p>
 </div>
 
 <textarea class="right required" name="blurb" id="blurb" rows="8">{{isset(@blurb)?@blurb:NULL}}</textarea>

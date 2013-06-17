@@ -37,7 +37,8 @@ $(document).ready(function() {
 
 	$(document).click(function(e) {
 		var box = $("#eventinfo");
-		if (e.pageX > box.offset().left && e.pageX < box.offset().left+box.outerWidth() &&
+		if (e.css('display') == "block" &&
+			e.pageX > box.offset().left && e.pageX < box.offset().left+box.outerWidth() &&
 			e.pageY > box.offset().top && e.pageY < box.offset().left+box.outerHeight())
 			return false;
 		box.hide();

@@ -38,8 +38,7 @@ tr, th, td { border: 1px solid #ccc; margin: 0; padding: 2px 6px; }
 th { background-color: #eee; }
 
 /** Forms **/
-form { margin-top: 1em; line-height: 1.5; width: 700px; margin: auto; font-size: 13pt; /* Alignment */ }
-form fieldset { border: 0; margin: 0; padding: 0; padding: 10px 0; }
+form { /* Alignment */ }
 form .left { width: 250px; float: left; text-align: right; }
 form label.left, form .left label { font-weight: bold; }
 form p.left, form .left p { font-size: 80%; font-style: italic; margin: 0; }
@@ -47,9 +46,14 @@ form .right, form label.error { width: 430px; float: right; }
 form .error { color: red; }
 form label.error { font-size: 80%; }
 
+fieldset { border: 0; margin: 0; padding: 0; padding: 10px 0; }
+
 input { border: none; border-bottom: 1px solid #ccc; padding: 4px; font-size: inherit; }
-input[type='submit'], .admin a { display: block; margin: 1em auto; padding: 5px 10px 5px; text-shadow: 0 -1px -1px rgba(0, 0, 0, 0.25); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25); border: 1px solid #888; border-radius: 5px; color: white; background: black; cursor: pointer; }
+input[type='submit'], .admin a { padding: 5px 10px 5px; text-shadow: 0 -1px -1px rgba(0, 0, 0, 0.25); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25); border: 1px solid #888; border-radius: 5px; color: black; background: #ddd; cursor: pointer; }
 input[type='submit']:active, .admin a:active { -webkit-transform: translateY(1px); -ms-transform: translateY(1px); -moz-transform: translateY(1px); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5); }
+
+#event_add form, #venue_add form { margin-top: 1em; line-height: 1.5; width: 700px; margin: auto; font-size: 13pt; }
+#event_add input[type='submit'], #venue_add input[type='submit'], #event_add .admin a, .admin #event_add a, #venue_add .admin a, .admin #venue_add a { display: block; margin: 1em auto; color: white; background: black; }
 
 /** Colours **/
 html { background-color: #eee; color: #222; }
@@ -93,8 +97,8 @@ section .sublinks { margin: -18px 0 0 0; text-align: right; }
 .admin { display: block; margin-top: 10px; }
 .admin form { display: inline; clear: both; }
 .admin p { display: inline-block; }
-.admin input, .admin a { font-size: 17px; display: inline-block; border: none; background-color: #eee; color: black; text-align: center; float: left; padding: 0 10px; margin: 0; margin-bottom: 15px; margin-right: 1em; }
-.admin input:hover { text-decoration: underline; cursor: pointer; }
+.admin input, .admin a { font-size: 17px; display: inline-block; float: left; padding: 0 10px; margin: 0; margin-bottom: 15px; margin-right: 1em; }
+.admin :hover { text-decoration: none; }
 
 .toc { border: 1px solid #ccc; width: auto; float: right; font-size: 90%; padding-top: 5px; padding-bottom: 5px; padding-left: 30px; margin-left: 20px; }
 .toc li { margin: 0; }
@@ -115,20 +119,20 @@ section .sublinks { margin: -18px 0 0 0; text-align: right; }
 
 #venue .info { margin-top: 1em; }
 
-#event_add { /* Individual fields */ /* Venues */ }
-#event_add .count { font-size: 80%; text-align: right; }
-#event_add .overcount { color: red; }
-#event_add .time { width: 3em; }
-#event_add .date { width: 14em; cursor: pointer; background-image: url(../img/calendar.png); background-repeat: no-repeat; background-position: 98% 50%; }
-#event_add .film { background-image: url(../img/film.png); background-repeat: no-repeat; background-position: 5px 7px; text-indent: 22px; }
-#event_add #venues { margin-bottom: 10px; margin-top: -10px; font-size: 80%; width: 600px; float: right; }
-#event_add #venues.empty { color: #bbb; }
-#event_add #venues ul, #event_add #venues li { list-style-type: none; padding: 0; margin: 0; }
-#event_add #vlist { height: 104px; border: 1px solid #ccc; border-radius: 4px; }
-#event_add #vlist.selected { color: #bbb; }
-#event_add #vlist li { width: 289px; float: left; padding: 4px 5px; cursor: pointer; height: 18px; }
-#event_add #vlist li.selected { background-color: #eee; color: black; }
-#event_add #vlist li:hover { background-color: #ddd; }
+#event_add, #venue_add { /* Individual fields */ /* Venues */ }
+#event_add .count, #venue_add .count { font-size: 80%; text-align: right; }
+#event_add .overcount, #venue_add .overcount { color: red; }
+#event_add .time, #venue_add .time { width: 3em; }
+#event_add .date, #venue_add .date { width: 14em; cursor: pointer; background-image: url(../img/calendar.png); background-repeat: no-repeat; background-position: 98% 50%; }
+#event_add .film, #venue_add .film { background-image: url(../img/film.png); background-repeat: no-repeat; background-position: 5px 7px; text-indent: 22px; }
+#event_add #venues, #venue_add #venues { margin-bottom: 10px; margin-top: -10px; font-size: 80%; width: 600px; float: right; }
+#event_add #venues.empty, #venue_add #venues.empty { color: #bbb; }
+#event_add #venues ul, #event_add #venues li, #venue_add #venues ul, #venue_add #venues li { list-style-type: none; padding: 0; margin: 0; }
+#event_add #vlist, #venue_add #vlist { height: 104px; border: 1px solid #ccc; border-radius: 4px; }
+#event_add #vlist.selected, #venue_add #vlist.selected { color: #bbb; }
+#event_add #vlist li, #venue_add #vlist li { width: 289px; float: left; padding: 4px 5px; cursor: pointer; height: 18px; }
+#event_add #vlist li.selected, #venue_add #vlist li.selected { background-color: #eee; color: black; }
+#event_add #vlist li:hover, #venue_add #vlist li:hover { background-color: #ddd; }
 
 /* Flatten out page on smaller width devices */
 @media (max-width: 800px) { section { display: inline; float: left; width: 94%; margin: 0; padding-left: 3%; padding-right: 3%; margin-left: 0; margin-right: 0; } }

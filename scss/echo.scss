@@ -26,10 +26,6 @@ th { background-color: #eee; }
 
 /** Forms **/
 form {
-	margin-top: 1em; line-height: 1.5; width: 700px; margin: auto; font-size: 13pt;
-
-	fieldset { border: 0; margin: 0; padding: 0; padding: 10px 0; }
-
 	/* Alignment */
 	.left { width: 250px; float: left; text-align: right; }
 	label.left, .left label { font-weight: bold; }
@@ -40,18 +36,20 @@ form {
 	label.error { font-size: 80%; }	
 }
 
+fieldset { border: 0; margin: 0; padding: 0; padding: 10px 0; }
+
 input {
 	border: none; border-bottom: 1px solid #ccc; padding: 4px;
 	font-size: inherit;
 
 	&[type='submit'] {
-		display: block; margin: 1em auto;
 		padding: 5px 10px 5px;
 		text-shadow: 0 -1px -1px rgba(0,0,0,0.25);
 		box-shadow: 0 1px 3px rgba(0,0,0,0.25);
 		border: 1px solid #888;
 		border-radius: 5px;
-		color: white; background: black;
+		color: black; 
+		background: #ddd;
 		cursor: pointer;
 	}
 	&[type='submit']:active {
@@ -59,6 +57,14 @@ input {
 		-ms-transform: translateY(1px);
 		-moz-transform: translateY(1px);
 		box-shadow: 0 1px 4px rgba(0,0,0,0.50);
+	}
+}
+
+%formpage { // for pages which are just a form
+	form { margin-top: 1em; line-height: 1.5; width: 700px; margin: auto; font-size: 13pt; }
+	input[type='submit'] {
+		display: block; margin: 1em auto;
+		color: white; background: black;
 	}
 }
 
@@ -129,8 +135,8 @@ section {
 	form { display: inline; clear: both; }
 	p { display: inline-block; }
 	a { @extend input[type='submit']; }
-	input, a { font-size: 17px; display: inline-block; border: none; background-color: #eee; color: black; text-align: center; float: left; padding: 0 10px; margin: 0; margin-bottom: 15px; margin-right: 1em; }
-	input:hover { text-decoration: underline; cursor: pointer; }
+	input, a { font-size: 17px; display: inline-block; float: left; padding: 0 10px; margin: 0; margin-bottom: 15px; margin-right: 1em; }
+	:hover { text-decoration: none; }
 }
 
 .toc {
@@ -173,7 +179,9 @@ section {
 
 #venue .info { margin-top: 1em; }
 
-#event_add {
+#event_add, #venue_add {
+	@extend %formpage;
+
 	.count { font-size: 80%; text-align: right; }
 	.overcount { color: red; }
 

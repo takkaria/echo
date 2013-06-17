@@ -6,8 +6,10 @@
 </header>
 
 <F3:check if="{{isset(@message)}}">
-	<p class="msg"><span>{{@message}}</span></p>
-	<!-- XXX add some kind of 'close message" button -->
+	<p class="msg">
+		<img src="{{@baseurl}}/img/cross.png" align="right" onclick="this.parentNode.style.display='none'">
+		{{@message}}
+</p>
 </F3:check>
 
 <div class="content">

@@ -75,8 +75,20 @@ header .about { font-size: 120%; margin: 0 0 10px 0; }
 
 /** Message box */
 p.msg {
-	font-weight: bold; text-align: center; font-size: 120%; width: 980px;
-	span { background-color: #fff; border-radius: 5px; padding: 2px 10px; }
+	display: block;
+	width: 40%;
+	left: 30%;
+	top: 30%;
+	position: fixed;
+	background-color: #fff;
+	border: 1px solid black;
+	border-radius: 4px;
+	padding: { top: 1em; bottom: 1em; }
+	box-shadow: 0 0 10px 10px white;
+
+	font-weight: bold; text-align: center; font-size: 120%;
+
+	img { padding-right: 1em; }
 }
 
 /*** Page layout ***/

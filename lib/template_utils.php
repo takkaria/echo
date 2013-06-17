@@ -4,16 +4,29 @@
 $f3->set('group_events', function() {
 	global $f3;
 	$events = $f3->get('events');
-	$sorted = array();
+	$bydate = array();
 	foreach ($events as $e) {
 		$dt = clone $e->startdt;
-		$sorted[$dt->modify("today")->format("Y-m-d")][] = $e;
+		$dtstamp = $dt->modify("today")->format("Y-m-d");
+		$bydate[$dtstamp][] = $e;
 	}
-	return $sorted;
+
+	$final = array();
+	foreach ($bydate as $dtstamp => $list) {
+		if (new DateTime($dtstamp) < new DateTime("today")) {
+			$final['Ongoing'] = $list;
+		} else {
+			$final[$dtstamp] = $list;
+		}
+	}
+	return $final;
 });
 
 // Format a nice prettily for the events listing
 $f3->set('formatdate', function($date) {
+	if ($date == 'Ongoing')
+		return $date;
+
 	$today = new DateTime("today"); // This gets the beginning of the day
 	$event = new DateTime($date);
 	$format = 'l j F';	// This should be in the templates but for some reason F3 was screwing up with it

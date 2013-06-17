@@ -1,6 +1,6 @@
 <div class="event">
 
-<span class="time">{{@event->startdt->format("H:i")}}</span>
+<span class="time"><check if="!{{@event->enddt}}">{{@event->startdt->format("H:i")}}</check></span>
 
 <div class="block">
 <h4 class="title"><F3:check if="{{@event->film}}"><img src="{{@baseurl}}/img/film.png" alt="Film showing: "></F3:check> {{@event->title}}</h4>
@@ -11,6 +11,10 @@
 <false>{{@event->location->short()}}</false>
 </F3:check>
 </span>
+
+<check if="{{@event->enddt}}">
+	<p class="multi">Starts <b>{{@event->startdt->format("l d F")}}</b> and ends <b>{{@event->enddt->format("l d F")}}</b>.</p>
+</check>
 
 <p class="description">
 <F3:check if="{{@event->cost}}">

@@ -81,6 +81,7 @@ section .sublinks { margin: -18px 0 0 0; text-align: right; }
 .event .time { float: left; }
 .event .title { font-weight: bold; }
 .event .location { font-style: italic; margin-bottom: 7px; }
+.event .multi { margin-bottom: 0.5em; }
 .event .block { margin-left: 3.2em; }
 .event .more { text-align: right; }
 .event .fb { border: 1px solid #666; border-radius: 3px; background-color: #3B5998; color: #eee; padding: 0px 6px; }

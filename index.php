@@ -80,7 +80,7 @@ $f3->route('GET /', function($f3) {
 	admin_check(FALSE);
 
 	/* Events */
-	$where = "startdt >= date('now', 'start of day') AND state == 'approved'";
+	$where = "(startdt >= date('now', 'start of day') OR date('now') <= enddt) AND state == 'approved'";
 	$limit = "0,10";
 	$f3->set('events', Events::load($where, $limit));
 
@@ -102,8 +102,8 @@ $f3->route('GET /about', function($f3) {
 /***************************/
 
 $f3->route('GET /events', function($f3) {
-	$where = "startdt >= date('now', 'start of day') AND " .
-			"startdt <= date('now', 'start of month', '+2 month', '-1 day') AND " .
+	$where = "date('now') <= enddt OR (startdt >= date('now', 'start of day') AND " .
+			"startdt <= date('now', 'start of month', '+2 month', '-1 day')) AND " .
 			"state == 'approved'";
 	$results = Events::load($where);
 	$f3->set('events', $results);

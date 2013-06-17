@@ -9,6 +9,7 @@
 
 <div style="max-width: 45em;">
 <F3:repeat group="{{@group_events()}}" key="{{@day}}" value="{{@events}}">
+
 <h4 class="date">{{@formatdate(@day, 'l jS')}}</h4>
 
 <F3:repeat group="{{@events}}" value="{{@event}}">

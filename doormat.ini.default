@@ -3,6 +3,7 @@
 [general]
 name = Doormat
 email = doormat@localhost
+debug = false
 
 [web]
 domain = localhost

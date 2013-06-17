@@ -5,10 +5,6 @@
 define("BASEPATH", "");
 
 $f3 = require(BASEPATH . 'lib/fatfree/base.php');
-
-// Disable this when in production
-$f3->set('DEBUG', TRUE);
-
 $f3->set("UI", BASEPATH . "templates/");
 
 /**** Initialise ****/
@@ -22,8 +18,9 @@ require_once BASEPATH . 'lib/Feeds.php';
 require_once BASEPATH . 'lib/template_utils.php';
 
 $options = parse_ini_file(BASEPATH . 'doormat.ini', true);
-
 define("READONLY", $options['db']['readonly']);
+$f3->set('readonly', READONLY);
+$f3->set('DEBUG', $options['general']['debug']);
 
 $db = new DB\SQL("sqlite:" . BASEPATH . $options['db']['events']);
 Events::init($db);
@@ -36,7 +33,6 @@ if (isset($_GET['msg']))
 	$f3->set('message', strip_tags($_GET['msg']));
 $f3->set('baseurl', $options['web']['echo_root']);
 $f3->set('appname', $options['general']['name']);
-$f3->set('readonly', READONLY);
 
 function spam_check() {
 	global $options;

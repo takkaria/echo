@@ -20,10 +20,25 @@ $f3->set('formatdate', function($date) {
 
 	$diff = intval($today->diff($event)->format('%R%a'));
 
-	if ($diff < -1)
+	if ($diff < -35) { // 5 weeks
+		$n = intval(-$diff/31);
+		if ($n == 1)
+			return "a month ago";
+		else
+			return $n . " months ago";
+	} else if ($diff < -7) { // 1 week
+		$float = -$diff/7.0;
+		$n = intval($float);
+		if ($n == 1 && $float - $n > 0.5)
+			return "a week and a bit ago";
+		else if ($n == 1)
+			return "a week ago";
+		else
+			return $n . " weeks ago";
+	} else if ($diff < -1)
 		return -$diff . " days ago";
 	else if ($diff == -1)
-		return "1 day ago";
+		return "a day ago";
 	else if ($diff == 0)
 		return "Today";
 	else if ($diff == 1)

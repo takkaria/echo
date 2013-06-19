@@ -20,6 +20,9 @@ function deentity($text) {
 
 function trim_summary($summary) {
 
+	// Just for the Salford Star
+	$summary = preg_replace("/Star date: [^\n]*/", "", $summary);
+
 	// Get rid of anything after 'The post <a' (ACI)
 	$summary = preg_replace("/The post \<a.*/", "", $summary);
 
@@ -101,14 +104,11 @@ function fetch_feed($db, $url) {
 		if (!$post->get_title())
 			break;
 
-		$dbstore = array(
-			':feed_url' => $url,
-			':id' => $post->get_id(),
-			':title' => $post->get_title(),
-			':link' => $post->get_permalink(),
-			':date' => $post->get_gmdate("Y-m-d H:i"),
-			':image' => find_image($post->get_content(true))
-		);
+		$title = $post->get_title();
+
+		$title2 = preg_replace("/Salford Star - /i", "", $title);
+		if ($title != $title2)
+			$title = ucwords(strtolower($title2));
 
 		$summary = $post->get_description(true);
 		if ($summary)
@@ -116,10 +116,21 @@ function fetch_feed($db, $url) {
 		else
 			$summary = summary_from_content(deentity($post->get_content(true)));
 
-		if ($debug)
-			echo $summary . "\n\n=====================\n";
+		$dbstore = array(
+			':feed_url' => $url,
+			':id' => $post->get_id(),
+			':title' => $title,
+			':link' => $post->get_permalink(),
+			':date' => $post->get_gmdate("Y-m-d H:i"),
+			':image' => find_image($post->get_content(true)),
+			':summary' => $summary
+		);
 
-		$dbstore[':summary'] = $summary;
+		if ($debug) {
+			echo $title . "\n";
+			echo $summary . "\n";
+			echo "\n=====================\n";
+		}
 
 		$db->exec('INSERT OR IGNORE INTO POSTS ( feed_url, id, title, link, date, image, summary ) VALUES ( :feed_url, :id, :title, :link, :date, :image, :summary );', $dbstore);
 	}

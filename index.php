@@ -112,13 +112,13 @@ $f3->route('GET /events', function($f3) {
 
 $f3->route('GET /events/unapproved', function($f3) {
 	admin_check();
-	$f3->set('events', Events::load("state == 'validated'"));
+	$f3->set('events', Events::load("state IS 'validated'"));
 	echo Template::instance()->render("events.html");
 });
 
 $f3->route('GET /events/unvalidated', function($f3) {
 	admin_check();
-	$f3->set('events', Events::load("state == 'submitted'"));
+	$f3->set('events', Events::load("state IS 'submitted' OR state IS NULL"));
 	echo Template::instance()->render("events.html");
 });
 
@@ -143,6 +143,7 @@ $f3->route('POST /event/add', function($f3) {
 
 	$event = new Event();
 	$messages = $event->parse_form_data();
+	$event->state = "submitted";
 
 	if (count($messages) > 0) {
 		$event->set_form_data();
@@ -412,7 +413,7 @@ $f3->route('GET /admin', function($f3) {
 		"old" => 0
 	);
 
-	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state="submitted"');
+	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state IS "submitted" OR state IS NULL');
 	$events_info['submitted'] = $r[0]['count'];
 
 	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state="validated"');

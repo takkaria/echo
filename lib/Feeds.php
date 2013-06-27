@@ -14,20 +14,20 @@ class Feeds
 		foreach ($results as &$post) {
 			$ts = strtotime($post['date']);
 
-			$post['id'] = $post['id'];
 			$post['time'] = strftime('%H:%M', $ts);
 			$post['date'] = strftime('%a %e %B', $ts);
-			$post['feed'] = array();
-			$post['feed']['url'] = $post['feed_url'];
-			$post['feed']['title'] = $post['title:1'];
-			$post['feed']['site'] = $post['site_url'];
+			$post['feed'] = [
+				'url' => $post['feed_url'],
+				'title' => $post['title:1'],
+				'site' => $post['site_url']
+			];
 		}
 
 		return $results;
 	}
 
 	static function purge($months) {
-		Feeds::$db->exec("DELETE FROM posts WHERE date < date('now', '-".$months." months')");
+		Feeds::$db->exec("DELETE FROM posts WHERE date < date('now', '-".intval($months)." months')");
 	}
 
 	static function getlist() {

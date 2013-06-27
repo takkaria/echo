@@ -138,17 +138,23 @@ $f3->route('GET /event/add', function($f3) {
 });
 
 $f3->route('POST /event/add', function($f3) {
+	admin_check(FALSE);
 	spam_check();
 	readonly_check();
 
+	$admin = $f3->get('admin');
+
 	$event = new Event();
 	$messages = $event->parse_form_data();
-	$event->state = "submitted";
 
 	if (count($messages) > 0) {
 		$event->set_form_data();
 		$f3->set('messages', $messages);
 		echo Template::instance()->render("event_add.html");
+	} else if ($admin) {
+		$event->state = "approved";
+		$event->save();
+		$f3->reroute("/?msg=Event+added+and+approved.");
 	} else {
 		// Check user isn't banned
 		$banned = User::isbanned($event->email);
@@ -157,6 +163,7 @@ $f3->route('POST /event/add', function($f3) {
 			die;
 		}
 
+		$event->state = "submitted";
 		$event->generate_key();
 		$event->save();
 		$event->send_confirm_mail();

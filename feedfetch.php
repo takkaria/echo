@@ -99,16 +99,21 @@ function summary_from_content($content) {
 	return $content;
 }
 
-function find_image($content) {
-	if (!$content) return;
+function get_image($post) {
+	if ($content = $post->get_content(true)) {
+		// find an image
+		$html = str_get_html($content);
+		$img = $html->find('img', 0);
 
-	// find an image
-	$html = str_get_html($content);
-	$img = $html->find('img', 0);
+		// Filter out annoying 'Comment:' images or blogspot trackers
+		if ($img && !preg_match('/(comments|tracker)/', $img)) {
+			return $img->src;
+		}
+	}
 
-	// Filter out annoying 'Comment:' images or blogspot trackers
-	if ($img && !preg_match('/(comments|tracker)/', $img)) {
-		return $img->src;
+	if ($e = $post->get_enclosure()) {
+		if (strstr($e->get_type(), "image/"))
+			return $e->get_link();
 	}
 }
 
@@ -148,7 +153,7 @@ function fetch_feed($db, $url) {
 			':title' => $title,
 			':link' => $post->get_permalink(),
 			':date' => $post->get_gmdate("Y-m-d H:i"),
-			':image' => find_image($post->get_content(true)),
+			':image' => get_image($post),
 			':summary' => $summary,
 			':content' => $content_mineable,
 			':eventish' => $eventish

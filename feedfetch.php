@@ -10,6 +10,29 @@ $f3 = require 'lib/fatfree/base.php';
 require_once 'lib/simplepie_1.3.compiled.php';
 require_once 'lib/simple_html_dom.php';
 
+function eventish($s) {
+	$result = [];
+	$regexes = [
+		"time" => [
+			"/\d?\d([ap]m)/",
+			"/\d?\d[\.:]\d\d/"
+		],
+		"date" => [
+			"/\d?\d(th|rd|nd)/",
+			"/(Jan|Feb|Mar|May|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)/",
+			"/(Mon|Tue|Wed|Thu|Fri|Sat|Sun)/"
+		]
+	];
+
+	foreach ($regexes as $key => $list) {
+		$result[$key] = 0;
+		foreach ($list as $expr)
+			$result[$key] += preg_match_all($expr, $s);
+	}
+
+	return $result['time'] && $result['date'];
+}
+
 function deentity($text) {
 	// First nuke non-breaking spaces
 	$text = preg_replace("/&nbsp;/", " ", $text);
@@ -110,6 +133,9 @@ function fetch_feed($db, $url) {
 		if ($title != $title2)
 			$title = ucwords(strtolower($title2));
 
+		$content_mineable = deentity(strip_tags($post->get_content(true)));
+		$eventish = eventish($content_mineable);
+
 		$summary = $post->get_description(true);
 		if ($summary)
 			$summary = trim_summary(deentity($summary));
@@ -123,16 +149,21 @@ function fetch_feed($db, $url) {
 			':link' => $post->get_permalink(),
 			':date' => $post->get_gmdate("Y-m-d H:i"),
 			':image' => find_image($post->get_content(true)),
-			':summary' => $summary
+			':summary' => $summary,
+			':content' => $content_mineable,
+			':eventish' => $eventish
 		);
 
 		if ($debug) {
-			echo $title . "\n";
-			echo $summary . "\n";
-			echo "\n=====================\n";
+			if ($eventish) {
+				echo $title . "\n";
+				echo strip_tags($post->get_content(true)) . "\n";
+				echo "Likely to be an event\n";
+				echo "\n=====================\n";
+			}
 		}
 
-		$db->exec('INSERT OR IGNORE INTO POSTS ( feed_url, id, title, link, date, image, summary ) VALUES ( :feed_url, :id, :title, :link, :date, :image, :summary );', $dbstore);
+		$db->exec('INSERT OR IGNORE INTO POSTS ( feed_url, id, title, link, date, image, summary, content, eventish ) VALUES ( :feed_url, :id, :title, :link, :date, :image, :summary, :content, :eventish );', $dbstore);
 	}
 
 }

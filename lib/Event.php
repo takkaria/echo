@@ -63,6 +63,10 @@ class Event {
 			"time1" => function($value) use(&$self, &$messages) {
 				$time = date_parse_from_format("H:i", $value);
 				if ($time['error_count'] > 0)
+					$time = date_parse_from_format("H:ia", $value);
+				if ($time['error_count'] > 0)
+					$time = date_parse_from_format("Ha", $value);
+				if ($time['error_count'] > 0)
 					$messages[] = "Invalid start time.";
 				if ($self->startdt)
 					$self->startdt->setTime($time['hour'], $time['minute']);
@@ -220,11 +224,11 @@ class Event {
 	
 	public function set_form_data() {
 		global $f3;
-		$f3->mset(array(
+		$f3->mset([
 			'title' => $this->title,
 			'location' => $this->location,
-			'date1' => $this->startdt->format("l j F"),
-			'time1' => $this->startdt->format("H:i"),
+			'date1' => $this->startdt ? $this->startdt->format("l j F") : NULL,
+			'time1' => $this->startdt ? $this->startdt->format("H:i") : NULL,
 			'date2' => $this->enddt ? $this->enddt->format("l j F") : NULL,
 			'time2' => $this->enddt ? $this->enddt->format("H:i") : NULL,
 			'blurb' => $this->blurb,
@@ -233,7 +237,7 @@ class Event {
 			'cost' => $this->cost,
 			'film' => $this->film,
 			'email' => $this->email,
-		));
+		]);
 	}
 }
 

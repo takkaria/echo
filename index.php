@@ -273,6 +273,58 @@ $f3->route('POST /posts/purge', function($f3) {
 	$f3->reroute("/admin?msg=Purged.");
 });
 
+$f3->route('GET /posts/eventish', function($f3) {
+	admin_check();
+	$posts = Feeds::load("eventish = 1 ORDER BY date DESC");
+
+	function eventish($s) {
+		$times = [
+			"/\d?\d[\.:]\d\d([ap]m)?/",
+			"/\d?\d([ap]m)/"
+		];
+
+		$dates = [
+			"/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)/",
+			"/(\d?\d)(th|rd|nd)/",
+		];
+
+		$time = [];
+		foreach ($times as $expr) {
+			if (preg_match($expr, $s, $matches))
+				$time[] = $matches[0];
+		}
+
+		$date = [];
+		foreach ($dates as $expr) {
+			if (preg_match($expr, $s, $matches))
+				$date[] = $matches[1];
+		}
+
+		if (preg_match("/(January|February|March|May|April|June|July|August|September|October|November|December)/", $s, $matches))
+			$date[] = $matches[0];
+		else if (preg_match("/(Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)/", $s, $matches))
+			$date[] = $matches[0];
+
+		$return = [
+			'time' => '',
+			'date' => ''
+		];
+
+		if (isset($time[0])) $return['time'] = $time[0];
+		if (isset($date[0])) $return['date'] = join(" ", $date);
+
+		return $return;
+	}
+
+	foreach ($posts as &$post) {
+		$post['event'] = eventish($post['content']);
+		$post['summary'] = preg_replace('/\s{2,}/', ' ', trim($post['summary']));
+	}
+
+	$f3->set('posts', $posts);
+	echo Template::instance()->render("posts.html");
+});
+
 /***********************/
 /**** Editing posts ****/
 /***********************/
@@ -439,7 +491,10 @@ $f3->route('GET /admin', function($f3) {
 	$r = Feeds::$db->exec('SELECT count(*) AS count FROM posts');
 	$feed_info['posts'] = $r[0]['count'];
 
-	$r = Feeds::$db->exec('SELECT count(*) AS count FROM posts WHERE date < date("now", "-1 month")');
+	$r = Feeds::$db->exec('SELECT count(*) AS count FROM posts WHERE eventish=1');
+	$feed_info['posts_eventish'] = $r[0]['count'];
+
+	$r = Feeds::$db->exec('SELECT count(*) AS count FROM posts WHERE date < date("now", "-2 month")');
 	$feed_info['old_posts'] = $r[0]['count'];
 
 	$f3->set("feeds", $feed_info);

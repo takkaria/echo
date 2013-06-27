@@ -6,6 +6,7 @@ CREATE TABLE posts (
 	summary TEXT,
 	image TEXT,	 /* this is an URL... maybe make it a data: link? */
 	feed_url TEXT,
+	eventish BOOLEAN,
 	hidden INTEGER
 );
 

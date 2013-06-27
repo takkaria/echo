@@ -27,7 +27,8 @@
 <li><a href="{{@baseurl}}/feeds">{{@feeds.feeds}} feeds</a>
 <li>{{@feeds.posts}} posts
 <ul>
-<li>with {{@feeds.old_posts}} of those posts over 1 month old
+	<li><a href="{{@baseurl}}/posts/eventish">{{@feeds.posts_eventish}} which might be events</a>
+	<li>{{@feeds.old_posts}} over two months old
 </ul>
 <li><form action="{{@baseurl}}/posts/purge" method="POST"><b>Purge posts</b> older than <input type="number" name="months"> months <input type="submit" value="Purge"></form>
 </ul>

@@ -56,6 +56,8 @@ $f3->set('formatdate', function($date) {
 		return "Today";
 	else if ($diff == 1)
 		return "Tomorrow";
+	else if ($diff < 5)
+		return "This " . $event->format('l');
 	else
 		return $event->format($format);
 });

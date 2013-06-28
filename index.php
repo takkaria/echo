@@ -369,9 +369,19 @@ $f3->route('POST /post/hide', function($f3) {
 	readonly_check();
 
 	$values = array(":id" => $_GET['id']);
-	Feeds::$db->exec("UPDATE posts SET hidden=1 WHERE id=:id", $values, 0, 'feeds');
+	Feeds::$db->exec("UPDATE posts SET hidden=1 WHERE id=:id", $values);
 
 	$f3->reroute("/?msg=Hidden!");
+});
+
+$f3->route('POST /post/not-event', function($f3) {
+	admin_check();
+	readonly_check();
+
+	$values = array(":id" => $_GET['id']);
+	Feeds::$db->exec("UPDATE posts SET eventish=0 WHERE id=:id", $values);
+
+	echo "Marked as not an event.";
 });
 
 /****************/

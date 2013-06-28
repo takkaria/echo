@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<title>{{@appname}} :: Posts</title>
+<include href="_stylesheets.html" />
+
+<body>
+<include href="_header.html" />
+
+<section>
+<h2>Posts that might be events</h2>
+
+<ul>
+<repeat group="{{@posts}}" key="{{@i}}" value="{{@post}}">
+<li style="clear: both">
+<h4><a href="{{@post.link}}" class="more">{{@post.title}}</a></h4>
+<p class="date"><check if="{{@post.feed.site}}"><a href="{{@post.feed.site}}">{{@post.feed.title}}</a>, </check>
+{{@formatdate(@post.date)}}</p>
+<p class="desc">{{@post.summary}}
+
+<div class="admin">
+	<form action="{{@baseurl}}/post/not-event/?id={{urlencode(@post.id)}}" method="POST">
+		<input class="ajax" type="submit" value="Mark as not event"></form>
+
+	<form action="{{@baseurl}}/event/add" method="POST">
+		<input type="hidden" name="title" value="{{@post.title}}">
+		<input type="hidden" name="time1" value="{{@post.event.time}}">
+		<input type="hidden" name="date1" value="{{@post.event.date}}">
+		<input type="hidden" name="url" value="{{@post.link}}">
+		<input type="hidden" name="blurb" value="{{@post.summary}}">
+
+		<input type="submit" value="Make event">
+	</form>
+</div>
+</repeat>
+</ul>
+</section>
+
+<include href="_footer.html" />

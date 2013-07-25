@@ -6,7 +6,7 @@
 /** Fonts **/
 html, input, textarea { font-size: 11pt; line-height: 1.25; font-family: Arial; word-spacing: -0.1em; }
 header, h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', Arial;  }
-a { text-decoration: none; color: blue; }
+a { text-decoration: none; color: rgb(0, 39, 241); }
 a:hover { text-decoration: underline; }
 
 h1 { font-size: 32px; }
@@ -116,7 +116,7 @@ section {
 }
 
 .event {
-	margin-bottom: 1em;
+	margin-bottom: 2em;
 
 	span { display: block; }
 	.time { float: left; }
@@ -168,7 +168,7 @@ section {
 /* Individual pages */
 
 #index {
-	h2 { text-align: center; letter-spacing: 2px; font-size: 100%; }
+	h2 { text-align: left; letter-spacing: 2px; font-size: 120%; }
 
 	@media (min-width: 800px) {
 		#news { @include column(5); font-size: 90%; } //margin-left: 0; }

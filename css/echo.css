@@ -10,7 +10,7 @@ html, input, textarea { font-size: 11pt; line-height: 1.25; font-family: Arial; 
 
 header, h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', Arial; }
 
-a { text-decoration: none; color: blue; }
+a { text-decoration: none; color: #0027f1; }
 
 a:hover { text-decoration: underline; }
 
@@ -76,7 +76,7 @@ section { display: inline; float: left; width: 95.01587%; margin: 0 0.99206%; pa
 @media (min-width: 800px) { section { box-shadow: 0 0 20px #ccc; } }
 section .sublinks { margin: -18px 0 0 0; text-align: right; }
 
-.event { margin-bottom: 1em; }
+.event { margin-bottom: 2em; }
 .event span { display: block; }
 .event .time { float: left; }
 .event .title { font-weight: bold; }
@@ -110,7 +110,7 @@ section .sublinks { margin: -18px 0 0 0; text-align: right; }
 .toc b { display: block; margin-bottom: 5px; margin-left: -20px; font-size: 110%; }
 
 /* Individual pages */
-#index h2 { text-align: center; letter-spacing: 2px; font-size: 100%; }
+#index h2 { text-align: left; letter-spacing: 2px; font-size: 120%; }
 @media (min-width: 800px) { #index #news { display: inline; float: left; width: 36.68254%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; font-size: 90%; }
   #index #events { display: inline; float: left; width: 53.34921%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; } }
 @media (max-width: 800px) { #index #events { border-top: 2px solid black; } }

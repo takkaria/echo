@@ -1,9 +1,21 @@
 <div class="event">
 
-<span class="time"><check if="!{{@event->enddt}}">{{@event->startdt->format("H:i")}}</check></span>
+<span class="time">
+	<check if="!{{@event->enddt}}">{{@event->startdt->format("H:i")}}</check>
+</span>
 
 <div class="block">
-<h4 class="title"><F3:check if="{{@event->film}}"><img src="{{@baseurl}}/img/film.png" alt="Film showing: "></F3:check> {{@event->title}}</h4>
+<h4 class="title">
+	<F3:check if="{{@event->film}}"><img src="{{@baseurl}}/img/film.png" alt="Film showing"></F3:check>
+
+	<F3:check if="{{@event->url}}&&{{!@facebook(@event->url)}}"><a href="{{@event->url}}"></F3:check>
+	{{@event->title}}
+	<F3:check if="{{@event->url}}&&{{!@facebook(@event->url)}}"></a></F3:check>
+
+	<F3:check if="{{@event->url}}&&{{@facebook(@event->url)}}">
+	<a href="{{@event->url}}" class="fb">Facebook</a>
+	</F3:check>
+</h4>
 
 <span class="location">
 <F3:check if="{{@event->location->in_db}}">
@@ -23,15 +35,6 @@
 </F3:check>
 {{@event->blurb}}
 </p>
-
-<F3:check if="{{@event->url}}">
-<span class="more">
-	<F3:check if="{{@facebook(@event->url)}}">
-	<F3:true><a href="{{@event->url}}" class="fb">Facebook event</a></F3:true>
-	<F3:false><a href="{{@event->url}}">more info</a></F3:false>
-	</F3:check>
-</span>
-</F3:check>
 
 <F3:include href="event_admin.html" />
 

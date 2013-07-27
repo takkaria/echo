@@ -71,6 +71,8 @@ p.msg img { padding-right: 1em; }
 
 header .content { padding-left: 10px; }
 
+body.thin .content { max-width: 800px; }
+
 /* Sections are used to contain page content */
 section { display: inline; float: left; width: 95.01587%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; background-color: white; margin-bottom: 2em; padding-top: 10px; padding-bottom: 10px; }
 @media (min-width: 800px) { section { box-shadow: 0 0 20px #ccc; } }

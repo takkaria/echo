@@ -3,11 +3,12 @@
 <F3:include href="_stylesheets.html" />
 <F3:include href="_header.html" />
 
+<body class='thin'>
 <section id="eventlist">
-<h2>Events</h2>
-<p class="sublinks"><a href="event/add">add your own event</a>
+<h2 style="text-align: center; margin-bottom: 1em;">Events</h2>
+<p class="sublinks"><a href="event/add">Add your own event</a>
 
-<div style="max-width: 45em;">
+<div style="max-width: 45em; margin: 0 auto;">
 <F3:repeat group="{{@group_events()}}" key="{{@day}}" value="{{@events}}">
 
 <h4 class="date">{{@formatdate(@day, 'l jS')}}</h4>

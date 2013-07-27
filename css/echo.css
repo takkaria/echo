@@ -91,7 +91,7 @@ section .sublinks { margin: -24px 0 0 0; text-align: right; font-size: 90%; line
 .event + * { clear: both; }
 
 .post { margin: 1em 0 1em 0; clear: both; margin-top: 0.5em; margin-bottom: 1.5em; }
-.post h4 { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
+.post h4 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
 .post img { float: right; padding: 1px 2px 2px 10px; }
 .post p { margin: 0; }
 .post .more { font-style: italic; }
@@ -113,6 +113,7 @@ section .sublinks { margin: -24px 0 0 0; text-align: right; font-size: 90%; line
 
 /* Individual pages */
 #index h2 { text-align: left; letter-spacing: 2px; font-size: 140%; }
+#index #news .post { margin-top: 1.5em; }
 @media (min-width: 800px) { #index #news { display: inline; float: left; width: 40.84921%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; }
   #index #events { display: inline; float: left; width: 45.01587%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; margin-left: 5.15873%; } }
 @media (max-width: 800px) { #index #events { border-top: 2px solid black; } }

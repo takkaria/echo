@@ -137,7 +137,7 @@ section {
 	margin: 1em 0 1em 0; clear: both;
 	margin-top: 0.5em; margin-bottom: 1.5em;
 
-	h4 { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
+	h4 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
 	img { float: right; padding: 1px 2px 2px 10px; }
 	p { margin: 0; }
 	.more { font-style: italic; }
@@ -171,6 +171,8 @@ section {
 
 #index {
 	h2 { text-align: left; letter-spacing: 2px; font-size: 140%; }
+
+	#news .post { margin-top: 1.5em; }
 
 	@media (min-width: 800px) {
 		#news { @include column(5.5); } //margin-left: 0; }

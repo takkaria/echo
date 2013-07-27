@@ -4,10 +4,10 @@
 *, body, h1, h2, h3, h4, h5, h6 { margin: 0; }
 
 /** Fonts **/
-html, input, textarea { font-size: 11pt; line-height: 1.25; font-family: Arial; word-spacing: -0.1em; }
-header, h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', Arial;  }
-a { text-decoration: none; color: rgb(0, 39, 241); }
-a:hover { text-decoration: underline; }
+html, input, textarea { font-size: 14px; line-height: 1.3; font-family: "Helvetica Neue", Helvetica, Arial; word-spacing: -0.1em; }
+header, h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', Arial; line-height: 1.2; }
+a { text-decoration: none; color: rgb(34, 68, 243); }
+a:hover { text-decoration: none; background: #ddd; }
 
 h1 { font-size: 32px; }
 h2 { font-size: 24px; }
@@ -112,7 +112,7 @@ section {
 		box-shadow: 0 0 20px #ccc;
 	}
 
-	.sublinks { margin: -18px 0 0 0; text-align: right; }
+	.sublinks { margin: -24px 0 0 0; text-align: right; font-size: 90%; line-height: 1.6;}
 }
 
 .event {
@@ -168,11 +168,11 @@ section {
 /* Individual pages */
 
 #index {
-	h2 { text-align: left; letter-spacing: 2px; font-size: 120%; }
+	h2 { text-align: left; letter-spacing: 2px; font-size: 140%; }
 
 	@media (min-width: 800px) {
-		#news { @include column(5); font-size: 90%; } //margin-left: 0; }
-		#events { @include column(7); } //margin-right: 0; }
+		#news { @include column(5.5); } //margin-left: 0; }
+		#events { @include column(6); @include push(0.5) } //margin-right: 0; }
 	}
 
 	@media (max-width: 800px) {

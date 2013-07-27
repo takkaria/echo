@@ -172,7 +172,7 @@ section {
 #index {
 	h2 { text-align: left; letter-spacing: 2px; font-size: 140%; }
 
-	#news .post { margin-top: 1.5em; }
+	#news .sublinks { margin-bottom: 30px; }
 
 	@media (min-width: 800px) {
 		#news { @include column(5.5); } //margin-left: 0; }

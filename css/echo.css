@@ -113,7 +113,7 @@ section .sublinks { margin: -24px 0 0 0; text-align: right; font-size: 90%; line
 
 /* Individual pages */
 #index h2 { text-align: left; letter-spacing: 2px; font-size: 140%; }
-#index #news .post { margin-top: 1.5em; }
+#index #news .sublinks { margin-bottom: 30px; }
 @media (min-width: 800px) { #index #news { display: inline; float: left; width: 40.84921%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; }
   #index #events { display: inline; float: left; width: 45.01587%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; margin-left: 5.15873%; } }
 @media (max-width: 800px) { #index #events { border-top: 2px solid black; } }

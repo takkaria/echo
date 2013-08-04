@@ -686,6 +686,8 @@ if ($f3->get('DEBUG') != 0) {
 	}
 );
 
+ini_set("zlib.output_compression", "On");
+
 try {
 	$f3->run();
 } catch (Exception $e) {

@@ -2,6 +2,23 @@
 <title>{{@appname}} :: {{@venue->name}}</title>
 <F3:include href="_stylesheets.html" />
 
+<body class="thin">
+<F3:include href="_header.html" />
+
+<section id="venue">
+<div id="map_canvas" style="float: right; width: 400px; height: 500px"></div>
+
+<h2>{{@venue->name}}</h2>
+<p>{{@comma2br(@venue->address)}}<br>
+{{@venue->postcode}}</p>
+
+<p class="info">{{@venue->info}}
+
+<!-- XXX upcoming events? -->
+</section>
+
+<F3:include href="_footer.html" />
+
 <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript">
 var mapOptions = {
@@ -31,20 +48,3 @@ $(function() {
 });
 
 </script>
-
-<body class="thin">
-<F3:include href="_header.html" />
-
-<section id="venue">
-<div id="map_canvas" style="float: right; width: 400px; height: 500px"></div>
-
-<h2>{{@venue->name}}</h2>
-<p>{{@comma2br(@venue->address)}}<br>
-{{@venue->postcode}}</p>
-
-<p class="info">{{@venue->info}}
-
-<!-- XXX upcoming events? -->
-</section>
-
-<F3:include href="_footer.html" />

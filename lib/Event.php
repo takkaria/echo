@@ -41,6 +41,12 @@ class Event {
 		$this->email = $r['email'];
 		$this->key = $r['key'];
 	}
+
+	public function multiday() {
+		if (!$this->enddt) return FALSE;
+		$interval = $this->startdt->diff($this->enddt);
+		return $interval->d >= 1;
+	}
 	
 	public function parse_form_data() {
 		$messages = array();

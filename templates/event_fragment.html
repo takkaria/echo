@@ -1,7 +1,7 @@
 <div class="event">
 
 <span class="time">
-	<check if="!{{@event->enddt}}">{{@event->startdt->format("H:i")}}</check>
+	<check if="!{{@event->multiday()}}">{{@event->startdt->format("H:i")}}</check>
 </span>
 
 <div class="block">
@@ -24,7 +24,7 @@
 </F3:check>
 </span>
 
-<check if="{{@event->enddt}}">
+<check if="{{@event->multiday()}}">
 	<p class="multi">Starts <b>{{@event->startdt->format("l d F")}}</b> and ends <b>{{@event->enddt->format("l d F")}}</b>.</p>
 </check>
 

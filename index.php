@@ -184,7 +184,7 @@ $f3->route('GET /event/@id [ajax]', function($f3) {
 	catch (Exception $e) { $f3->error(404); }
 
 	$f3->set("event", $event);
-	echo Template::instance()->render("event_box.html");
+	echo Template::instance()->render("_event_box.html");
 });
 
 $f3->route('GET /event/@id', function($f3) {
@@ -388,15 +388,6 @@ $f3->route('POST /post/not-event', function($f3) {
 /**** Venues ****/
 /****************/
 
-$f3->route('GET /venues', function($f3) {
-	$f3->set("venues", Events::$db->exec(
-		"SELECT location AS name, count(location) AS count ".
-		"FROM events WHERE location != CAST(location AS INTEGER)".
-		"GROUP BY location ORDER BY count DESC;"));
-
-	echo Template::instance()->render("venues.html");
-});
-
 $f3->route('GET /venue/@id', function($f3) {
 	$v = new Venue(intval($f3->get('PARAMS.id')));
 	$f3->set("venue", $v);
@@ -436,7 +427,7 @@ $f3->route('GET /feeds', function($f3) {
 	admin_check();
 
 	$f3->set('feeds', Feeds::getlist());
-	echo Template::instance()->render("feeds.html");
+	echo Template::instance()->render("admin_feeds.html");
 });
 
 $f3->route('POST /feeds/add', function($f3) {
@@ -577,6 +568,15 @@ $f3->route('GET /admin/logout', function($f3) {
 	session_destroy();
 
 	$f3->reroute("/");
+});
+
+$f3->route('GET /admin/venues', function($f3) {
+	$f3->set("venues", Events::$db->exec(
+		"SELECT location AS name, count(location) AS count ".
+		"FROM events WHERE location != CAST(location AS INTEGER)".
+		"GROUP BY location ORDER BY count DESC;"));
+
+	echo Template::instance()->render("admin_venues.html");
 });
 
 

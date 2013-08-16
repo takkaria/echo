@@ -10,8 +10,8 @@
 <p class="sublinks"><a href="{{@baseurl}}/about#addnews">(want yours here?)</a></p>
 
 <repeat group="{{@posts}}" key="{{@i}}" value="{{@post}}">
-<include if="@i < 7" href="post.html" />
-<include if="@i >= 7" href="shortpost.html" />
+<include if="@i < 7" href="_post.html" />
+<include if="@i >= 7" href="_post_short.html" />
 </repeat>
 </section>
 

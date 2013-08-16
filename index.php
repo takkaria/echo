@@ -170,8 +170,7 @@ $f3->route('POST /event/add', function($f3) {
 
 		global $options;
 
-		// XXX This is a hack until we have something better
-		mail($options['general']['notify'], "New Echo event", "As above.", "From: " . $options['general']['email']);
+		User::notify_all();
 
 		// XXX How about sending the user to a special 'event added' page?
 		$f3->reroute("/?msg=Event+submitted.+Please+check+your+email.");
@@ -577,6 +576,78 @@ $f3->route('GET /admin/venues', function($f3) {
 		"GROUP BY location ORDER BY count DESC;"));
 
 	echo Template::instance()->render("admin_venues.html");
+});
+
+$f3->route('GET /admin/users', function($f3) {
+	$f3->set("users", Events::$db->exec("SELECT * FROM users"));
+
+	echo Template::instance()->render("admin_users.html");
+});
+
+$f3->route('POST /admin/users', function($f3) {
+	admin_check();
+	$user = $_POST['user'];
+
+	switch ($_POST['what']) {
+		case 'update_notify': {
+			$notify = isset($_POST['notify']) ? true : false;
+			if (!User::set_notify($user, $notify))
+				$f3->error(500);
+			break;
+		}
+
+		case 'reset_password': {
+			User::reset_password($user);
+			break;
+		}
+
+		case 'update_rights': {
+			if (User::rights($_SESSION['email']) == "admin")
+				User::set_rights($user, $_POST['rights']);
+			else
+				$f3->error(500);
+			break;
+		}
+
+		case 'new_user': {
+			User::new_user($user, $_POST['rights']);
+			break;
+		}
+
+		default: {
+			echo "Error";
+		}
+	}
+
+	$f3->reroute("/admin/users");
+});
+
+$f3->route('GET /p/@key', function($f3) {
+	$key = $f3->get('PARAMS.key');
+	$user = User::find_pwreset($key);
+	if (!$user)
+		$f3->error(404);
+
+	$f3->set('email', $user);
+
+	echo Template::instance()->render('password.html');
+});
+
+$f3->route('POST /p/@key', function($f3) {
+	$key = $f3->get('PARAMS.key');
+	$user = User::find_pwreset($key);
+	if (!$user)
+		$f3->error(404);
+
+	$pw = $_POST['password'];
+	$pw2 = $_POST['password2'];
+	if ($pw != $pw2)
+		$f3->reroute("/p/" . $key);
+
+	User::new_password($user, $pw);
+
+	$message = "Done, thanks";
+	$f3->reroute("/?msg=" . urlencode($message));
 });
 
 

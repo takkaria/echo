@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<title>{{@appname}} :: User management</title>
+<F3:include href="_stylesheets.html" />
+
+<body class="thin">
+<F3:include href="_header.html" />
+
+<section>
+<h2 style="padding-bottom: 10px">User management</h2>
+
+<table>
+<tr>
+<th>Email address
+<th>Rights
+<th>Notifications
+<th>Password
+
+<F3:repeat group="{{@users}}" value="{{@user}}">
+<tr>
+<td><b>{{@user.email}}</b>
+
+<td>
+<form method="POST" action="?">
+	<input type="hidden" name="user" value="{{@user.email}}">
+	<input type="hidden" name="what" value="update_rights">
+	<input type="radio" name="rights" value='admin' {{@user.rights=="admin"?"checked":""}}> Administrator<br>
+	<input type="radio" name="rights" value='editor' {{@user.rights=="editor"?"checked":""}}> Editor
+	<input type="submit" value="Update">
+</form>
+
+<td>
+<form method="POST" action="?">
+	<input type="hidden" name="user" value="{{@user.email}}">
+	<input type="hidden" name="what" value="update_notify">
+	<input type="checkbox" name="notify" {{@user.notify?"checked":""}} class="aax"> Notify new events
+	<input type="submit" value="Update">
+</form>
+
+<td>
+<form method="POST" action="?">
+	<input type="hidden" name="user" value="{{@user.email}}">
+	<input type="hidden" name="what" value="reset_password">
+	<input type="submit" value="Reset password" class="aax">
+</form>
+
+</f3:repeat>
+
+</table>
+
+<p>&nbsp;
+
+<h3>Add a user</h3>
+
+<form method="POST" action="?">
+
+<input type="hidden" name="what" value="new_user">
+
+<fieldset>
+<label class="left" for="name">Email address:</label>
+<input class="right" type="text" name="user">
+</fieldset>
+
+<fieldset>
+<label class="left" for="address">Rights:</label>
+<div class="right">
+	<input type="radio" name="rights" value='admin'> Administrator<br>
+	<input type="radio" name="rights" value='editor' checked> Editor
+</div>
+</fieldset>
+
+<input type="submit" value="Add user">
+</form>
+</section>
+
+<F3:include href="_footer.html" />

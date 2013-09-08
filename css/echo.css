@@ -131,7 +131,7 @@ section .sublinks { margin: -24px 0 0 0; text-align: right; font-size: 90%; line
 #event_add .count, #venue_add .count { font-size: 80%; text-align: right; }
 #event_add .overcount, #venue_add .overcount { color: red; }
 #event_add .time, #venue_add .time { width: 3em; }
-#event_add .date, #venue_add .date { width: 14em; cursor: pointer; background-image: url(../img/calendar.png); background-repeat: no-repeat; background-position: 98% 50%; }
+#event_add .hasDatepicker, #venue_add .hasDatepicker { width: 14em; cursor: pointer; background-image: url(../img/calendar.png); background-repeat: no-repeat; background-position: 98% 50%; }
 #event_add .film, #venue_add .film { background-image: url(../img/film.png); background-repeat: no-repeat; background-position: 5px 7px; text-indent: 22px; }
 #event_add #venues, #venue_add #venues { margin-bottom: 10px; margin-top: -10px; font-size: 80%; width: 600px; float: right; }
 #event_add #venues.empty, #venue_add #venues.empty { color: #bbb; }

@@ -9,16 +9,29 @@ class User
 	}
 
 	/** Utilities **/
-	static function notify_all() {
+	static function notify_all($event) {
 		global $options;
+		global $f3;
+
+		$f3->set("event", $event);
+		$f3->set("domain", $options['web']['domain']);
+		$f3->set('admin', FALSE);
 
 		$r = User::$db->exec("SELECT email FROM users WHERE notify=1");
 		foreach ($r as $user) {
 			$email = $user['email'];
-			mail($options['general']['notify'],
-				"New Echo event",
-				"There has been a new Echo event.  Please go to http://{{@domain}}{{@baseurl}}/events/unapproved to approve it.",
-				"From: " . $options['general']['email']);
+
+			// To send HTML mail, the Content-type header must be set
+			$headers = 'MIME-Version: 1.0' . "\r\n";
+			$headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+			$headers .= "From: " . $options['general']['email'] . "\r\n";
+
+			$result = mail($email,
+				"New Echo event: " . $event->title,
+				Template::instance()->render('event_notify_email.txt', 'text/html'),
+				$headers);
+
+			var_dump($result);
 		}
 	}
 

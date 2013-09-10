@@ -170,7 +170,7 @@ $f3->route('POST /event/add', function($f3) {
 
 		global $options;
 
-		User::notify_all();
+		User::notify_all($event);
 
 		// XXX How about sending the user to a special 'event added' page?
 		$f3->reroute("/?msg=Event+submitted.+Please+check+your+email.");
@@ -545,6 +545,7 @@ $f3->route('POST /admin/login', function($f3) {
 	session_start();
 	$_SESSION['admin'] = TRUE;
 	$_SESSION['email'] = $r['email'];
+	$_SESSION['rights'] = $r['rights'];
 	session_commit();
 
 	$f3->reroute("/admin");
@@ -579,6 +580,10 @@ $f3->route('GET /admin/venues', function($f3) {
 });
 
 $f3->route('GET /admin/users', function($f3) {
+	admin_check();
+	if ($_SESSION['rights'] != "admin")
+		$f3->reroute("/admin");
+
 	$f3->set("users", Events::$db->exec("SELECT * FROM users"));
 
 	echo Template::instance()->render("admin_users.html");
@@ -586,6 +591,9 @@ $f3->route('GET /admin/users', function($f3) {
 
 $f3->route('POST /admin/users', function($f3) {
 	admin_check();
+	if ($_SESSION['rights'] != "admin")
+		$f3->reroute("/admin");
+
 	$user = $_POST['user'];
 
 	switch ($_POST['what']) {
@@ -602,10 +610,7 @@ $f3->route('POST /admin/users', function($f3) {
 		}
 
 		case 'update_rights': {
-			if (User::rights($_SESSION['email']) == "admin")
-				User::set_rights($user, $_POST['rights']);
-			else
-				$f3->error(500);
+			User::set_rights($user, $_POST['rights']);
 			break;
 		}
 

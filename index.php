@@ -672,7 +672,8 @@ $f3->route('GET /embed', function($f3) {
 $f3->route('GET /icalendar', function($f3) {
 	$where = "startdt >= date('now', 'start of day') AND state == 'approved'";
 	$f3->set('events', Events::load($where));
-	echo Template::instance()->render("ical.txt");
+	$f3->set('ESCAPE', FALSE);
+	echo Template::instance()->render("ical.txt", 'text/plain');
 });
 
 $f3->route('GET /json', function($f3) {

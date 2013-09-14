@@ -22,6 +22,12 @@ $f3->set('group_events', function() {
 	return $final;
 });
 
+// Format some text appropriately for iCal text fields
+$f3->set('icalendarise', function($text) {
+	$text = preg_replace("/[\s]+/x", " ", $text);
+	return preg_replace("/([,;])/", "\\\\\\1", $text);
+});
+
 // Format a nice prettily for the events listing
 $f3->set('formatdate', function($date) {
 	if ($date == 'Ongoing')

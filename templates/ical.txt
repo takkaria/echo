@@ -11,9 +11,9 @@ BEGIN:VEVENT
 UID:{{@event->id}}@echomanchester.net
 SUMMARY:{{@event->title}}
 
-DESCRIPTION:{{@event->blurb}}
+DESCRIPTION:{{@icalendarise(@event->blurb)}}
 
-LOCATION:{{@event->location->short()}}
+LOCATION:{{@icalendarise(@event->location->short())}}
 <check if="{{@event->url}}">
 
 URL:{{@event->url}}

@@ -1,0 +1,20 @@
+
+
+<repeat group="{{@group_events()}}" key="{{@date}}" value="{{@events}}">
+	<p>{{@formatdate(@date)}}, 
+	<F3:repeat group="{{@events}}" value="{{@event}}">
+
+		{{@event->startdt->format("g:ia")}}<br>
+
+		<b>
+			<F3:check if="{{@event->film}}"><img src="{{@baseurl}}/img/film.png" alt="Film showing"></F3:check>
+			{{@event->title}}
+		</b>
+		<i>{{@event->location->short()}}</i><br>
+		<check if="{{@event->cost}}">{{@event->cost}}.</check> {{@event->blurb}}
+
+		<F3:check if="{{@event->url}}&&{{!@facebook(@event->url)}}"><u>{{@event->url}}</u></F3:check>
+		</p>
+	</F3:repeat>
+</repeat>
+

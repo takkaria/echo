@@ -669,6 +669,12 @@ $f3->route('GET /embed', function($f3) {
 /**** Other formats ****/
 /***********************/
 
+$f3->route('GET /leaflet', function($f3) {
+	$where = "startdt >= date('now', 'start of day') AND state == 'approved'";
+	$f3->set('events', Events::load($where));
+	echo Template::instance()->render("leaflet.html");
+});
+
 $f3->route('GET /icalendar', function($f3) {
 	$where = "startdt >= date('now', 'start of day') AND state == 'approved'";
 	$f3->set('events', Events::load($where));

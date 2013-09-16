@@ -29,7 +29,7 @@ $f3->set('icalendarise', function($text) {
 });
 
 // Format a nice prettily for the events listing
-$f3->set('formatdate', function($date) {
+$f3->set('formatdate', function($date, $relativise = TRUE) {
 	if ($date == 'Ongoing')
 		return $date;
 
@@ -38,6 +38,9 @@ $f3->set('formatdate', function($date) {
 	$format = 'l j F';	// This should be in the templates but for some reason F3 was screwing up with it
 
 	$diff = intval($today->diff($event)->format('%R%a'));
+
+	if (!$relativise)
+		return $event->format($format);
 
 	if ($diff < -35) { // 5 weeks
 		$n = intval(-$diff/31);
@@ -63,7 +66,7 @@ $f3->set('formatdate', function($date) {
 	else if ($diff == 1)
 		return "Tomorrow";
 	else if ($diff < 5)
-		return "This " . $event->format('l');
+		return $event->format('l');
 	else
 		return $event->format($format);
 });

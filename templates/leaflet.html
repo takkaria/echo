@@ -1,7 +1,7 @@
 
 
 <repeat group="{{@group_events()}}" key="{{@date}}" value="{{@events}}">
-	<p>{{@formatdate(@date)}}, 
+	<p>{{@formatdate(@date, FALSE)}}, 
 	<F3:repeat group="{{@events}}" value="{{@event}}">
 
 		{{@event->startdt->format("g:ia")}}<br>

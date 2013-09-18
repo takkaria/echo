@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<body>
+<p>Hi there!
+
+<p>There has been a new Echo event:
+
+<ul>
+<li><b> <F3:check if="{{@event->film}}">Film showing: </F3:check> {{@event->title}}</b>
+<check if="{{@event->url}}"><li><a href="{{@event->url}}">(more info)</a></check>
+<li>On: {{@event->startdt->format("l jS F H:i")}}
+<li>At: {{@event->location->short()}}
+<li>{{@event->blurb}}
+</ul>
+
+<p>Please go to <a href="http://{{@domain}}{{@baseurl}}/events/unapproved">http://{{@domain}}{{@baseurl}}/events/unapproved</a> to approve it.
+
+<p>- <b>The Echo Automaton</b>
+
+</body>
+</html>

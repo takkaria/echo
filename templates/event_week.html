@@ -1,4 +1,8 @@
-<h3>{{@formatdate(@day)}}</h3>
+<check if="{{@daysaway(@day)}} > 1 && {{@daysaway(@day)}} < 14">
+<true><h3>{{@formatdate(@day)}} <span class="daystime">(in {{@daysaway(@day)}} days)</span></h3></true>
+
+<false><h3>{{@formatdate(@day)}}</h3></false>
+</check>
 
 <F3:repeat group="{{@events}}" value="{{@event}}">
 <F3:include href="_event.html">

@@ -71,6 +71,17 @@ $f3->set('formatdate', function($date, $relativise = TRUE) {
 		return $event->format($format);
 });
 
+// Return how many days away a given date is
+$f3->set('daysaway', function($date) {
+	if ($date == 'Ongoing')
+		return 0;
+
+	$today = new DateTime("today"); // This gets the beginning of the day
+	$event = new DateTime($date);
+
+	return intval($today->diff($event)->format('%R%a'));
+});
+
 // Output 'value' attribute suitable for input tag if arg isn't null
 $f3->set('value', function($arg) {
 	if ($arg)

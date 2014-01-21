@@ -4,14 +4,14 @@
 $f3->set('group_events', function($ongoing = TRUE) {
 	global $f3;
 	$events = $f3->get('events');
-	$bydate = array();
+	$bydate = [];
 	foreach ($events as $e) {
 		$dt = clone $e->startdt;
 		$dtstamp = $dt->modify("today")->format("Y-m-d");
 		$bydate[$dtstamp][] = $e;
 	}
 
-	$final = array();
+	$final = [];
 	foreach ($bydate as $dtstamp => $list) {
 		if ($ongoing && new DateTime($dtstamp) < new DateTime("today")) {
 			$final['Ongoing'] = $list;

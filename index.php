@@ -382,7 +382,7 @@ $f3->route('GET /post/edit', function($f3) {
 	admin_check();
 	readonly_check();
 
-	$r = Feeds::$db->exec("SELECT id, title, summary FROM posts WHERE id=:id", array(":id" => $_GET['id']));
+	$r = Feeds::$db->exec("SELECT id, title, summary FROM posts WHERE id=:id", [ ":id" => $_GET['id'] ]);
 	$r = $r[0];
 
 	$f3->set('id', $r['id']);
@@ -396,10 +396,11 @@ $f3->route('POST /post/edit', function($f3) {
 	admin_check();
 	readonly_check();
 
-	$values = array(
+	$values = [
 		":id" => $_POST['id'],
 		":title" => $_POST['title'],
-		":summary" => $_POST['summary']);
+		":summary" => $_POST['summary']
+	];
 
 	Feeds::$db->exec("UPDATE posts SET title=:title, summary=:summary WHERE id=:id", $values);
 
@@ -410,7 +411,7 @@ $f3->route('POST /post/hide', function($f3) {
 	admin_check();
 	readonly_check();
 
-	$values = array(":id" => $_GET['id']);
+	$values = [ ":id" => $_GET['id'] ];
 	Feeds::$db->exec("UPDATE posts SET hidden=1 WHERE id=:id", $values);
 
 	$f3->reroute("/?msg=Hidden!");
@@ -420,7 +421,7 @@ $f3->route('POST /post/not-event', function($f3) {
 	admin_check();
 	readonly_check();
 
-	$values = array(":id" => $_GET['id']);
+	$values = [ ":id" => $_GET['id'] ];
 	Feeds::$db->exec("UPDATE posts SET eventish=0 WHERE id=:id", $values);
 
 	echo "Marked as not an event.";
@@ -508,12 +509,12 @@ $f3->route('GET /admin', function($f3) {
 	admin_check();
 
 	/** Retrieve event info **/
-	$events_info = array(
+	$events_info = [
 		"submitted" => 0,
 		"validated" => 0,
 		"approved" => 0,
 		"old" => 0
-	);
+	];
 
 	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state IS "submitted" OR state IS NULL');
 	$events_info['submitted'] = $r[0]['count'];
@@ -529,11 +530,11 @@ $f3->route('GET /admin', function($f3) {
 
 	$f3->set("events", $events_info);
 
-	$feed_info = array(
+	$feed_info = [
 		"feeds" => 0,
 		"posts" => 0,
 		"old_posts" => 0
-	);
+	];
 
 	$r = Feeds::$db->exec('SELECT count(*) AS count FROM feeds');
 	$feed_info['feeds'] = $r[0]['count'];
@@ -565,7 +566,7 @@ $f3->route('POST /admin/login', function($f3) {
 
 	/* Get the salt */
 	$result = Events::$db->exec("SELECT * FROM users WHERE email=:email",
-		array(':email' => $_POST['email']));
+		[ ':email' => $_POST['email'] ]);
 
 	/* No such user! */
 	if (sizeof($result) == 0) {
@@ -738,20 +739,19 @@ $f3->route('GET /json', function($f3) {
 		"startdt < datetime(". $endts .",'unixepoch')");
 	$f3->set('events', $e);
 
-	$events = array();
+	$events = [];
 	foreach ($e as $event) {
-		$insert = array(
+		$insert = [
 			'id' => $event->id,
 			'title' => $event->title,
 			'start' => $event->startdt->format('U'),
-		);
+		];
 		if ($event->enddt)
 			$insert['end'] = $event->enddt->format('U');
 		if ($event->url)
 			$insert['url'] = $event->url;
 
 		$events[] = $insert;
-
 	}
 
 	echo json_encode($events);

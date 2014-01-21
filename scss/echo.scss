@@ -101,6 +101,7 @@ $total-width: 100%;
 
 .content { max-width: 1008px; margin: auto; }
 header .content { padding-left: 10px; } // account for the fact that header .content doesn't use a grid layout but needs a margin to line up with the grid below
+header img { max-width: 95%; }
 
 body.thin .content { max-width: 800px; }
 

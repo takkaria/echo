@@ -71,6 +71,8 @@ p.msg img { padding-right: 1em; }
 
 header .content { padding-left: 10px; }
 
+header img { max-width: 95%; }
+
 body.thin .content { max-width: 800px; }
 
 /* Reusable nav elements */

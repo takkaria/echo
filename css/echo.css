@@ -12,6 +12,8 @@ header, h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', Arial; line-height: 1.3
 
 a { text-decoration: none; color: #2244f3; }
 
+h1 a:hover { background: none; }
+
 a:hover { text-decoration: none; background: #ddd; }
 
 h1 { font-size: 32px; }

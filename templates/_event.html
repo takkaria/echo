@@ -1,42 +1,43 @@
 <div class="event">
 
-<span class="time">
-	<check if="!{{@event->multiday()}}">{{@event->startdt->format("H:i")}}</check>
-</span>
-
-<div class="block">
 <h4 class="title">
-	<F3:check if="{{@event->film}}"><img src="{{@baseurl}}/img/film.png" alt="Film showing"></F3:check>
-
+	<F3:check if="{{@event->film}}">Film showing: </F3:check>
 	<F3:check if="{{@event->url}}&&{{!@facebook(@event->url)}}"><a href="{{@event->url}}"></F3:check>
 	{{@event->title}}
 	<F3:check if="{{@event->url}}&&{{!@facebook(@event->url)}}"></a></F3:check>
-
-	<F3:check if="{{@event->url}}&&{{@facebook(@event->url)}}">
-	<a href="{{@event->url}}" class="fb">Facebook</a>
-	</F3:check>
 </h4>
 
-<span class="location">
+<ul class="fa-ul">
+	<li class="time"><i class="fa fa-li fa-clock-o"></i> 
+
+<check if="{{@event->multiday()}}">
+<true>Starts <b>{{@event->startdt->format("l j F")}}</b> and ends <b>{{@event->enddt->format("l j F")}}</b>.</true>
+<false>
+	<check if="{{@event->startdt->format('i') != '00'}}">
+		<true>{{@event->startdt->format("g:ia, l jS F")}}</true>
+		<false>{{@event->startdt->format("ga, l jS F")}}</false>
+	</check>
+</false>
+</check>
+
+	<li class="location"><i class="fa fa-li fa-map-marker"></i>
 <F3:check if="{{@event->location->in_db}}">
 <true><a href="{{@baseurl}}/venue/{{@event->location->id}}">{{@event->location->short()}}</a></true>
 <false>{{@event->location->short()}}</false>
 </F3:check>
-</span>
 
-<check if="{{@event->multiday()}}">
-	<p class="multi">Starts <b>{{@event->startdt->format("l j F")}}</b> and ends <b>{{@event->enddt->format("l j F")}}</b>.</p>
+<check if="{{@event->url}}&&{{@facebook(@event->url)}}">
+	<li class="facebook"><i class="fa fa-li fa-facebook"></i><a href="{{@event->url}}">Facebook event</a>
 </check>
 
-<p class="description">
-<F3:check if="{{@event->cost}}">
-<F3:false>Free event. </F3:false>
-<F3:true><b>Costs {{@event->cost}}.</b> </F3:true>
-</F3:check>
-{{@event->blurb}}
-</p>
+	<li class="cost"><i class="fa fa-li fa-gbp"></i>
+<check if="{{@event->cost}}">
+<false>Free</false>
+<true>{{@event->cost}}</true>
+</check>
+
+	<li class="description"><i class="fa fa-li fa-align-left fa-flip-vertical"></i>{{@event->blurb}}
+</ol>
 
 <F3:include href="_event_admin.html" />
-
-</div>
 </div>

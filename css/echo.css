@@ -8,7 +8,7 @@ body:after { clear: both; }
 /** Fonts **/
 html, input, textarea { font-size: 14px; line-height: 1.3; font-family: "Helvetica Neue", Helvetica, Arial; word-spacing: -0.1em; }
 
-header, h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', Arial; line-height: 1.2; }
+header, h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', Arial; line-height: 1.3; }
 
 a { text-decoration: none; color: #2244f3; }
 
@@ -79,16 +79,9 @@ section { display: inline; float: left; width: 95.01587%; margin: 0 0.99206%; pa
 section .sublinks { margin: -24px 0 0 0; text-align: right; font-size: 90%; line-height: 1.6; }
 
 .event { margin-bottom: 2em; }
-.event span { display: block; }
-.event .time { float: left; }
-.event .title { font-weight: bold; }
-.event .location { font-style: italic; margin-bottom: 7px; }
-.event .multi { margin-bottom: 0.5em; }
-.event .block { margin-left: 3.2em; }
-.event .more { text-align: right; }
-.event .fb { border: 1px solid #666; border-radius: 3px; background-color: #3B5998; color: #eee; padding: 0px 6px; }
-.event .fb:hover { text-decoration: none; background-color: #7C90BA; }
-.event + * { clear: both; }
+.event .title { font-weight: bold; margin-bottom: 7px; }
+.event ul { margin-top: 0; }
+.event li { padding-left: 4px; margin-bottom: 4px; margin-left: 0; }
 
 .post { margin: 1em 0 1em 0; clear: both; margin-top: 0.5em; margin-bottom: 1.5em; }
 .post h4 { font-weight: 700; margin-bottom: 2px; }

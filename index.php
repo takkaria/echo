@@ -101,24 +101,67 @@ $f3->route('GET /about', function($f3) {
 /**** Displaying events ****/
 /***************************/
 
-$f3->route('GET /events', function($f3) {
-	$where = "date('now') <= enddt OR (startdt >= date('now', 'start of day') AND " .
-			"startdt <= date('now', 'start of month', '+2 month', '-1 day')) AND " .
-			"state == 'approved'";
+$f3->route('GET /events/@year/@month', function($f3) {
+
+	$year = $f3->get('PARAMS.year');
+	$month = $f3->get('PARAMS.month');
+
+	$dt = DateTime::createFromFormat("Y-M-d", $year."-".$month."-01");
+	if (!$dt) $f3->error("Sorry, I can't find that month.");
+
+	$month_next = clone $dt;
+	$month_next->modify("first day of next month");
+	$month_prev = clone $dt;
+	$month_prev->modify("first day of last month");
+
+	$month_begins = $dt->format('Y-m-d');
+	$where = "state == 'approved' AND (" .
+				"startdt >= date('".$month_begins."') AND " .
+				"startdt <= date('".$month_begins."', 'start of month', '+1 month', '-1 day')" .
+			")";
 	$results = Events::load($where);
 	$f3->set('events', $results);
+	$f3->set('nav', [
+			"title" => "Events in ". $dt->format("F Y"),
+			"next" => [
+				"title" => $month_next->format("F Y"),
+				"url" => "/events/".strtolower($month_next->format("Y/M"))
+			],
+			"prev" => [
+				"title" => $month_prev->format("F Y"),
+				"url" => "/events/".strtolower($month_prev->format("Y/M"))
+			]
+		]);
 	echo Template::instance()->render("events.html");
+});
+
+$f3->route('GET /events', function($f3) {
+	$f3->reroute("/events/" . strtolower(date("Y/M")));
 });
 
 $f3->route('GET /events/unapproved', function($f3) {
 	admin_check();
 	$f3->set('events', Events::load("state IS 'validated'"));
+	$f3->set('nav', [
+		"title" => "Unapproved events",
+		"prev" => [
+			"title" => "Back to admin panel",
+			"url" => "/admin"
+		]
+	]);
 	echo Template::instance()->render("events.html");
 });
 
 $f3->route('GET /events/unvalidated', function($f3) {
 	admin_check();
 	$f3->set('events', Events::load("state IS 'submitted' OR state IS NULL"));
+	$f3->set('nav', [
+		"title" => "Unvalidated events",
+		"prev" => [
+			"title" => "Back to admin panel",
+			"url" => "/admin"
+		]
+	]);
 	echo Template::instance()->render("events.html");
 });
 

@@ -73,6 +73,17 @@ header .content { padding-left: 10px; }
 
 body.thin .content { max-width: 800px; }
 
+/* Reusable nav elements */
+.forward, .previous { height: 40px; width: 50%; font-size: 20px; line-height: 40px; }
+.forward:hover, .previous:hover { background-color: #eee; }
+.forward i, .previous i { display: block; font-size: 40px; line-height: 1; }
+
+.forward { float: right; text-align: right; }
+.forward i { float: right; margin-left: 10px; padding-right: 10px; }
+
+.previous { float: left; text-align: left; }
+.previous i { float: left; margin-right: 10px; padding-left: 10px; }
+
 /* Sections are used to contain page content */
 section { display: inline; float: left; width: 95.01587%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; background-color: white; margin-bottom: 2em; padding-top: 10px; padding-bottom: 10px; }
 @media (min-width: 800px) { section { box-shadow: 0 0 20px #ccc; } }
@@ -110,11 +121,9 @@ section .sublinks { margin: -24px 0 0 0; text-align: right; font-size: 90%; line
 @media (min-width: 800px) { #index #news { display: inline; float: left; width: 40.84921%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; }
   #index #events { display: inline; float: left; width: 45.01587%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; margin-left: 5.15873%; } }
 @media (max-width: 800px) { #index #events { border-top: 2px solid black; } }
-#index #events h3 { font-weight: normal; border-bottom: 1px solid black; clear: both; margin-bottom: 0.5em; margin-top: 0.5em; padding: 0; }
-#index #events h3 .daystime { float: right; font-size: 70%; }
-#index .forward { height: 40px; width: 50%; float: right; font-size: 20px; line-height: 40px; text-align: right; }
-#index .forward i { display: block; font-size: 40px; line-height: 1; float: right; margin-left: 10px; padding-right: 10px; }
-#index .forward:hover { background-color: #ddd; }
+
+#index #events h3, #eventlist h3 { font-weight: normal; border-bottom: 1px solid black; clear: both; margin-bottom: 0.5em; margin-top: 0.5em; padding: 0; }
+#index #events h3 .daystime, #eventlist h3 .daystime { float: right; font-size: 70%; }
 
 #login input { display: block; margin: 10px 0; padding: 5px; }
 #login input[type="submit"] { font-size: 120%; font-weight: bold; }

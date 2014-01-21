@@ -104,6 +104,27 @@ header .content { padding-left: 10px; } // account for the fact that header .con
 
 body.thin .content { max-width: 800px; }
 
+/* Reusable nav elements */
+
+%bigarrow {
+	height: 40px; width: 50%;
+	font-size: 20px; line-height: 40px;
+	&:hover { background-color: #eee; }
+	i { display: block; font-size: 40px; line-height: 1; }
+}
+
+.forward {
+	@extend %bigarrow;
+	float: right; text-align: right;
+	i { float: right; margin-left: 10px; padding-right: 10px; }
+}
+
+.previous {
+	@extend %bigarrow;
+	float: left; text-align: left;
+	i { float: left; margin-right: 10px; padding-left: 10px; }	
+}
+
 /* Sections are used to contain page content */
 section {
 	@include column($columns);
@@ -174,29 +195,18 @@ section {
 	@media (max-width: 800px) {
 		#events { border-top: 2px solid black; }
 	}
-
-	#events h3 {
-		font-weight: normal;
-		border-bottom: 1px solid black;
-		clear: both;
-		margin-bottom: 0.5em; margin-top: 0.5em; padding: 0;
-
-		.daystime { float: right; font-size: 70%; }
-	}
-
-	.forward {
-		height: 40px;
-		width: 50%;
-		float: right;
-		font-size: 20px;
-		line-height: 40px;
-		text-align: right;
-
-		i { display: block; font-size: 40px; line-height: 1; float: right; margin-left: 10px; padding-right: 10px; }
-
-		&:hover { background-color: #ddd; }
-	}
 }
+
+
+#index #events h3, #eventlist h3 {
+	font-weight: normal;
+	border-bottom: 1px solid black;
+	clear: both;
+	margin-bottom: 0.5em; margin-top: 0.5em; padding: 0;
+
+	.daystime { float: right; font-size: 70%; }
+}
+
 
 #login {
 	input { display: block; margin: 10px 0; padding: 5px; }

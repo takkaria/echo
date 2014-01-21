@@ -1,7 +1,7 @@
 <?php
 
 // Group events by day
-$f3->set('group_events', function() {
+$f3->set('group_events', function($ongoing = TRUE) {
 	global $f3;
 	$events = $f3->get('events');
 	$bydate = array();
@@ -13,7 +13,7 @@ $f3->set('group_events', function() {
 
 	$final = array();
 	foreach ($bydate as $dtstamp => $list) {
-		if (new DateTime($dtstamp) < new DateTime("today")) {
+		if ($ongoing && new DateTime($dtstamp) < new DateTime("today")) {
 			$final['Ongoing'] = $list;
 		} else {
 			$final[$dtstamp] = $list;

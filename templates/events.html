@@ -1,23 +1,58 @@
 <!DOCTYPE html>
-<title>{{@appname}} :: Future events</title>
+<title>{{@appname}} :: {{@nav.title}}</title>
 <F3:include href="_stylesheets.html" />
 <F3:include href="_header.html" />
 
 <body class='thin'>
 <section id="eventlist">
-<h2 style="text-align: center; margin-bottom: 1em;">Events</h2>
-<p class="sublinks"><a href="event/add">Add your own event</a>
+<h2 style="text-align: center;">{{@nav.title}}</h2>
+<p style="text-align: center;"><a href="event/add">+ add your own event</a></p>
 
-<div style="max-width: 45em; margin: 0 auto;">
-<F3:repeat group="{{@group_events()}}" key="{{@day}}" value="{{@events}}">
+<div style="max-width: 48em; margin: 0 auto;">
+	<check if="isset({{@nav.prev}}) || isset({{@nav.next}})">
+		<div style="margin: 1em">
+			<check if="isset({{@nav.prev}})">
+				<a href="{{@baseurl}}{{@nav.prev.url}}">
+				<div class="previous"><i class="fa fa-angle-left"></i>{{@nav.prev.title}}</div>
+				</a>
+			</check>
 
-<h4 class="date">{{@formatdate(@day, 'l jS')}}</h4>
+			<check if="isset({{@nav.next}})">
+				<a href="{{@baseurl}}{{@nav.next.url}}">
+				<div class="forward"><i class="fa fa-angle-right"></i>{{@nav.next.title}}</div>
+				</a>
+			</check>
+		</div>
+	</check>
 
-<F3:repeat group="{{@events}}" value="{{@event}}">
-<F3:include href="_event.html" />
-</F3:repeat>
+	<div style="clear: both; margin-bottom: 1em;"></div>
 
-</F3:repeat>
+	<check if="count({{@events}}) == 0"><p style="text-align: center;"><b>No events yet.</b></check>
+	<F3:repeat group="{{@group_events(FALSE)}}" key="{{@day}}" value="{{@events}}">
+		<h3 class="date">{{@formatdate(@day, FALSE)}}</h3>
+
+		<F3:repeat group="{{@events}}" value="{{@event}}">
+			<F3:include href="_event.html" />
+		</F3:repeat>
+	</F3:repeat>
+
+	<!-- XXX this is a repeat of the section above -->
+	<check if="count({{@events}}) > 0 && (isset({{@nav.prev}}) || isset({{@nav.next}}))">
+		<div style="margin: 1em">
+			<check if="isset({{@nav.prev}})">
+				<a href="{{@baseurl}}{{@nav.prev.url}}">
+				<div class="previous"><i class="fa fa-angle-left"></i>{{@nav.prev.title}}</div>
+				</a>
+			</check>
+
+			<check if="isset({{@nav.next}})">
+				<a href="{{@baseurl}}{{@nav.next.url}}">
+				<div class="forward"><i class="fa fa-angle-right"></i>{{@nav.next.title}}</div>
+				</a>
+			</check>
+		</div>
+	</check>
+
 </div>
 </section>
 

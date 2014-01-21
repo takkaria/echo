@@ -11,16 +11,6 @@
 <body id="index">
 <include href="_header.html" />
 
-<section id="news">
-<h2>NEWS</h2>
-<p class="sublinks"><a href="{{@baseurl}}/about#addnews">(want yours here?)</a></p>
-
-<repeat group="{{@posts}}" key="{{@i}}" value="{{@post}}">
-<include if="@i < 7" href="_post.html" />
-<include if="@i >= 7" href="_post_short.html" />
-</repeat>
-</section>
-
 <section id="events">
 <h2><a href="events">EVENTS</a></h2>
 <check if="!{{@readonly}}">
@@ -38,6 +28,16 @@
 	See more events
 </div>
 </a>
+</section>
+
+<section id="news">
+<h2>NEWS</h2>
+<p class="sublinks"><a href="{{@baseurl}}/about#addnews">(want yours here?)</a></p>
+
+<repeat group="{{@posts}}" key="{{@i}}" value="{{@post}}">
+<include if="@i < 7" href="_post.html" />
+<include if="@i >= 7" href="_post_short.html" />
+</repeat>
 </section>
 
 <include href="_footer.html" />

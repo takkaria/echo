@@ -6,7 +6,7 @@ body:after { clear: both; }
 *, body, h1, h2, h3, h4, h5, h6 { margin: 0; }
 
 /** Fonts **/
-html, input, textarea { font-size: 14px; line-height: 1.3; font-family: "Helvetica Neue", Helvetica, Arial; word-spacing: -0.1em; }
+html, input, textarea { font-size: 14px; line-height: 1.4; font-family: "Helvetica Neue", Helvetica, Arial; }
 
 header, h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', Arial; line-height: 1.3; }
 
@@ -119,10 +119,11 @@ section .sublinks { margin: -24px 0 0 0; text-align: right; font-size: 90%; line
 
 /* Individual pages */
 #index h2 { text-align: left; letter-spacing: 2px; font-size: 140%; }
+#index #news { word-spacing: -0.1em; }
 #index #news .sublinks { margin-bottom: 30px; }
-@media (min-width: 800px) { #index #news { display: inline; float: left; width: 40.84921%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; }
-  #index #events { display: inline; float: left; width: 45.01587%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; margin-left: 5.15873%; } }
-@media (max-width: 800px) { #index #events { border-top: 2px solid black; } }
+@media (min-width: 800px) { #index #events { display: inline; float: left; width: 53.34921%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; }
+  #index #news { display: inline; float: left; width: 32.51587%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; margin-left: 5.15873%; } }
+@media (max-width: 800px) { #index #news { border-top: 2px solid black; } }
 
 #index #events h3, #eventlist h3 { font-weight: normal; border-bottom: 1px solid black; clear: both; margin-bottom: 0.5em; margin-top: 0.5em; padding: 0; }
 #index #events h3 .daystime, #eventlist h3 .daystime { float: right; font-size: 70%; }

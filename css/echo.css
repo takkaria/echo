@@ -112,6 +112,9 @@ section .sublinks { margin: -24px 0 0 0; text-align: right; font-size: 90%; line
 @media (max-width: 800px) { #index #events { border-top: 2px solid black; } }
 #index #events h3 { font-weight: normal; border-bottom: 1px solid black; clear: both; margin-bottom: 0.5em; margin-top: 0.5em; padding: 0; }
 #index #events h3 .daystime { float: right; font-size: 70%; }
+#index .forward { height: 40px; width: 50%; float: right; font-size: 20px; line-height: 40px; text-align: right; }
+#index .forward i { display: block; font-size: 40px; line-height: 1; float: right; margin-left: 10px; padding-right: 10px; }
+#index .forward:hover { background-color: #ddd; }
 
 #login input { display: block; margin: 10px 0; padding: 5px; }
 #login input[type="submit"] { font-size: 120%; font-weight: bold; }

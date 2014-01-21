@@ -1,47 +1,4 @@
 <div class="eventbox" id="e{{@event->id}}">
-
-<style>
-.eventbox { line-height: 1.4; }
-
-.eventbox h3, .eventbox p, .eventbox .close { margin: 0.4rem 0.6rem; }
-.eventbox .close { cursor: pointer; }
-
-.eventbox h3 { font-size: 1.5rem; }
-.eventbox .datetimeplace { font-size: 1.1rem; }
-</style>
-
 <img src="{{@baseurl}}/img/cross.png" align="right" class="close">
-
-<!-- Title -->
-<h3><F3:check if="{{@event->film}}">Film:</F3:check> {{@event->title}}</h3>
-
-<p class="datetimeplace">
-<!--date-->{{@event->startdt->format("l jS F")}} at
-<!--time-->{{@event->startdt->format("g:ia")}}<br>
-<!--place-->
-<F3:check if="{{@event->location->in_db}}">
-<true><a href="{{@baseurl}}/venue/{{@event->location->id}}">{{@event->location->short()}}</a></true>
-<false>{{@event->location->short()}}</false>
-</F3:check>
-</p>
-
-<p class="description"><F3:check if="{{@event->cost}}">
-<F3:false>Free event.</F3:false>
-<F3:true><b>Costs {{@event->cost}}.</b></F3:true>
-</F3:check>
-
-{{@event->blurb}}
-</p>
-
-<F3:check if="{{@event->url}}">
-<p>
-	<F3:check if="{{@facebook(@event->url)}}">
-	<true><a href="{{@event->url}}">Facebook event</a></true>
-	<false><a href="{{@event->url}}">Website</a></false>
-	</F3:check>
-</p>
-</F3:check>
-
-<F3:include href="_event_admin.html" />
-
+<F3:include href="_event.html" />
 </div>

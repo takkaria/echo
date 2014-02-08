@@ -137,7 +137,29 @@ section {
 		box-shadow: 0 0 20px #ccc;
 	}
 
-	.sublinks { margin: -24px 0 0 0; text-align: right; font-size: 90%; line-height: 1.6;}
+}
+
+ul.sublinks {
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
+	margin-top: -58px;
+	margin-bottom: 58px + 10px;
+
+	li { margin: 0; text-align: right; }
+
+	a {
+		display: block;
+		float: right;
+		clear: both; 
+		text-align: right;
+		width: 200px;
+		font-size: 14px;
+		margin: 0; 
+		padding: 5px;
+		border-radius: 5px;
+	}
+	a:hover { background-color: #ddd; }
 }
 
 .event {
@@ -185,7 +207,7 @@ section {
 /* Individual pages */
 
 #index {
-	h2 { text-align: left; letter-spacing: 2px; font-size: 140%; }
+	h2 { text-align: left; line-height: 58px; letter-spacing: 2px; font-size: 32px; margin-top: 2px; margin-bottom: 0; }
 
 	#news {
 		word-spacing: -0.1em;

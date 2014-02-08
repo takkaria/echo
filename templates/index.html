@@ -13,10 +13,10 @@
 
 <section id="events">
 <h2><a href="events">EVENTS</a></h2>
-<check if="!{{@readonly}}">
-<p class="sublinks"><a href="{{@baseurl}}/event/add">+ add yours here</a><br>
-<a href="http://www.google.com/calendar/render?cid=http%3A%2F%2Fechomanchester.net%2Ficalendar" target="_blank">+ subscribe using Google Calendar</a><br>
-</check>
+<ul class="sublinks">
+    <li><a href="/event/add">Add event <i class="fa fa-fw fa-plus"></i></a>
+    <li><a href="http://www.google.com/calendar/render?cid=http%3A%2F%2Fechomanchester.net%2Ficalendar" target="_blank">Subscribe on Google <i class="fa fa-fw fa-calendar-o"></i></a>
+</ul>
 
 <repeat group="{{@group_events()}}" key="{{@day}}" value="{{@events}}">
 <include href="event_week.html" />

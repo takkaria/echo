@@ -1,6 +1,6 @@
 <F3:check if="{{isset(@admin)}}">
 <div class="admin">
-	<p><a href="{{@baseurl}}/event/{{@event->id}}/edit">Edit</a>
+	<p><a href="{{@baseurl}}/event/{{@event->id}}/edit"><i class="fa fa-edit"></i> Edit</a>
 	<F3:check if="{{@event->state=='approved'}}">
 		<F3:true><form action="{{@baseurl}}/event/{{@event->id}}/unapprove" method="POST"><input class="ajax" type="submit" value="Unapprove"></form></F3:true>
 		<F3:false><form action="{{@baseurl}}/event/{{@event->id}}/approve" method="POST"><input class="ajax" type="submit" value="Approve"></form></F3:false>

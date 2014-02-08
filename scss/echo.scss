@@ -136,7 +136,15 @@ section {
 	@media (min-width: 800px) {
 		box-shadow: 0 0 20px #ccc;
 	}
+}
 
+%button {
+	display: block; padding: 3px 10px;
+	border: 2px solid #aaa; border-radius: 5px;
+	background-color: #eee; box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+	font-size: 14px;
+
+	&:hover { background-color: #ddd; }
 }
 
 ul.sublinks {
@@ -144,22 +152,15 @@ ul.sublinks {
 	margin: 0;
 	margin-top: -36px;
 	list-style-type: none;
+	max-width: 70%;
+	margin-left: auto;
 
 	li { margin: 0; }
 
-	a {
-		display: block;
-		float: right;
-		margin-left: 1em;
-		margin-bottom: 15px;
-		padding: 5px 10px;
-		border: 2px solid #aaa;
-		border-radius: 5px;
-		background-color: #eee;
-		font-size: 14px;
-	}
+	a { @extend %button; float: right; margin-left: 1em; margin-bottom: 15px; }
 	&:first-child li { margin-left: 0; }
-	a:hover { background-color: #ddd; }
+
+	i { margin-right: 3px; }
 }
 
 .event {
@@ -189,13 +190,14 @@ ul.sublinks {
 }
 
 .admin { // admin controls for posts/events
-	display: block; margin-top: 10px;
+	* { margin: 0; padding: 0; text-decoration: none; }
+
+	margin-top: 10px;
 
 	form { display: inline; clear: both; }
 	p { display: inline-block; }
-	a { @extend input[type='submit']; }
-	input, a { font-size: 17px; display: inline-block; float: left; padding: 0 10px; margin: 0; margin-bottom: 15px; margin-right: 1em; }
-	:hover { text-decoration: none; }
+
+	input, a { @extend %button; float: left; margin-right: 1em; color: blue; }
 }
 
 .toc {
@@ -217,6 +219,7 @@ ul.sublinks {
 	@media (min-width: 800px) {
 		#events { @include column(7);  } //margin-right: 0; }
 		#news { @include column(4.5); @include push(0.5) } //margin-left: 0; }
+		.narrow { display: none; }
 	}
 
 	@media (max-width: 800px) {

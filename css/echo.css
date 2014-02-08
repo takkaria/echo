@@ -51,11 +51,11 @@ form label.error { font-size: 80%; }
 fieldset { border: 0; margin: 0; padding: 0; padding: 10px 0; }
 
 input { border: none; border-bottom: 1px solid #ccc; padding: 4px; font-size: inherit; }
-input[type='submit'], .admin a { padding: 5px 10px 5px; text-shadow: 0 -1px -1px rgba(0, 0, 0, 0.25); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25); border: 1px solid #888; border-radius: 5px; color: black; background: #ddd; cursor: pointer; }
-input[type='submit']:active, .admin a:active { -webkit-transform: translateY(1px); -ms-transform: translateY(1px); -moz-transform: translateY(1px); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5); }
+input[type='submit'] { padding: 5px 10px 5px; text-shadow: 0 -1px -1px rgba(0, 0, 0, 0.25); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25); border: 1px solid #888; border-radius: 5px; color: black; background: #ddd; cursor: pointer; }
+input[type='submit']:active { -webkit-transform: translateY(1px); -ms-transform: translateY(1px); -moz-transform: translateY(1px); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5); }
 
 #event_add form, #venue_add form { margin-top: 1em; line-height: 1.5; width: 700px; margin: auto; font-size: 13pt; }
-#event_add input[type='submit'], #venue_add input[type='submit'], #event_add .admin a, .admin #event_add a, #venue_add .admin a, .admin #venue_add a { display: block; margin: 1em auto; color: white; background: black; }
+#event_add input[type='submit'], #venue_add input[type='submit'] { display: block; margin: 1em auto; color: white; background: black; }
 
 /** Colours **/
 html { background-color: #eee; color: #222; }
@@ -92,11 +92,14 @@ body.thin .content { max-width: 800px; }
 section { display: inline; float: left; width: 95.01587%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; background-color: white; margin-bottom: 2em; padding-top: 10px; padding-bottom: 10px; }
 @media (min-width: 800px) { section { box-shadow: 0 0 20px #ccc; } }
 
-ul.sublinks { padding: 0; margin: 0; margin-top: -36px; list-style-type: none; }
+ul.sublinks a, .admin input, .admin a { display: block; padding: 3px 10px; border: 2px solid #aaa; border-radius: 5px; background-color: #eee; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25); font-size: 14px; }
+ul.sublinks a:hover, .admin input:hover, .admin a:hover { background-color: #ddd; }
+
+ul.sublinks { padding: 0; margin: 0; margin-top: -36px; list-style-type: none; max-width: 70%; margin-left: auto; }
 ul.sublinks li { margin: 0; }
-ul.sublinks a { display: block; float: right; margin-left: 1em; margin-bottom: 15px; padding: 5px 10px; border: 2px solid #aaa; border-radius: 5px; background-color: #eee; font-size: 14px; }
+ul.sublinks a { float: right; margin-left: 1em; margin-bottom: 15px; }
 ul.sublinks:first-child li { margin-left: 0; }
-ul.sublinks a:hover { background-color: #ddd; }
+ul.sublinks i { margin-right: 3px; }
 
 .event { margin-bottom: 2em; }
 .event .title { font-weight: bold; margin-bottom: 7px; }
@@ -114,11 +117,11 @@ ul.sublinks a:hover { background-color: #ddd; }
 
 .shortpost h4 { font-size: 100%; }
 
-.admin { display: block; margin-top: 10px; }
+.admin { margin-top: 10px; }
+.admin * { margin: 0; padding: 0; text-decoration: none; }
 .admin form { display: inline; clear: both; }
 .admin p { display: inline-block; }
-.admin input, .admin a { font-size: 17px; display: inline-block; float: left; padding: 0 10px; margin: 0; margin-bottom: 15px; margin-right: 1em; }
-.admin :hover { text-decoration: none; }
+.admin input, .admin a { float: left; margin-right: 1em; color: blue; }
 
 .toc { border: 1px solid #ccc; width: auto; float: right; font-size: 90%; padding-top: 5px; padding-bottom: 5px; padding-left: 30px; margin-left: 20px; }
 .toc li { margin: 0; }
@@ -129,7 +132,8 @@ ul.sublinks a:hover { background-color: #ddd; }
 #index #news { word-spacing: -0.1em; }
 #index #news .sublinks { margin-bottom: 15px; }
 @media (min-width: 800px) { #index #events { display: inline; float: left; width: 53.34921%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; }
-  #index #news { display: inline; float: left; width: 32.51587%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; margin-left: 5.15873%; } }
+  #index #news { display: inline; float: left; width: 32.51587%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; margin-left: 5.15873%; }
+  #index .narrow { display: none; } }
 @media (max-width: 800px) { #index #news { border-top: 2px solid black; } }
 
 #index #events h3, #eventlist h3 { font-weight: normal; border-bottom: 1px solid black; clear: both; margin-bottom: 0.5em; margin-top: 0.5em; padding: 0; }

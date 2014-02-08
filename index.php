@@ -102,6 +102,7 @@ $f3->route('GET /about', function($f3) {
 /***************************/
 
 $f3->route('GET /events/@year/@month', function($f3) {
+	admin_check(FALSE);
 
 	$year = $f3->get('PARAMS.year');
 	$month = $f3->get('PARAMS.month');

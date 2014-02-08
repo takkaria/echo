@@ -92,9 +92,10 @@ body.thin .content { max-width: 800px; }
 section { display: inline; float: left; width: 95.01587%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; background-color: white; margin-bottom: 2em; padding-top: 10px; padding-bottom: 10px; }
 @media (min-width: 800px) { section { box-shadow: 0 0 20px #ccc; } }
 
-ul.sublinks { padding: 0; margin: 0; list-style-type: none; margin-top: -58px; margin-bottom: 68px; }
-ul.sublinks li { margin: 0; text-align: right; }
-ul.sublinks a { display: block; float: right; clear: both; text-align: right; width: 200px; font-size: 14px; margin: 0; padding: 5px; border-radius: 5px; }
+ul.sublinks { padding: 0; margin: 0; margin-top: -36px; list-style-type: none; }
+ul.sublinks li { margin: 0; }
+ul.sublinks a { display: block; float: right; margin-left: 1em; margin-bottom: 15px; padding: 5px 10px; border: 2px solid #aaa; border-radius: 5px; background-color: #eee; font-size: 14px; }
+ul.sublinks:first-child li { margin-left: 0; }
 ul.sublinks a:hover { background-color: #ddd; }
 
 .event { margin-bottom: 2em; }
@@ -124,9 +125,9 @@ ul.sublinks a:hover { background-color: #ddd; }
 .toc b { display: block; margin-bottom: 5px; margin-left: -20px; font-size: 110%; }
 
 /* Individual pages */
-#index h2 { text-align: left; line-height: 58px; letter-spacing: 2px; font-size: 32px; margin-top: 2px; margin-bottom: 0; }
+#index h2 { text-align: left; letter-spacing: 2px; font-size: 32px; line-height: 40px; }
 #index #news { word-spacing: -0.1em; }
-#index #news .sublinks { margin-bottom: 30px; }
+#index #news .sublinks { margin-bottom: 15px; }
 @media (min-width: 800px) { #index #events { display: inline; float: left; width: 53.34921%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; }
   #index #news { display: inline; float: left; width: 32.51587%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; margin-left: 5.15873%; } }
 @media (max-width: 800px) { #index #news { border-top: 2px solid black; } }

@@ -8,8 +8,8 @@
 
 <check if="{{isset(@admin)}}">
 <div class="admin">
-	<p><a href="{{@baseurl}}/post/edit/?id={{urlencode(@post.id)}}">Edit</a>
-	<form action="{{@baseurl}}/post/hide/?id={{urlencode(@post.id)}}" method="POST"><input class="ajax" type="submit" value="Hide"></form>
+	<p><a href="{{@baseurl}}/post/edit/?id={{urlencode(@post.id)}}"><i class="fa fa-pencil"></i> Edit</a>
+	<form action="{{@baseurl}}/post/hide/?id={{urlencode(@post.id)}}" method="POST"><button class="ajax" type="submit"> Hide</button></form>
 </div>
 </check>
 

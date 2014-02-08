@@ -4,7 +4,7 @@
 *, body, h1, h2, h3, h4, h5, h6 { margin: 0; }
 
 /** Fonts **/
-html, input, textarea { font-size: 14px; line-height: 1.4; font-family: "Helvetica Neue", Helvetica, Arial; }
+html, input, button, textarea { font-size: 14px; line-height: 1.4; font-family: "Helvetica Neue", Helvetica, Arial; }
 header, h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', Arial; line-height: 1.3; }
 a { text-decoration: none; color: rgb(34, 68, 243); }
 h1 a:hover { background: none; }
@@ -39,7 +39,7 @@ form {
 
 fieldset { border: 0; margin: 0; padding: 0; padding: 10px 0; }
 
-input {
+input,button {
 	border: none; border-bottom: 1px solid #ccc; padding: 4px;
 	font-size: inherit;
 
@@ -145,6 +145,7 @@ section {
 	font-size: 14px;
 
 	&:hover { background-color: #ddd; }
+	i { margin-right: 3px; }
 }
 
 ul.sublinks {
@@ -159,8 +160,6 @@ ul.sublinks {
 
 	a { @extend %button; float: right; margin-left: 1em; margin-bottom: 15px; }
 	&:first-child li { margin-left: 0; }
-
-	i { margin-right: 3px; }
 }
 
 .event {
@@ -197,7 +196,7 @@ ul.sublinks {
 	form { display: inline; clear: both; }
 	p { display: inline-block; }
 
-	input, a { @extend %button; float: left; margin-right: 1em; color: blue; }
+	button, a { @extend %button; float: left; margin-right: 1em; color: blue; }
 }
 
 .toc {

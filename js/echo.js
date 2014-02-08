@@ -1,6 +1,6 @@
 $(function() {
 
-$("input.ajax").click(function(e) {
+$("button.ajax").click(function(e) {
 	var url = this.form.action;
 	var method = this.form.method;
 

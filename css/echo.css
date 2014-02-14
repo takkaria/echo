@@ -92,13 +92,13 @@ body.thin .content { max-width: 800px; }
 section { display: inline; float: left; width: 95.01587%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; background-color: white; margin-bottom: 2em; padding-top: 10px; padding-bottom: 10px; }
 @media (min-width: 800px) { section { box-shadow: 0 0 20px #ccc; } }
 
-ul.sublinks a, .admin button, .admin a { display: block; padding: 3px 10px; border: 2px solid #aaa; border-radius: 5px; background-color: #eee; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25); font-size: 14px; }
+ul.sublinks a, .admin button, .admin a { display: block; padding: 3px 10px; border: 2px solid #aaa; border-radius: 5px; background-color: #eee; font-size: 14px; }
 ul.sublinks a:hover, .admin button:hover, .admin a:hover { background-color: #ddd; }
 ul.sublinks a i, .admin button i, .admin a i { margin-right: 3px; }
 
-ul.sublinks { padding: 0; margin: 0; margin-top: -36px; list-style-type: none; max-width: 70%; margin-left: auto; }
+ul.sublinks { padding: 0; margin: 0; list-style-type: none; max-width: 70%; margin-left: auto; }
 ul.sublinks li { margin: 0; }
-ul.sublinks a { float: right; margin-left: 1em; margin-bottom: 15px; }
+ul.sublinks a { margin-top: 5px; float: right; margin-left: 1em; margin-bottom: 15px; }
 ul.sublinks:first-child li { margin-left: 0; }
 
 .event { margin-bottom: 2em; }
@@ -128,7 +128,7 @@ ul.sublinks:first-child li { margin-left: 0; }
 .toc b { display: block; margin-bottom: 5px; margin-left: -20px; font-size: 110%; }
 
 /* Individual pages */
-#index h2 { text-align: left; letter-spacing: 2px; font-size: 32px; line-height: 40px; }
+#index h2 { float: left; text-align: left; letter-spacing: 2px; font-size: 32px; line-height: 40px; margin-bottom: 12px; }
 #index #news { word-spacing: -0.1em; }
 #index #news .sublinks { margin-bottom: 15px; }
 @media (min-width: 800px) { #index #events { display: inline; float: left; width: 53.34921%; margin: 0 0.99206%; padding-left: 1.5%; padding-right: 1.5%; }

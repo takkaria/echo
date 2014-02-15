@@ -2,7 +2,6 @@
 <title>{{@appname}} :: Add an event</title>
 
 <F3:include href="_stylesheets.html" />
-<link rel="stylesheet" type="text/css" href="/css/jquery.timepicker.css">
 <link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.24.custom.css">
 
 <body class="thin">
@@ -107,7 +106,6 @@ function word_count(s) {
 
 // Initialise jQueryUI widgets
 function initWidgets() {
-	var time_options = { step: 30, timeFormat: 'H:i' };
 	var date_options = {
 		dateFormat: "DD d MM",
 		firstDay: 1,
@@ -117,8 +115,6 @@ function initWidgets() {
 	};
 
 	// Start time & date
-	$("#time1").timepicker(time_options);
-	$("#time2").timepicker(time_options);
 	$("#date1").datepicker(date_options);
 	$("#date2").datepicker(date_options);
 }

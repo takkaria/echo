@@ -5,3 +5,4 @@ temp
 .htaccess
 .sass-cache
 tmp
+node_modules

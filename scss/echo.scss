@@ -25,6 +25,18 @@ table { margin: 0; padding: 0; border-collapse: collapse; }
 tr, th, td { border: 1px solid #ccc; margin: 0; padding: 2px 6px; }
 th { background-color: #eee; }
 
+/** Basic styles **/
+%button {
+	padding: 3px 10px;
+	border: 2px solid #aaa; border-radius: 5px;
+	background-color: #eee;
+	font-size: 14px;
+
+	&:hover { background-color: #ddd; }
+	i { margin-right: 3px; }
+}
+
+
 /** Forms **/
 form {
 	/* Alignment */
@@ -44,14 +56,9 @@ input,button {
 	font-size: inherit;
 
 	&[type='submit'] {
-		padding: 5px 10px 5px;
-		text-shadow: 0 -1px -1px rgba(0,0,0,0.25);
 		box-shadow: 0 1px 3px rgba(0,0,0,0.25);
-		border: 1px solid #888;
-		border-radius: 5px;
-		color: black; 
-		background: #ddd;
 		cursor: pointer;
+		@extend %button;
 	}
 	&[type='submit']:active {
 		-webkit-transform: translateY(1px);
@@ -138,16 +145,6 @@ section {
 	}
 }
 
-%button {
-	display: block; padding: 3px 10px;
-	border: 2px solid #aaa; border-radius: 5px;
-	background-color: #eee;
-	font-size: 14px;
-
-	&:hover { background-color: #ddd; }
-	i { margin-right: 3px; }
-}
-
 ul.sublinks {
 	padding: 0;
 	margin: 0;
@@ -157,7 +154,7 @@ ul.sublinks {
 
 	li { margin: 0; }
 
-	a { margin-top: 5px; @extend %button; float: right; margin-left: 1em; margin-bottom: 15px; }
+	a { margin-top: 5px; @extend %button; display: block; float: right; margin-left: 1em; margin-bottom: 15px; }
 	&:first-child li { margin-left: 0; }
 }
 
@@ -195,7 +192,7 @@ ul.sublinks {
 	form { display: inline; clear: both; }
 	p { display: inline-block; }
 
-	button, a { @extend %button; float: left; margin-right: 1em; color: blue; }
+	button, a { @extend %button; display: block; float: left; margin-right: 1em; color: blue; }
 }
 
 .toc {

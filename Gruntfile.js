@@ -34,6 +34,14 @@ module.exports = function(grunt) {
 			}
 		},
 
+		cssmin: {
+			dist: {
+				files: {
+					'css/echo.css': 'css/echo.css'
+				}
+			}
+		},
+
 		watch: {
 			scripts: {
 				files: ['<%= concat.dist.src %>'],
@@ -51,9 +59,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-sass');
-	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
 
 	// Default task(s).
 	grunt.registerTask('default', ['concat', 'sass']);
-	grunt.registerTask('dist', ['concat', 'uglify', 'sass']);
+	grunt.registerTask('dist', ['concat', 'uglify', 'sass', 'cssmin']);
 };

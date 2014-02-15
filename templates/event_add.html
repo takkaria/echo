@@ -21,8 +21,8 @@
 <form method="POST" action="?">
 
 <fieldset>
-<label class="left" for="title">Event name:</label>
-<input class="right required" type="text" name="title" id="title" {{isset(@title)?@value(@title):NULL}}>
+<label class="title" for="title">Event name:</label>
+<input class="long required" type="text" name="title" id="title" {{isset(@title)?@value(@title):NULL}}>
 
 <div class="right">
 <input type="checkbox" id="film" name="film" {{isset(@film)&&@film?'checked':''}}>
@@ -31,59 +31,60 @@
 </fieldset>
 
 <fieldset>
-<label class="left" for="date">Time and date:</label>
-<div class="right" id="start">
+<i class="icon-big fa fa-clock-o"></i> 
+<label class="title" for="date">Time and date:</label>
+<div id="start">
 Starts <input class="required time" type="text" name="time1" id="time1" {{isset(@time1)?@value(@time1):NULL}} placeholder="time"> on <input class="required" type="text" id="date1" name="date1" placeholder="date" {{isset(@date1)?@value(@date1):NULL}}><br>
 </div>
-<div class="right" id="end" style="display: none;">
+<div id="end" style="display: none;">
 Ends <input class="required time" type="text" name="time2" id="time2" {{isset(@time2)?@value(@time2):NULL}} placeholder="time"> on <input class="required date" type="text" id="date2" name="date2" placeholder="date" {{isset(@date2)?@value(@date2):NULL}}>
 </div>
-<div class="right">
+<div>
 <input type="checkbox" id="set_end"> <label for="set_end">Set an end time and date?</label>
 </div>
 </fieldset>
 
 <fieldset>
-<label class="left" for="location">Location:</label>
-<input class="right required" type="text" name="location" id="location" {{isset(@location)?@value(@location):NULL}}>
+<i class="icon-big fa fa-map-marker"></i>
+<label class="title" for="location">Location:</label>
+<input class="long required" type="text" name="location" id="location" {{isset(@location)?@value(@location):NULL}}>
 </fieldset>
 </fieldset>
 
 <fieldset>
-<label class="left">Price:</label>
+<i class="icon-big fa fa-gbp"></i>
+<label class="title">Price:</label>
 
-<div class="right">
+<div>
 <input type="radio" name="free" id="free" {{isset(@free)&&@free?'checked':''}} value="free"> <label for="free">Free</label><br>
 <input type="radio" name="free" id="costbutton" {{isset(@cost)&&@cost?'checked':''}}> <label for="costbutton">It costs</label> <input type="text" name="cost" id="cost" style="width: 220px;" {{isset(@cost)?@value(@cost):NULL}}>
 </div>
 </fieldset>
 
 <fieldset>
-<div class="left">
-<label for="blurb">Please describe your event:</label>
-<p class="desc">Please include the group organising the event and information about booking if you have to book.  Maximum 120 words.</p>
-</div>
+<i class="icon-big fa fa-align-left fa-flip-vertical"></i>
 
-<textarea class="right required" name="blurb" id="blurb" rows="8">{{isset(@blurb)?@blurb:NULL}}</textarea>
+<label class="title" for="blurb">Event description:</label>
+<p class="desc">Please include the group organising the event and information about booking if you have to book.<br>
+Maximum 120 words.</p>
+
+<textarea class="long required" name="blurb" id="blurb" rows="8">{{isset(@blurb)?@blurb:NULL}}</textarea>
 <p class="right count" style="display: none;"><i>Word count:</i> <span id="wordcount">0</span> / 120</p>
 </fieldset>
 
 <fieldset>
-<div class="left">
-<label for="url">URL for more info:</label>
-<p class="desc">Is there somewhere people can go online to get more information, like a blog post or Facebook event?</p>
-</div>
+<i class="icon-big fa fa-link"></i>
 
-<input class="right permissive_url" type="text" name="url" id="url" {{isset(@url)?@value(@url):NULL}}>
+<label class="title" for="url">Link to more info:</label>
+<input class="long permissive_url" type="url" name="url" id="url" {{isset(@url)?@value(@url):NULL}}>
+<p class="desc">Is there somewhere people can go online to get more information, like a blog post or Facebook event?</p>
 </fieldset>
 
 <fieldset>
-<div class="left">
-<label class="left" for="email">Your email:</label>
+<i class="icon-big fa fa-envelope"></i>
+<label class="title" for="email">Your email:</label>
+<input class="long required email" type="email" name="email" id="email" {{isset(@email)?@value(@email):NULL}}>
 <p class="desc">This is not made public, but we will send you an email so we know you're not a spammer.</p>
-</div>
-
-<input class="right required email" type="text" name="email" id="email" {{isset(@email)?@value(@email):NULL}}>
 </fieldset>
 
 <input type="submit" value="Submit your event!">

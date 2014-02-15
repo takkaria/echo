@@ -37,17 +37,10 @@ th { background-color: #eee; }
 	i { margin-right: 3px; }
 }
 
-
 /** Forms **/
 form {
-	/* Alignment */
-	.left { width: 250px; float: left; text-align: right; margin-top: 4px; }
-	label.left, .left label { font-weight: bold; }
-	p.left, .left p { font-size: 12px; margin: 0; }
-	.right, label.error { width: 430px; float: right; }
-
-	.error { color: red; }
-	label.error { font-size: 80%; }	
+	.error { color: rgb(182, 69, 69); }
+	label.error { font-size: 80%; display: block; }
 }
 
 fieldset { border: 0; margin: 0; padding: 0; padding: 10px 0; }
@@ -55,8 +48,7 @@ fieldset { border: 0; margin: 0; padding: 0; padding: 10px 0; }
 textarea { border: 1px solid #ccc; border-radius: 5px; padding: 5px; }
 
 input,button {
-	border: none; border-bottom: 1px solid #ccc; padding: 4px;
-	font-size: inherit;
+	padding: 4px; font-size: inherit;
 
 	&[type='submit'] {
 		box-shadow: 0 1px 3px rgba(0,0,0,0.25);
@@ -114,7 +106,9 @@ $total-width: 100%;
 header .content { padding-left: 10px; } // account for the fact that header .content doesn't use a grid layout but needs a margin to line up with the grid below
 header img { max-width: 95%; }
 
-body.thin .content { max-width: 800px; }
+$thin-width: 800px;
+
+body.thin .content { max-width: $thin-width; }
 
 /* Reusable nav elements */
 
@@ -250,13 +244,20 @@ ul.sublinks {
 #event_add, #venue_add {
 	@extend %formpage;
 
-	.count { font-size: 80%; text-align: right; }
+	.count { font-size: 80%; text-align: right; max-width: $thin-width - 300px; margin-bottom: -5px; }
 	.overcount { color: red; }
 
 	/* Individual fields */
 	.time { width: 4em; }
 	.hasDatepicker { width: 14em; cursor: pointer; 
 		background-image: url(../img/calendar.png); background-repeat: no-repeat; background-position: 98% 50%; }
+
+	label.title { font-weight: bold; display: block; }
+	p.desc { font-size: 12px; }
+	.long { width: $thin-width - 300px; }
+	fieldset { margin-left: 130px /* for the big icons */ + 20px /* for central alignment */; }
+
+	.icon-big { font-size: 500%; color: #aaa; float: left; margin-left: -130px; min-width: 100px; text-align: center; }
 }
 
 /* Flatten out page on smaller width devices */

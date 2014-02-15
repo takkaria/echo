@@ -213,15 +213,6 @@ function initEndDatetime() {
 	update_panel();
 }
 
-function initFilmIcon() {
-	$("#film").click(function(e) {
-		if (e.target.checked)
-			$("#title").addClass("film");
-		else
-			$("#title").removeClass("film");
-	});
-}
-
 function initCostLogic() {
 	function update_disabled() {
 		if ($("#free").prop('checked') == true) {
@@ -246,7 +237,6 @@ initWidgets();
 initFormValidation();
 initWordCount();
 initEndDatetime();
-initFilmIcon();
 initCostLogic();
 
 });

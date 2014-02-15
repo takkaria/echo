@@ -17,10 +17,10 @@
 <p class="desc">{{@post.summary}}
 
 <div class="admin">
-	<form action="{{@baseurl}}/post/not-event/?id={{urlencode(@post.id)}}" method="POST">
+	<form action="/post/not-event/?id={{urlencode(@post.id)}}" method="POST">
 		<input class="ajax" type="submit" value="Mark as not event"></form>
 
-	<form action="{{@baseurl}}/event/add" method="POST">
+	<form action="/event/add" method="POST">
 		<input type="hidden" name="title" value="{{@post.title}}">
 		<input type="hidden" name="time1" value="{{@post.event.time}}">
 		<input type="hidden" name="date1" value="{{@post.event.date}}">

@@ -13,24 +13,24 @@
 
 <h3>Events</h3>
 <ul>
-<li>{{@events.submitted}} <a href="{{@baseurl}}/events/unvalidated">submitted but not validated events</a>
-<li>{{@events.validated}} <a href="{{@baseurl}}/events/unapproved">validated but unapproved events</a>
+<li>{{@events.submitted}} <a href="/events/unvalidated">submitted but not validated events</a>
+<li>{{@events.validated}} <a href="/events/unapproved">validated but unapproved events</a>
 <li>{{@events.approved}} approved events
 <ul>
 <li>With {{@events.old}} of those in the past
 </ul>
-<li><form action="{{@baseurl}}/events/purge" method="POST"><b>Purge events</b> older than <input type="number" name="months"> months <input type="submit" value="Purge"></form>
+<li><form action="/events/purge" method="POST"><b>Purge events</b> older than <input type="number" name="months"> months <input type="submit" value="Purge"></form>
 </ul>
 
 <h3>Posts</h3>
 <ul>
-<li><a href="{{@baseurl}}/feeds">{{@feeds.feeds}} feeds</a>
+<li><a href="/feeds">{{@feeds.feeds}} feeds</a>
 <li>{{@feeds.posts}} posts
 <ul>
-	<li><a href="{{@baseurl}}/posts/eventish">{{@feeds.posts_eventish}} which might be events</a>
+	<li><a href="/posts/eventish">{{@feeds.posts_eventish}} which might be events</a>
 	<li>{{@feeds.old_posts}} over two months old
 </ul>
-<li><form action="{{@baseurl}}/posts/purge" method="POST"><b>Purge posts</b> older than <input type="number" name="months"> months <input type="submit" value="Purge"></form>
+<li><form action="/posts/purge" method="POST"><b>Purge posts</b> older than <input type="number" name="months"> months <input type="submit" value="Purge"></form>
 </ul>
 
 </section>

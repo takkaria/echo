@@ -22,7 +22,7 @@
 
 	<li class="location"><i class="fa fa-li fa-map-marker"></i>
 <F3:check if="{{@event->location->in_db}}">
-<true><a href="{{@baseurl}}/venue/{{@event->location->id}}">{{@event->location->short()}}</a></true>
+<true><a href="/venue/{{@event->location->id}}">{{@event->location->short()}}</a></true>
 <false>{{@event->location->short()}}</false>
 </F3:check>
 

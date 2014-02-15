@@ -9,18 +9,18 @@
 
 <h2 style="line-height: 36px; float: left;">{{@nav.title}}</h2>
 <ul class="sublinks">
-    <li><a href="{{@baseurl}}/event/add"><i class="fa fa-plus"></i> Add event</a>
+    <li><a href="/event/add"><i class="fa fa-plus"></i> Add event</a>
     <li><a href="http://www.google.com/calendar/render?cid=http%3A%2F%2Fechomanchester.net%2Ficalendar" target="_blank"><i class="fa fa-calendar-o"></i> Subscribe on Google</a>
 </ul>
 
 <check if="isset({{@nav.prev}}) || isset({{@nav.next}})">
 	<div style="clear: both;">
 		<check if="isset({{@nav.prev}})">
-			<a class="previous" href="{{@baseurl}}{{@nav.prev.url}}"><i class="fa fa-angle-left"></i>{{@nav.prev.title}}</a>
+			<a class="previous" href="{{@nav.prev.url}}"><i class="fa fa-angle-left"></i>{{@nav.prev.title}}</a>
 		</check>
 
 		<check if="isset({{@nav.next}})">
-			<a class="forward" href="{{@baseurl}}{{@nav.next.url}}"><i class="fa fa-angle-right"></i>{{@nav.next.title}}</a>
+			<a class="forward" href="{{@nav.next.url}}"><i class="fa fa-angle-right"></i>{{@nav.next.title}}</a>
 		</check>
 	</div>
 </check>
@@ -40,13 +40,13 @@
 <check if="count({{@events}}) > 0 && (isset({{@nav.prev}}) || isset({{@nav.next}}))">
 	<div style="margin: 1em">
 		<check if="isset({{@nav.prev}})">
-			<a href="{{@baseurl}}{{@nav.prev.url}}">
+			<a href="{{@nav.prev.url}}">
 			<div class="previous"><i class="fa fa-angle-left"></i>{{@nav.prev.title}}</div>
 			</a>
 		</check>
 
 		<check if="isset({{@nav.next}})">
-			<a href="{{@baseurl}}{{@nav.next.url}}">
+			<a href="{{@nav.next.url}}">
 			<div class="forward"><i class="fa fa-angle-right"></i>{{@nav.next.title}}</div>
 			</a>
 		</check>

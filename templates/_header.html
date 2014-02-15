@@ -1,13 +1,13 @@
 <header>
 <div class="content">
-<h1><a href="{{@baseurl}}/"><img src="{{@baseurl}}/img/header.png" alt="Echo"></a></h1>
-<p class="about">ECHO is a left &amp; liberation news &amp; events site for Manchester.  <a href="{{@baseurl}}/about">read more</a></p>
+<h1><a href="/"><img src="/img/header.png" alt="Echo"></a></h1>
+<p class="about">ECHO is a left &amp; liberation news &amp; events site for Manchester.  <a href="/about">read more</a></p>
 </div>
 </header>
 
 <F3:check if="{{isset(@message)}}">
 	<p class="msg">
-		<img src="{{@baseurl}}/img/cross.png" align="right" onclick="$(this.parentNode).css('display','none')">
+		<img src="/img/cross.png" align="right" onclick="$(this.parentNode).css('display','none')">
 		{{@message}}
 </p>
 </F3:check>

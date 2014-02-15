@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <title>{{@appname}} :: About Echo</title>
-<link rel="stylesheet" href="{{@baseurl}}/css/fullcalendar.css" type="text/css">
+<link rel="stylesheet" href="/css/fullcalendar.css" type="text/css">
 <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
 <style>
 .event .title { font-weight: bold; margin-bottom: 7px; margin-top: 0; }
@@ -8,7 +8,7 @@
 .event ul { margin-top: 0; }
 .event li { padding-left: 4px; margin-bottom: 4px; margin-left: 0; }
 </style>
-<script src="{{@baseurl}}/js/echo.js"></script>
+<script src="/js/echo.js"></script>
 
 <script>
 function show_event(baseurl, id, e) {
@@ -41,7 +41,7 @@ $(document).ready(function() {
 		},
 		timeFormat: 'h(:mm)tt',
 
-		events: '{{@baseurl}}/json',
+		events: '/json',
 		allDayDefault: false,
 		weekMode: "liquid",
 		eventBackgroundColor: "transparent",
@@ -49,12 +49,12 @@ $(document).ready(function() {
 		eventTextColor: "green",
 
 		eventClick: function(event, jsevent, view) {
-			show_event("{{@baseurl}}", event.id, jsevent);
+			show_event("", event.id, jsevent);
 			return false;
 		},
 	});
 
-	$('.fc-header-left').html('<img src="{{@baseurl}}/img/miniecho.png" height=30 title="Powered by Echo Manchester"> <a class="add" href="{{@baseurl}}/event/add?embed" target="_parent">+ add an event</a>');
+	$('.fc-header-left').html('<img src="/img/miniecho.png" height=30 title="Powered by Echo Manchester"> <a class="add" href="/event/add?embed" target="_parent">+ add an event</a>');
 
 	$("#close").click(function() {
 		$("#eventinfo").hide();

@@ -257,20 +257,6 @@ ul.sublinks {
 	.time { width: 4em; }
 	.hasDatepicker { width: 14em; cursor: pointer; 
 		background-image: url(../img/calendar.png); background-repeat: no-repeat; background-position: 98% 50%; }
-	.film { background-image: url(../img/film.png); background-repeat: no-repeat; background-position: 5px 7px; text-indent: 22px; }
-
-	/* Venues */
-	#venues { margin-bottom: 10px; margin-top: -10px; font-size: 80%; width: 600px; float: right; }
-	#venues.empty { color: #bbb; }
-
-	#venues ul, #venues li { list-style-type: none; padding: 0; margin: 0; }
-
-	#vlist { height: 104px; border: 1px solid #ccc; border-radius: 4px; }
-	#vlist.selected { color: #bbb; }
-
-	#vlist li { width: 289px; float: left; padding: 4px 5px; cursor: pointer; height: 18px; }
-	#vlist li.selected { background-color: #eee; color: black; }
-	#vlist li:hover { background-color: #ddd; }
 }
 
 /* Flatten out page on smaller width devices */

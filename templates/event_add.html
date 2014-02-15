@@ -44,16 +44,9 @@ Ends <input class="required time" type="text" name="time2" id="time2" {{isset(@t
 </fieldset>
 
 <fieldset>
-<div class="left">
-<label for="location">Location:</label>
-<p class="desc" style="margin-top: 10px">Or select from below:</p>
-</div>
-<input class="right required" type="text" name="location" id="location" autocomplete="off" {{isset(@location)?@value(@location):NULL}}>
+<label class="left" for="location">Location:</label>
+<input class="right required" type="text" name="location" id="location" {{isset(@location)?@value(@location):NULL}}>
 </fieldset>
-
-<div id="venues" style="display: none;">
-<ul id="vlist"></ul>
-</div>
 </fieldset>
 
 <fieldset>
@@ -121,25 +114,6 @@ function initWidgets() {
 	// Start time & date
 	$("#date1").datepicker(date_options);
 	$("#date2").datepicker(date_options);
-}
-
-// Initialise venue list
-function initVenues() {
-	var mylist = [
-	<F3:repeat group="{{@get_venues()}}" value="{{@venue}}">
-		"{{@venue.name}}",
-	</F3:repeat>
-	];
-
-	venuelist.init(mylist, "#vlist", "#location");
-	venuelist.empty = function(empty) {
-		if (empty)
-			$("#venues").addClass("empty");
-		else
-			$("#venues").removeClass("empty");	
-	};
-
-	$("#venues").show();
 }
 
 // Initialise form validation
@@ -269,7 +243,6 @@ function initCostLogic() {
 }
 
 initWidgets();
-initVenues();
 initFormValidation();
 initWordCount();
 initEndDatetime();

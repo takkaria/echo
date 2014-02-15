@@ -2,7 +2,7 @@
 
 [general]
 name = Doormat
-email = doormat@localhost
+email = echo@localhost
 debug = false
 
 [web]

@@ -30,7 +30,7 @@ The following do not:
 
 3. Set up the config file.
 
-An initial config file is in the package.  It should be called 'doormat.ini'.
+An initial config file is in the package.  It should be called 'echo.ini'.
 
 4. Set up a temp directory for F3:
 

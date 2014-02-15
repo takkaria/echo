@@ -8,9 +8,6 @@ debug = false
 [web]
 domain = localhost
 
-; no trailing slash.  You only need to set this if your install is not at /
-echo_root = ""
-
 [spam]
 blocklist[] = dnsbl.sorbs.net
 blocklist[] = xbl.spamhaus.org

@@ -31,7 +31,6 @@ Feeds::init($feedsdb);
 
 if (isset($_GET['msg']))
 	$f3->set('message', strip_tags($_GET['msg']));
-$f3->set('baseurl', $options['web']['echo_root']);
 $f3->set('appname', $options['general']['name']);
 
 function spam_check() {
@@ -798,7 +797,7 @@ body { background: #eee; width: 40em; margin: auto; margin-top: 5em; }
 ul { overflow-x: auto; }
 </style>
 
-<h1><img src="<?=$f3->get('baseurl')?>/img/header.png" alt="Echo" width="100%"></h1>
+<h1><img src="/img/header.png" alt="Echo" width="100%"></h1>
 <h2>Error <?=$code?></h2>
 <p><?=$msg?>
 <?php
@@ -807,7 +806,7 @@ if ($f3->get('DEBUG') != 0) {
 	echo '<ul>'.$out."</ul>";
 }
 ?>
-<p><a href="<?=$f3->get('baseurl')?>/">← Go back to main site</a>
+<p><a href="/">← Go back to main site</a>
 <?php
 
 	}

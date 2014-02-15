@@ -17,7 +17,7 @@ require_once BASEPATH . 'lib/User.php';
 require_once BASEPATH . 'lib/Feeds.php';
 require_once BASEPATH . 'lib/template_utils.php';
 
-$options = parse_ini_file(BASEPATH . 'doormat.ini', true);
+$options = parse_ini_file(BASEPATH . 'echo.ini', true);
 define("READONLY", $options['db']['readonly']);
 $f3->set('readonly', READONLY);
 $f3->set('DEBUG', $options['general']['debug']);

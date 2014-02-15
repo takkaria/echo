@@ -22,6 +22,12 @@ function show_event(id, e) {
 		else
 			info.css('left', e.pageX + "px");
 
+		/* Don't overflow the heightwise either */
+		if (e.pageY + info.outerHeight() > $("#calendar").height())
+			info.css('top', $("#calendar").height() - info.outerHeight() - 10);
+		else
+			info.css('top', e.pageY + "px");
+
 		$(".eventbox .close").click(function() {
 			$("#eventinfo").hide();
 		});

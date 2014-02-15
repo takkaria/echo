@@ -13,7 +13,7 @@
 <li>{{@event->blurb}}
 </ul>
 
-<p>Please go to <a href="http://{{@domain}}{{@baseurl}}/events/unapproved">http://{{@domain}}{{@baseurl}}/events/unapproved</a> to approve it.
+<p>Please go to <a href="http://{{@domain}}/events/unapproved">http://{{@domain}}/events/unapproved</a> to approve it.
 
 <p>- <b>The Echo Automaton</b>
 

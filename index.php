@@ -760,6 +760,8 @@ $f3->route('GET /json', function($f3) {
 
 $f3->set('ONERROR',
 	function($f3) {
+		header("Content-Type: text/html");
+
 		$code = $f3->get('ERROR.code');
 		$title = $f3->get('ERROR.title');
 		$text = $f3->get('ERROR.text');

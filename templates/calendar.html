@@ -11,7 +11,7 @@
 <script src="/js/echo.js"></script>
 
 <script>
-function show_event(baseurl, id, e) {
+function show_event(id, e) {
 	var show = function() {
 		var info = $("#eventinfo");
 		info.css('top', e.pageY + "px");
@@ -29,7 +29,7 @@ function show_event(baseurl, id, e) {
 		info.show();
 	};
 
-	$("#eventinfo").load(baseurl + "/event/" + id + " .eventbox", show);
+	$("#eventinfo").load("/event/" + id + " .eventbox", show);
 }
 
 $(document).ready(function() {
@@ -49,7 +49,7 @@ $(document).ready(function() {
 		eventTextColor: "green",
 
 		eventClick: function(event, jsevent, view) {
-			show_event("", event.id, jsevent);
+			show_event(event.id, jsevent);
 			return false;
 		},
 	});

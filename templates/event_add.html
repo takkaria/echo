@@ -78,14 +78,18 @@ Ends <input class="required time" type="text" name="time2" id="time2" {{isset(@t
 <fieldset>
 <div class="left">
 <label for="url">URL for more info:</label>
-<p class="desc">Is there somewhere on the web people can go to get more information, like a blog post / Facebook event?</p>
+<p class="desc">Is there somewhere people can go online to get more information, like a blog post or Facebook event?</p>
 </div>
 
 <input class="right permissive_url" type="text" name="url" id="url" {{isset(@url)?@value(@url):NULL}}>
 </fieldset>
 
 <fieldset>
+<div class="left">
 <label class="left" for="email">Your email:</label>
+<p class="desc">This is not made public, but we will send you an email so we know you're not a spammer.</p>
+</div>
+
 <input class="right required email" type="text" name="email" id="email" {{isset(@email)?@value(@email):NULL}}>
 </fieldset>
 

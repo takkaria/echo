@@ -41,9 +41,9 @@ th { background-color: #eee; }
 /** Forms **/
 form {
 	/* Alignment */
-	.left { width: 250px; float: left; text-align: right; }
+	.left { width: 250px; float: left; text-align: right; margin-top: 4px; }
 	label.left, .left label { font-weight: bold; }
-	p.left, .left p { font-size: 80%; font-style: italic; margin: 0; }
+	p.left, .left p { font-size: 12px; margin: 0; }
 	.right, label.error { width: 430px; float: right; }
 
 	.error { color: red; }
@@ -51,6 +51,8 @@ form {
 }
 
 fieldset { border: 0; margin: 0; padding: 0; padding: 10px 0; }
+
+textarea { border: 1px solid #ccc; border-radius: 5px; padding: 5px; }
 
 input,button {
 	border: none; border-bottom: 1px solid #ccc; padding: 4px;

@@ -1,5 +1,34 @@
 <?php
 
+function parse_time($value) {
+	$normalise = function($time) {
+		// Check if the time is set to 7am or before; if so, make it pm
+		if ($time["hour"] <= 7)
+			$time["hour"] += 12;
+		return $time;
+	};
+
+	$formats = [
+		[ "format" => "H:ia" ],
+		[ "format" => "Ha" ],
+		[ "format" => "H:i",   "filter" => $normalise ],
+		[ "format" => "H" ,    "filter" => $normalise ]
+	];
+
+	foreach ($formats as $f) {
+		$time = date_parse_from_format($f['format'], $value);
+		if ($time['error_count'] == 0) {
+			if (isset($f['filter'])) {
+				$function = $f['filter'];
+				$time = $function($time);
+			}
+			break;
+		}
+	}
+
+	return $time;
+}
+
 class Event {
 	public $id;
 	public $title;
@@ -67,11 +96,8 @@ class Event {
 			},
 	
 			"time1" => function($value) use(&$self, &$messages) {
-				$time = date_parse_from_format("H:i", $value);
-				if ($time['error_count'] > 0)
-					$time = date_parse_from_format("H:ia", $value);
-				if ($time['error_count'] > 0)
-					$time = date_parse_from_format("Ha", $value);
+				$time = parse_time($value);
+
 				if ($time['error_count'] > 0)
 					$messages[] = "Invalid start time.";
 				if ($self->startdt)
@@ -88,7 +114,8 @@ class Event {
 
 			"time2" => function($value) use(&$self, &$messages) {
 				if ($value) {
-					$time = date_parse_from_format("H:i", $value);
+					$time = parse_time($value);
+
 					if ($time['error_count'] > 0) {
 						$messages[] = "Invalid end time.";
 					} else if ($self->enddt) {
@@ -234,9 +261,9 @@ class Event {
 			'title' => $this->title,
 			'location' => $this->location,
 			'date1' => $this->startdt ? $this->startdt->format("l j F") : NULL,
-			'time1' => $this->startdt ? $this->startdt->format("H:i") : NULL,
+			'time1' => $this->startdt ? $this->startdt->format("g:ia") : NULL,
 			'date2' => $this->enddt ? $this->enddt->format("l j F") : NULL,
-			'time2' => $this->enddt ? $this->enddt->format("H:i") : NULL,
+			'time2' => $this->enddt ? $this->enddt->format("g:ia") : NULL,
 			'blurb' => $this->blurb,
 			'url' => $this->url,
 			'free' => $this->cost ? FALSE : TRUE,

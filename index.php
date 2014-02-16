@@ -618,7 +618,7 @@ $f3->route('GET /admin/venues', function($f3) {
 	$f3->set("venues", Events::$db->exec(
 		"SELECT location AS name, count(location) AS count ".
 		"FROM events WHERE location != CAST(location AS INTEGER)".
-		"GROUP BY location ORDER BY count DESC;"));
+		"GROUP BY location ORDER BY name ASC;"));
 
 	echo Template::instance()->render("admin_venues.html");
 });

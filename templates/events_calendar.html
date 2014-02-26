@@ -29,7 +29,19 @@
 <script>
 $(document).ready(function() {
 	$('#calendar').fullCalendar({
+<check if="{{isset(@nav.allow_nav)}}">
+<true>
+		header: {
+			left: 'prev',
+			center: '',
+			right: 'next',
+		},
+</true>
+<false>
 		header: false,
+</false>
+</check>
+
 <check if="{{isset(@nav.date)}}">
 		month: {{@nav.date.month}},
 		year: {{@nav.date.year}},

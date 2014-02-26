@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<title>{{@appname}} :: {{@nav.title}}</title>
+<F3:include href="_stylesheets.html" />
+<F3:include href="_header.html" />
+
+<section>
+
+	<h2 style="line-height: 36px; float: left;">{{@nav.title}}</h2>
+	<ul class="sublinks">
+		<li><a href="/event/add"><i class="fa fa-plus"></i> Add event</a>
+		<li><a href="?listing"><i class="fa fa-list-ol"></i> View as listing</a>
+	</ul>
+
+	<!-- Nav section -->
+	<include href="_events_nav.html" />
+
+	<!-- Calendar -->
+	<div id="calendar" style="background:white;"></div>
+
+	<!-- Nav section -->
+	<include href="_events_nav.html" />
+
+</section>
+
+<F3:include href="_footer.html" />
+
+<!-- Calender JavaScript -->
+<style>@import "/css/fullcalendar.css";</style>
+<script>
+$(document).ready(function() {
+	$('#calendar').fullCalendar({
+		header: false,
+<check if="{{isset(@nav.date)}}">
+		month: {{@nav.date.month}},
+		year: {{@nav.date.year}},
+</check>
+		timeFormat: 'h(:mm)tt',
+
+		events: {{@json | raw}},
+
+		allDayDefault: false,
+		weekMode: "liquid",
+		eventBackgroundColor: "#eee",
+		eventBorderColor: "#ccc",
+		eventTextColor: "black",
+	});
+});
+</script>

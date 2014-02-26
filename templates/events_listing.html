@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<title>{{@appname}} :: {{@nav.title}}</title>
+<F3:include href="_stylesheets.html" />
+<F3:include href="_header.html" />
+
+<body class='thin'>
+<section id="eventlist">
+<div style="max-width: 48em; margin: 0 auto;">
+
+	<h2 style="line-height: 36px; float: left;">{{@nav.title}}</h2>
+	<ul class="sublinks">
+		<li><a href="/event/add"><i class="fa fa-plus"></i> Add event</a>
+		<li><a href="?calendar"><i class="fa fa-calendar-o"></i> View as calendar</a>
+	</ul>
+
+	<!-- Nav section -->
+	<include href="_events_nav.html" />
+
+	<check if="count({{@events}}) == 0">
+		<true>
+			<p style="text-align: center;"><b>No events yet.</b>
+		</true>
+		<false>
+			<F3:repeat group="{{@group_events(FALSE)}}" key="{{@day}}" value="{{@events}}">
+				<h3 class="date">{{@formatdate(@day, FALSE)}}</h3>
+
+				<F3:repeat group="{{@events}}" value="{{@event}}">
+					<F3:include href="_event.html" />
+				</F3:repeat>
+			</F3:repeat>
+		</false>
+	</check>
+
+	<!-- Nav section -->
+	<include href="_events_nav.html" />
+
+</div>
+</section>
+
+<F3:include href="_footer.html" />

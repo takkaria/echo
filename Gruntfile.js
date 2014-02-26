@@ -44,7 +44,7 @@ module.exports = function(grunt) {
 
 		watch: {
 			scripts: {
-				files: ['<%= concat.dist.src %>'],
+				files: ['<%= concat.main.src %>'],
 				tasks: ['concat']
 			},
 			scss: {

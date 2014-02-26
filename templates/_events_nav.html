@@ -1,0 +1,11 @@
+<check if="isset({{@nav.prev}}) || isset({{@nav.next}})">
+	<div style="clear: both;">
+		<check if="isset({{@nav.prev}})">
+			<a class="previous" href="{{@nav.prev.url}}"><i class="fa fa-angle-left"></i>{{@nav.prev.title}}</a>
+		</check>
+
+		<check if="isset({{@nav.next}})">
+			<a class="forward" href="{{@nav.next.url}}"><i class="fa fa-angle-right"></i>{{@nav.next.title}}</a>
+		</check>
+	</div>
+</check>

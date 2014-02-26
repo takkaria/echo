@@ -114,7 +114,9 @@ body.thin .content { max-width: $thin-width; }
 
 %bigarrow {
 	height: 40px; width: 50%;
+	margin: 10px 0;
 	font-size: 20px; line-height: 40px;
+	border-radius: 5px;
 	&:hover { background-color: #eee; }
 	i { display: block; font-size: 40px; line-height: 1; }
 }
@@ -151,7 +153,7 @@ ul.sublinks {
 
 	li { margin: 0; }
 
-	a { margin-top: 5px; @extend %button; display: block; float: right; margin-left: 1em; margin-bottom: 15px; }
+	a { @extend %button; display: block; float: right; margin: 5px 0 5px 1em; }
 	&:first-child li { margin-left: 0; }
 }
 

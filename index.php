@@ -100,6 +100,26 @@ $f3->route('GET /about', function($f3) {
 /**** Displaying events ****/
 /***************************/
 
+function event_page($f3, $events, $calendar = FALSE) {
+	/* Check for what kind of listing we want */
+	if (isset($_GET['calendar']))
+		$_SESSION['calendar'] = true;
+	else if (isset($_GET['listing']))
+		$_SESSION['calendar'] = false;
+	else
+		$_SESSION['calendar'] = true;
+
+	/* Choose what to display */
+	if ($_SESSION['calendar']) {
+		$f3->set('json', Events::json($events));
+		return Template::instance()->render("events_calendar.html");
+	} else {
+		$f3->set('events', $events);
+		return Template::instance()->render("events_listing.html");
+	}
+}
+
+
 $f3->route('GET /events/@year/@month', function($f3) {
 	admin_check(FALSE);
 
@@ -120,7 +140,7 @@ $f3->route('GET /events/@year/@month', function($f3) {
 				"startdt <= date('".$month_begins."', 'start of month', '+1 month', '-1 day')" .
 			")";
 	$results = Events::load($where);
-	$f3->set('events', $results);
+
 	$f3->set('nav', [
 			"title" => "Events in ". $dt->format("F Y"),
 			"next" => [
@@ -130,9 +150,14 @@ $f3->route('GET /events/@year/@month', function($f3) {
 			"prev" => [
 				"title" => $month_prev->format("F Y"),
 				"url" => "/events/".strtolower($month_prev->format("Y/M"))
-			]
+			],
+			"date" => [
+				"year" => intval($dt->format('Y')),
+				"month" => intval($dt->format('n')) - 1,
+			],
 		]);
-	echo Template::instance()->render("events.html");
+
+	echo event_page($f3, $results);
 });
 
 $f3->route('GET /events', function($f3) {
@@ -737,25 +762,9 @@ $f3->route('GET /json', function($f3) {
 	$e = Events::load("state == 'approved' AND ".
 		"startdt > datetime(". $startts .",'unixepoch') AND ".
 		"startdt < datetime(". $endts .",'unixepoch')");
-	$f3->set('events', $e);
 
-	$events = [];
-	foreach ($e as $event) {
-		$insert = [
-			'id' => $event->id,
-			'title' => $event->title,
-			'start' => $event->startdt->format('U'),
-		];
-		if ($event->enddt)
-			$insert['end'] = $event->enddt->format('U');
-		if ($event->url)
-			$insert['url'] = $event->url;
-
-		$events[] = $insert;
-	}
-
-	echo json_encode($events);
 	header("Content-Type: application/json");
+	echo Events::json($e);
 });
 
 $f3->set('ONERROR',

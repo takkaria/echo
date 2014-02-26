@@ -296,6 +296,26 @@ class Events {
 		return $events;
 	}
 
+
+	static function json($array) {
+		$events = [];
+		foreach ($array as $event) {
+			$insert = [
+				'id' => $event->id,
+				'title' => $event->title,
+				'start' => $event->startdt->format('U'),
+			];
+			if ($event->enddt)
+				$insert['end'] = $event->enddt->format('U');
+			if ($event->url)
+				$insert['url'] = $event->url;
+
+			$events[] = $insert;
+		}
+
+		return json_encode($events);
+	}
+
 	static function purge($m) {
 		Events::$db->exec("DELETE FROM events WHERE startdt < date('now', '-".$m." months')");
 	}

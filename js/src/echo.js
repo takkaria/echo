@@ -32,7 +32,7 @@ var echo = {
 		$('body').append(html);
 
 		// Request the info
-		$("#eventinfo").load("/event/" + id, function() {
+		$("#eventinfo").hide().load("/event/" + id, function() {
 			var info = $("#eventinfo");
 			info.css('top', ev.pageY + "px");
 

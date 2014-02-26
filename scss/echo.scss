@@ -165,6 +165,12 @@ ul.sublinks {
 	li { padding-left: 4px; margin-bottom: 4px; margin-left: 0; }
 }
 
+#eventinfo {
+	position: absolute; background-color: white;
+	width: 380px; padding: 10px; box-shadow: 5px 5px 5px #aaa;
+	border: 2px solid black; z-index: 99;
+}
+
 .post {
 	margin: 1em 0 1em 0; clear: both;
 	margin-top: 0.5em; margin-bottom: 1.5em;

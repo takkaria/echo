@@ -55,6 +55,11 @@ $(document).ready(function() {
 		eventBackgroundColor: "#eee",
 		eventBorderColor: "#ccc",
 		eventTextColor: "black",
+
+		eventClick: function(event, jsevent, view) {
+			echo.show_event(event.id, jsevent);
+			return false;
+		},
 	});
 });
 </script>

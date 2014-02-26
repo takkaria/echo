@@ -1,44 +1,25 @@
 <!DOCTYPE html>
 <title>{{@appname}} :: About Echo</title>
 <link rel="stylesheet" href="/css/fullcalendar.css" type="text/css">
-<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+<F3:include href="_stylesheets.html" />
+
+<div id="calendar" style="background: white;"></div>
+
+<F3:include href="_footer.html" />
+
 <style>
-.event .title { font-weight: bold; margin-bottom: 7px; margin-top: 0; }
-.event .title a { text-decoration: none; }
-.event ul { margin-top: 0; }
-.event li { padding-left: 4px; margin-bottom: 4px; margin-left: 0; }
+html { background: white; }
+.fc-header tr, .fc-header td { border: none; }
+
+.fc-grid th { text-align: left; padding-left: 2px; }
+.fc-header-left { vertical-align: bottom; }
+.add { display: inline-block; vertical-align: top; font-size: 1.2rem; text-decoration: none; color: blue; margin-left: 20px; margin-top: 5px; }
+.add:hover { text-decoration: underline; background: inherit; }
 </style>
-<script src="/js/echo.js"></script>
 
 <script>
-function show_event(id, e) {
-	var show = function() {
-		var info = $("#eventinfo");
-		info.css('top', e.pageY + "px");
-
-		/* Don't overflow the page */
-		if (e.pageX + info.outerWidth() > $(window).width())
-			info.css('left', $(window).width() - info.outerWidth() - 10);
-		else
-			info.css('left', e.pageX + "px");
-
-		/* Don't overflow the heightwise either */
-		if (e.pageY + info.outerHeight() > $("#calendar").height())
-			info.css('top', $("#calendar").height() - info.outerHeight() - 10);
-		else
-			info.css('top', e.pageY + "px");
-
-		$(".eventbox .close").click(function() {
-			$("#eventinfo").hide();
-		});
-
-		info.show();
-	};
-
-	$("#eventinfo").load("/event/" + id + " .eventbox", show);
-}
-
 $(document).ready(function() {
+
 	$('#calendar').fullCalendar({
 		header: {
 			left: '',
@@ -50,60 +31,17 @@ $(document).ready(function() {
 		events: '/json',
 		allDayDefault: false,
 		weekMode: "liquid",
-		eventBackgroundColor: "transparent",
-		eventBorderColor: "transparent",
-		eventTextColor: "green",
+		eventBackgroundColor: "#eee",
+		eventBorderColor: "#ccc",
+		eventTextColor: "black",
 
 		eventClick: function(event, jsevent, view) {
-			show_event(event.id, jsevent);
+			echo.show_event(event.id, jsevent);
 			return false;
 		},
 	});
 
 	$('.fc-header-left').html('<img src="/img/miniecho.png" height=30 title="Powered by Echo Manchester"> <a class="add" href="/event/add?embed" target="_parent">+ add an event</a>');
 
-	$("#close").click(function() {
-		$("#eventinfo").hide();
-	});
-
-	$(document).click(function(e) {
-		var box = $("#eventinfo");
-		if (e.css('display') == "block" &&
-			e.pageX > box.offset().left && e.pageX < box.offset().left+box.outerWidth() &&
-			e.pageY > box.offset().top && e.pageY < box.offset().left+box.outerHeight())
-			return false;
-		box.hide();
-		return true;
-	})
 });
-</script>
-
-<style>
-* { font-family: Helvetica, Arial; }
-body { font-size: 14px; }
-h2 { font-size: 1.2rem; margin: 0; margin-top: 5px !important; }
-.fc-grid th { text-align: left; padding-left: 2px; }
-.fc-header-left { vertical-align: bottom; }
-.add { display: inline-block; vertical-align: top; font-size: 1.2rem; text-decoration: none; color: blue; padding-left: 20px; margin-top: 5px; }
-.add:hover { text-decoration: underline; }
-
-#eventinfo { position: absolute; background-color: white; width: 380px; padding: 10px; box-shadow: 5px 5px 5px #aaa; display: none; border: 2px solid; z-index: 99; }
-</style>
-
-<div id="calendar" style="background:white;"></div>
-
-<div id="eventinfo">
-<span id="close">x</span>
-<div></div>
-</div>
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-41808953-1', 'echomanchester.net');
-  ga('send', 'pageview');
-
 </script>

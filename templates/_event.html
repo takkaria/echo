@@ -1,10 +1,10 @@
 <div class="event">
 
 <h4 class="title">
-	<F3:check if="{{@event->film}}">Film showing: </F3:check>
 	<F3:check if="{{@event->url}}&&{{!@facebook(@event->url)}}"><a href="{{@event->url}}"></F3:check>
 	{{@event->title}}
 	<F3:check if="{{@event->url}}&&{{!@facebook(@event->url)}}"></a></F3:check>
+	<F3:check if="{{@event->film}}"><i class="fa fa-film" style="padding-left: 0.5em;"></i> </F3:check>
 </h4>
 
 <ul class="fa-ul">

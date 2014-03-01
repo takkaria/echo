@@ -7,15 +7,15 @@ var echo = {
 		echo.registered = true;
 		$(document).click(function(e) {
 			var box = $("#eventinfo");
-			if (box &&
-					e.pageX > box.offset().left &&
-					e.pageX < box.offset().left+box.outerWidth() &&
-					e.pageY > box.offset().top &&
-					e.pageY < box.offset().left+box.outerHeight()) {
-				return false;
+			if (box && box.offset() && (
+						e.pageX < box.offset().left ||
+						e.pageX > box.offset().left+box.outerWidth() ||
+						e.pageY < box.offset().top ||
+						e.pageY > box.offset().top+box.outerHeight()
+					)) {
+				box.detach();
 			}
 
-			box.detach();
 			return true;
 		});
 	},
@@ -43,8 +43,8 @@ var echo = {
 				info.css('left', ev.pageX + "px");
 
 			/* Don't overflow the heightwise either */
-			if (ev.pageY + info.outerHeight() > $("#calendar").height())
-				info.css('top', $("#calendar").height() - info.outerHeight() - 10);
+			if (ev.pageY + info.outerHeight() > $(document).height())
+				info.css('top', $(document).height() - info.outerHeight() - 10);
 			else
 				info.css('top', ev.pageY + "px");
 

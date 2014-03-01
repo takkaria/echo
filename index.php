@@ -204,6 +204,10 @@ $f3->route('POST /events/purge', function($f3) {
 /***************************/
 
 $f3->route('GET /event/add', function($f3) {
+	admin_check(FALSE);
+	if (isset($_SESSION['email']))
+		$f3->set("email", $_SESSION['email']);
+
 	echo Template::instance()->render("event_add.html");
 });
 

@@ -16,6 +16,8 @@ h2 { font-size: 24px; }
 h3 { font-size: 20px; }
 h4 { font-size: 16px; }
 
+:target { background-color: darkseagreen; border-radius: 2px; }
+
 li { margin-bottom: 10px; }
 p, ul, ol { margin-bottom: 1em; }
 h2 + ol, h3 + ol, h4 + ol, h2 + ul, h3 + ul, h4 + ul { margin-top: 1em; }
@@ -137,7 +139,6 @@ body.thin .content { max-width: $thin-width; }
 section {
 	@include column($columns);
 	background-color: white;
-	margin-bottom: 2em;
 	padding: { top: 10px; bottom: 10px; }
 	@media (min-width: 800px) {
 		box-shadow: 0 10px 20px #ccc;
@@ -146,7 +147,7 @@ section {
 
 #footer {
 	clear: both;
-	padding: 1em;
+	padding: 2em 0;
 	color: #555;
 	text-align: center;
 }

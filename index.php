@@ -3,6 +3,7 @@
  * Change this to where the ini file and DB folder are kept.
  ************************************/
 define("BASEPATH", "");
+define("VERSION", "0.1");
 
 $f3 = require(BASEPATH . 'lib/fatfree/base.php');
 $f3->set("UI", BASEPATH . "templates/");
@@ -20,6 +21,7 @@ require_once BASEPATH . 'lib/template_utils.php';
 $options = parse_ini_file(BASEPATH . 'echo.ini', true);
 define("READONLY", $options['db']['readonly']);
 $f3->set('readonly', READONLY);
+$f3->set('version', VERSION);
 $f3->set('DEBUG', $options['general']['debug']);
 
 $db = new DB\SQL("sqlite:" . BASEPATH . $options['db']['events']);

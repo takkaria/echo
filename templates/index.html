@@ -15,13 +15,20 @@
 <h2><a href="events">EVENTS</a></h2>
 <ul class="sublinks">
     <li><a href="/event/add"><i class="fa fa-plus"></i> Add event</a>
-    <li><a href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fechomanchester.net%2Ficalendar%3Fv1" target="_blank"><i class="fa fa-calendar-o"></i> Subscribe on Google</a>
+    <li><a href="/events?calendar"><i class="fa fa-calendar-o"></i> View as calendar</a>
 </ul>
 <p class="narrow" style="clear: both;"><a href="#news">Skip to news</a></p>
 
-<form action="https://docs.google.com/forms/d/114oUUpYGh0vox28-_wuEh7asoXyHa9zr8yb2B_zqJLE/formResponse" style="clear: both; text-align: center;" method="POST" target="_new">
-<p>Subscribe for fortnightly updates: <input type="email" name="entry.557563294" placeholder="Enter email address" style="width: 13em; margin: 0 0.5em"> <button type="submit"><i class="fa fa-envelope"></i> Subscribe</button>
-</form>
+<div id="subscribe">
+	<p><b>Subscribe to Echo!</b> We now have an email newsletter we send fortnightly:</p>
+
+	<form action="https://docs.google.com/forms/d/114oUUpYGh0vox28-_wuEh7asoXyHa9zr8yb2B_zqJLE/formResponse" style="/* clear: both; */ text-align: center;" method="POST" target="_new">
+		<input type="email" name="entry.557563294" placeholder="Enter email address" style="width: 13em; margin: 0 0.5em">
+		<button type="submit"><i class="fa fa-envelope"></i> Subscribe</button>
+	</form>
+
+	<p style="margin-bottom: 0; margin-top: 0.6em;">You can also subscribe to <a href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fechomanchester.net%2Ficalendar%3Fv1" target="_blank">our feed on Google Calendar</a>.</p>
+</div>
 
 <repeat group="{{@group_events()}}" key="{{@day}}" value="{{@events}}">
 <include href="event_week.html" />

@@ -140,8 +140,15 @@ section {
 	margin-bottom: 2em;
 	padding: { top: 10px; bottom: 10px; }
 	@media (min-width: 800px) {
-		box-shadow: 0 0 20px #ccc;
+		box-shadow: 0 10px 20px #ccc;
 	}
+}
+
+#footer {
+	clear: both;
+	padding: 1em;
+	color: #555;
+	text-align: center;
 }
 
 ul.sublinks {
@@ -210,6 +217,17 @@ ul.sublinks {
 
 #index {
 	h2 { float: left; text-align: left; letter-spacing: 2px; font-size: 32px; line-height: 40px; margin-bottom: 12px; }
+
+	#subscribe {
+	    border: 2px solid darkseagreen;
+	    clear:  both;
+	    border-radius: 5px;
+	    background: rgba(143, 188, 143, 0.3);
+	    padding: 5px 10px;
+	    text-align: center;
+
+	    p { margin-bottom: 0.6em; }
+	}
 
 	#news {
 		word-spacing: -0.1em;

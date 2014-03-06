@@ -170,6 +170,8 @@
 						}
 					}
 
+					$tagfill .= ' target="_blank"';
+
 					$link_url_enc = HtmlSpecialChars($link_url);
 					$display_url_enc = HtmlSpecialChars($display_url);
 

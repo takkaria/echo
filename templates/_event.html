@@ -1,7 +1,7 @@
 <div class="event">
 
 <h4 class="title">
-	<F3:check if="{{@event->url}}&&{{!@facebook(@event->url)}}"><a href="{{@event->url}}"></F3:check>
+	<F3:check if="{{@event->url}}&&{{!@facebook(@event->url)}}"><a href="{{@event->url}}" target="_blank"></F3:check>
 	{{@event->title}}
 	<F3:check if="{{@event->url}}&&{{!@facebook(@event->url)}}"></a></F3:check>
 	<F3:check if="{{@event->film}}"><i class="fa fa-film" style="padding-left: 0.5em;"></i> </F3:check>
@@ -27,7 +27,7 @@
 </F3:check>
 
 <check if="{{@event->url}}&&{{@facebook(@event->url)}}">
-	<li class="facebook"><i class="fa fa-li fa-facebook"></i><a href="{{@event->url}}">Facebook event</a>
+	<li class="facebook"><i class="fa fa-li fa-facebook"></i><a target="_blank" href="{{@event->url}}">Facebook event</a>
 </check>
 
 	<li class="cost"><i class="fa fa-li fa-gbp"></i>

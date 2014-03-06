@@ -1,10 +1,10 @@
 <div class="post">
 <h4>{{@post.title}}</h4>
 <check if="{{@post.image}}"><img src="{{@post.image}}" width="25%"></check>
-<p class="date"><check if="{{@post.feed.site}}"><a href="{{@post.feed.site}}">{{@post.feed.title}}</a>, </check>
+<p class="date"><check if="{{@post.feed.site}}"><a href="{{@post.feed.site}}" target="_blank">{{@post.feed.title}}</a>, </check>
 {{@formatdate(@post.date)}}</p>
 
-<p class="desc">{{@post.summary}} ... <a href="{{@post.link}}" class="more">read more</a>
+<p class="desc">{{@post.summary}} ... <a href="{{@post.link}}" target="_blank" class="more">read more</a>
 
 <check if="{{isset(@admin)}}">
 <div class="admin">

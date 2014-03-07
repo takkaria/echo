@@ -3,11 +3,11 @@
 <body>
 <p>Hi there!
 
-<p>There has been a new Echo event:
+<p><b>{{@event->email}}</b> has submitted a new event on Echo.
 
 <ul>
 <li><b> <F3:check if="{{@event->film}}">Film showing: </F3:check> {{@event->title}}</b>
-<check if="{{@event->url}}"><li><a href="{{@event->url}}">(more info)</a></check>
+<check if="{{@event->url}}"><li>URL: <a href="{{@event->url}}">{{@event->url}}</a></check>
 <li>On: {{@event->startdt->format("l jS F H:i")}}
 <li>At: {{@event->location->short()}}
 <li>{{@event->blurb}}

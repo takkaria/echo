@@ -41,7 +41,6 @@ class Event {
 	public $film;
 
 	public $email;
-	public $key;
 	public $state;
 
 	function __construct($id = NULL) {
@@ -68,7 +67,6 @@ class Event {
 
 		$this->state = $r['state'];
 		$this->email = $r['email'];
-		$this->key = $r['key'];
 	}
 
 	public function multiday() {
@@ -184,19 +182,14 @@ class Event {
 		return $messages;
 	}
 
-	public function generate_key() {
-		$this->key = md5($this->email . rand());
-	}
-
 	public function approve() {
 		$this->state = "approved";
-		$this->key = NULL;
 		$this->save();
 		$this->send_approve_mail();
 	}
 
 	public function unapprove() {
-		$this->state = "validated";
+		$this->state = "submitted";
 		$this->save();
 	}
 
@@ -204,10 +197,9 @@ class Event {
 		global $options;
 		global $f3;
 
-		$f3->set("approved_id", $this->key);
 		$f3->set("domain", $options['web']['domain']);
 		$template = new Template;
-		$message = $template->render('event_confirm_mail.txt','text/plain');
+		$message = wordwrap($template->render('event_confirm_mail.txt','text/plain'));
 
 		$subject = $options['general']['name'] . ": Please confirm your event";
 		$headers = "From: " . $options['general']['email'];
@@ -249,7 +241,6 @@ class Event {
 			$e->type = "film";
 
 		$e->email = $this->email;
-		$e->key = $this->key;
 		$e->state = $this->state;
 
 		$e->save();
@@ -318,15 +309,6 @@ class Events {
 
 	static function purge($m) {
 		Events::$db->exec("DELETE FROM events WHERE startdt < date('now', '-".$m." months')");
-	}
-
-	static function validate($key) {
-		$result = Events::$db->exec(
-				"UPDATE events" .
-				" SET key=NULL, state=:state" .
-				" WHERE key=:key",
-				array(':state' => "validated", ':key' => $key));
-		return $result ? TRUE : FALSE;
 	}
 
 	static function delete($id) {

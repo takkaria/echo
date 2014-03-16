@@ -21,9 +21,9 @@ CREATE TABLE events (
 	cost TEXT,		/* NULL = free */
 
 	/* State crap */
-	state TEXT,		/* "submitted", "validated", "approved" */
+	state TEXT,		/* "submitted", "approved" */
 	email TEXT,		/* Delete after submitted? */
-	key TEXT			/* key needed for validation */
+	key TEXT			/* key needed for validation */ /* XXX remove */
 );
 
 CREATE TABLE users (

@@ -177,21 +177,7 @@ $f3->route('GET /events/unapproved', function($f3) {
 		"allow_nav" => true
 	]);
 
-	echo event_page($f3, Events::load("state IS 'validated'"));
-});
-
-$f3->route('GET /events/unvalidated', function($f3) {
-	admin_check();
-	$f3->set('nav', [
-		"title" => "Unvalidated events",
-		"prev" => [
-			"title" => "Back to admin panel",
-			"url" => "/admin"
-		],
-		"allow_nav" => true
-	]);
-
-	echo event_page($f3, Events::load("state IS 'submitted' OR state IS NULL"));
+	echo event_page($f3, Events::load("state IS NOT 'approved'"));
 });
 
 $f3->route('POST /events/purge', function($f3) {
@@ -232,19 +218,9 @@ $f3->route('POST /event/add', function($f3) {
 		$event->save();
 		$f3->reroute("/?msg=Event+added+and+approved.");
 	} else {
-		// Check user isn't banned
-		$banned = User::isbanned($event->email);
-		if ($banned) {
-			echo Template::instance()->render("spam.html");
-			die;
-		}
-
 		$event->state = "submitted";
-		$event->generate_key();
 		$event->save();
 		$event->send_confirm_mail();
-
-		global $options;
 
 		User::notify_all($event);
 
@@ -300,18 +276,6 @@ $f3->route('POST /event/@id/edit', function($f3) {
 		$event->save();
 		$f3->reroute("/event/" . $id . "/edit?msg=Event%20saved.");
 	}
-});
-
-$f3->route('GET /c/@key', function($f3) {
-	global $events;
-
-	$key = $f3->get('PARAMS.key');
-	if (ctype_alnum($key) && Events::validate($key))
-		$message = "Event submitted.  Please await approval :)";
-	else
-		$message = "No event to approve found!  Maybe you already approved it?";
-
-	$f3->reroute("/?msg=" . urlencode($message));
 });
 
 $f3->route('POST /event/@id/approve', function($f3) {
@@ -579,16 +543,12 @@ $f3->route('GET /admin', function($f3) {
 	/** Retrieve event info **/
 	$events_info = [
 		"submitted" => 0,
-		"validated" => 0,
 		"approved" => 0,
 		"old" => 0
 	];
 
 	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state IS "submitted" OR state IS NULL');
 	$events_info['submitted'] = $r[0]['count'];
-
-	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state="validated"');
-	$events_info['validated'] = $r[0]['count'];
 
 	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state="approved"');
 	$events_info['approved'] = $r[0]['count'];

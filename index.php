@@ -31,8 +31,6 @@ User::init($db);
 $feedsdb = new DB\SQL("sqlite:" . BASEPATH . $options['db']['feeds']);
 Feeds::init($feedsdb);
 
-if (isset($_GET['msg']))
-	$f3->set('message', strip_tags($_GET['msg']));
 $f3->set('appname', $options['general']['name']);
 
 function spam_check() {
@@ -54,7 +52,6 @@ function spam_check() {
 
 function admin_check($reroute = TRUE) {
 	global $f3;
-	session_start();
 	if (!isset($_SESSION['admin'])) {
 		if ($reroute) {
 			$f3->reroute("/admin/login");
@@ -68,7 +65,8 @@ function admin_check($reroute = TRUE) {
 function readonly_check() {
 	global $f3;
 	if (READONLY) {
-		$f3->reroute("/?msg=Sorry,+can't+do+that.+Database+in+read-only+mode.");
+		$_SESSION['message'] = "Sorry, you can't do that.  The site is in read-only mode.";
+		$f3->reroute("/");
 		die;
 	}
 }
@@ -184,7 +182,8 @@ $f3->route('POST /events/purge', function($f3) {
 	admin_check();
 	readonly_check();
 	Events::purge(intval($_POST['months']));
-	$f3->reroute("/admin?msg=Purged.");
+	$_SESSION["message"] = 'Old events purged.';
+	$f3->reroute("/admin");
 });
 
 /***************************/
@@ -216,7 +215,8 @@ $f3->route('POST /event/add', function($f3) {
 	} else if ($admin) {
 		$event->state = "approved";
 		$event->save();
-		$f3->reroute("/?msg=Event+added+and+approved.");
+		$_SESSION['message'] = "Event added and approved.";
+		$f3->reroute("/");
 	} else {
 		$event->state = "submitted";
 		$event->save();
@@ -224,8 +224,8 @@ $f3->route('POST /event/add', function($f3) {
 
 		User::notify_all($event);
 
-		// XXX How about sending the user to a special 'event added' page?
-		$f3->reroute("/?msg=Event+submitted.+Please+check+your+email.");
+		$_SESSION['message'] = "<b>Event submitted</b>. Please wait while one of our moderators checks it.";
+		$f3->reroute("/");
 	}
 });
 
@@ -274,7 +274,8 @@ $f3->route('POST /event/@id/edit', function($f3) {
 		echo Template::instance()->render("event_add.html");
 	} else {
 		$event->save();
-		$f3->reroute("/event/" . $id . "/edit?msg=Event%20saved.");
+		$_SESSION['Event saved.'];
+		$f3->reroute("/event/" . $id . "/edit");
 	}
 });
 
@@ -332,7 +333,8 @@ $f3->route('POST /event/@id/reject', function($f3) {
 	mail($to, $subject, $body, $headers);
 	Events::delete($e->id);
 
-	$f3->reroute('/admin?msg=Event+rejected.');
+	$_SESSION['message'] = "Event rejected.";
+	$f3->reroute("/admin");
 });
 
 $f3->route('POST /event/@id/delete', function($f3) {
@@ -351,7 +353,8 @@ $f3->route('POST /posts/purge', function($f3) {
 	readonly_check();
 
 	Feeds::purge(intval($_POST['months']));
-	$f3->reroute("/admin?msg=Purged.");
+	$_SESSION['message'] = "Old posts purged.";
+	$f3->reroute("/admin");
 });
 
 $f3->route('GET /posts/eventish', function($f3) {
@@ -436,7 +439,8 @@ $f3->route('POST /post/edit', function($f3) {
 
 	Feeds::$db->exec("UPDATE posts SET title=:title, summary=:summary WHERE id=:id", $values);
 
-	$f3->reroute("/?msg=Done.");
+	$_SESSION['message'] = "Changes saved.";
+	$f3->reroute("/");
 });
 
 $f3->route('POST /post/hide', function($f3) {
@@ -446,7 +450,8 @@ $f3->route('POST /post/hide', function($f3) {
 	$values = [ ":id" => $_GET['id'] ];
 	Feeds::$db->exec("UPDATE posts SET hidden=1 WHERE id=:id", $values);
 
-	$f3->reroute("/?msg=Hidden!");
+	$_SESSION['message'] = "Post hidden.";
+	$f3->reroute("/");
 });
 
 $f3->route('POST /post/not-event', function($f3) {
@@ -491,7 +496,8 @@ $f3->route('POST /venue/add', function($f3) {
 
 	$venue->save();
 
-	$f3->reroute("/?msg=Venue+added.");
+	$_SESSION['message'] = "Venue added.";
+	$f3->reroute("/");
 });
 
 /********************************/
@@ -510,11 +516,11 @@ $f3->route('POST /feeds/add', function($f3) {
 	readonly_check();
 
 	if (Feeds::add($_POST['url']))
-		$message = "Feed added.";
+		$_SESSION['message'] = "Feed added.";
 	else
-		$message = "Failed to add feed to database.";
+		$_SESSION['message'] = "Failed to add feed to database.";
 
-	$f3->reroute("/feeds?msg=" . $message);
+	$f3->reroute("/feeds");
 });
 
 $f3->route('POST /feeds/edit', function($f3) {
@@ -530,6 +536,7 @@ $f3->route('POST /feeds/edit', function($f3) {
 			Feeds::update($_POST["feed_url"][$i], $_POST["title"][$i], $_POST["site_url"][$i]);
 	}
 
+	$_SESSION['message'] = 'Changes saved.';
 	$f3->reroute("/feeds");
 });
 
@@ -614,7 +621,6 @@ $f3->route('POST /admin/login', function($f3) {
 	}
 
 	// We're in!
-	session_start();
 	$_SESSION['admin'] = TRUE;
 	$_SESSION['email'] = $r['email'];
 	$_SESSION['rights'] = $r['rights'];
@@ -624,8 +630,6 @@ $f3->route('POST /admin/login', function($f3) {
 });
 
 $f3->route('GET /admin/logout', function($f3) {
-
-	session_start();
 
 	// Nuke the session cookie
 	$params = session_get_cookie_params();
@@ -723,8 +727,8 @@ $f3->route('POST /p/@key', function($f3) {
 
 	User::new_password($user, $pw);
 
-	$message = "Done, thanks";
-	$f3->reroute("/?msg=" . urlencode($message));
+	$_SESSION['message'] = "Password reset successfully.";
+	$f3->reroute("/");
 });
 
 
@@ -827,6 +831,12 @@ if ($f3->get('DEBUG') != 0) {
 );
 
 ini_set("zlib.output_compression", "On");
+session_start();
+
+if (isset($_SESSION['message'])) {
+	$f3->set("message", $_SESSION['message']);
+	$_SESSION['message'] = NULL;	
+}
 
 try {
 	$f3->run();

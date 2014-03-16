@@ -78,24 +78,6 @@ html { background-color: #eee; color: #222; }
 header { border-bottom: 4px solid black; background-color: darkseagreen; padding-left: 10px; box-shadow: 0 0 20px #ccc; padding-top: 5px; }
 header .about { font-size: 120%; margin: 0 0 10px 0; }
 
-/** Message box */
-p.msg {
-	display: block;
-	width: 40%;
-	left: 30%;
-	top: 30%;
-	position: fixed;
-	background-color: #fff;
-	border: 1px solid black;
-	border-radius: 4px;
-	padding: { top: 1em; bottom: 1em; }
-	box-shadow: 0 0 1000px 140px white;
-
-	font-weight: bold; text-align: center; font-size: 120%;
-
-	img { padding-right: 1em; }
-}
-
 /*** Page layout ***/
 
 $columns: 12;
@@ -111,6 +93,19 @@ header img { max-width: 95%; }
 $thin-width: 800px;
 
 body.thin .content { max-width: $thin-width; }
+
+/** Message box */
+div.message {
+	font-size: 18px;
+
+	p {
+		padding: 16px 0;
+		border-bottom: 2px solid black;
+		background-color: #ddd;
+		color: black;
+		@include column(12);
+	}
+}
 
 /* Reusable nav elements */
 

@@ -6,10 +6,12 @@
 </header>
 
 <F3:check if="{{isset(@message)}}">
-	<p class="msg">
-		<img src="/img/cross.png" align="right" onclick="$(this.parentNode).css('display','none')">
-		{{@message}}
-</p>
+<div class="content message">
+	<p><i class="fa fa-info-circle" style="margin-right: 0.5em"></i> {{@message}}</p>
+</div>
+
+<!-- <img src="/img/cross.png" align="right" onclick="$(this.parentNode).css('display','none')"> -->
+
 </F3:check>
 
 <div class="content">

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<title>{{@appname}} :: Reject event</title>
+
+<F3:include href="_stylesheets.html" />
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.24.custom.css">
+
+<body class="thin formpage">
+<F3:include href="_header.html" />
+
+<section>
+<h2 style="text-align: center">Reject event</h2>
+
+<div style="width: 35em; margin: 0 auto;">
+<p>
+	<b>To:</b> {{@event->email}}<br>
+	<b>From:</b> {{@from_email}}<br>
+	<b>Subject:</b> Unpublished event: "{{@event->title}}"
+</p>
+
+<form method="POST" action="?">
+
+<label class="title" for="blurb">Message text:</label>
+
+<textarea class="long required" name="text" id="text" style="width: 35em; height: 35em">
+<F3:include href="event_reject_mail.txt" />
+</textarea>
+<p class="right count" style="display: none;"><i>Word count:</i> <span id="wordcount">0</span> / 120</p>
+
+<p><input type="submit" value="Reject event">
+</form>
+</div>
+
+</section>
+
+<F3:include href="_footer.html" />

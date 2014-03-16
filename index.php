@@ -336,6 +336,41 @@ $f3->route('POST /event/@id/unapprove', function($f3) {
 	echo "Unapproved";
 });
 
+$f3->route('GET /event/@id/reject', function($f3) {
+	global $options;
+
+	admin_check();
+	readonly_check();
+
+	try { $e = new Event(intval($f3->get('PARAMS.id'))); }
+	catch (Exception $e) { $f3->error(404); }
+
+	$f3->set("event", $e);
+	$f3->set("from_email", $options['general']['email']);
+
+	echo Template::instance()->render("event_reject.html");
+});
+
+$f3->route('POST /event/@id/reject', function($f3) {
+	global $options;
+
+	admin_check();
+	readonly_check();
+
+	try { $e = new Event(intval($f3->get('PARAMS.id'))); }
+	catch (Exception $e) { $f3->error(404); }
+
+	$to = $e->email;
+	$subject = 'Unpublished event: "' . $e->title . '"';
+	$body = wordwrap($_POST['text']);
+	$headers = "From: " . $options['general']['email'];
+
+	mail($to, $subject, $body, $headers);
+	Events::delete($e->id);
+
+	$f3->reroute('/admin?msg=Event+rejected.');
+});
+
 $f3->route('POST /event/@id/delete', function($f3) {
 	admin_check();
 	readonly_check();

@@ -1,6 +1,6 @@
 Hello,
 
-Thanks for adding your event "{{@event->name}}" to Echo Manchester. Unfortunately we don't feel that it fits Echo's remit, so we're not publishing it.
+Thanks for adding your event "{{@event->title}}" to Echo Manchester. Unfortunately we don't feel that it fits Echo's remit, so we're not publishing it.
 
 We are sorry if this sounds harsh, we just want to keep our focus on what Echo was set up for (i.e. to provide opportunities for struggle against oppression to grow by increasing participation in demonstrations, events, organised groups, and fundraisers) so Echo's mission doesn't become diluted and its effectiveness lessened.
 

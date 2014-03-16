@@ -270,6 +270,11 @@ ul.sublinks {
 
 #venue .info { margin-top: 1em; }
 
+form {
+	label.title { font-weight: bold; display: block; }
+	p.desc { font-size: 12px; }
+}
+
 #event_add, #venue_add {
 	@extend %formpage;
 
@@ -281,8 +286,6 @@ ul.sublinks {
 	.hasDatepicker { width: 14em; cursor: pointer; 
 		background-image: url(../img/calendar.png); background-repeat: no-repeat; background-position: 98% 50%; }
 
-	label.title { font-weight: bold; display: block; }
-	p.desc { font-size: 12px; }
 	.long { width: $thin-width - 300px; }
 	fieldset { margin-left: 130px /* for the big icons */ + 20px /* for central alignment */; }
 

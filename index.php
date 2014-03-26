@@ -3,7 +3,7 @@
  * Change this to where the ini file and DB folder are kept.
  ************************************/
 define("BASEPATH", "");
-define("VERSION", "0.1");
+define("VERSION", "0.2");
 
 $f3 = require(BASEPATH . 'lib/fatfree/base.php');
 $f3->set("UI", BASEPATH . "templates/");

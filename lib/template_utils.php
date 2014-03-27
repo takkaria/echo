@@ -1,8 +1,5 @@
 <?php
 
-require_once 'lib_autolink.php';
-require_once 'lib_parsedown.php';
-
 // Group events by day
 $f3->set('group_events', function($ongoing = TRUE) {
 	global $f3;
@@ -104,11 +101,6 @@ $f3->set('comma2br', function($text) {
 // Convert commas into brs
 $f3->set('get_venues', function() {
 	return Events::$db->exec("SELECT name FROM venues");
-});
-
-// Turn newlines to paragraphs
-$f3->set('process_text', function($string) {
-	return Parsedown::instance()->parse(autolink($string, 40));
 });
 
 ?>

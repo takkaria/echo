@@ -1,12 +1,23 @@
 Hello,
 
-Thanks for adding your event "{{@event->title}}" to Echo Manchester. Unfortunately we don't feel that it fits Echo's remit, so we're not publishing it.
+Thanks for adding your event "{{@event->title}}" to Echo Manchester. Unfortunately we've decided not to publish your event at this time, because [1. we don't want to list regular group meetings] / [2. we don't feel that it fits within Echo's remit].
 
-We are sorry if this sounds harsh, we just want to keep our focus on what Echo was set up for (i.e. to provide opportunities for struggle against oppression to grow by increasing participation in demonstrations, events, organised groups, and fundraisers) so Echo's mission doesn't become diluted and its effectiveness lessened.
+
+1. We don't want to list regular group organising meetings on Echo because in our experience, they are often inaccessible to newcomers.  We're fine with them going on the site every so often but we'd prefer groups to put on events aimed at new people.
+
+We realise this might seem arbitrary or unfair to you. If you feel strongly that your event should go on the site, please reply and explain why and we'll reconsider.  We're definitely open to having a conversation about it!
+
+We hope you understand our position and that this doesn't put you off posting future events.
+
+
+
+2. We are sorry if this sounds harsh, we just want to keep our focus on what Echo was set up for (i.e. to provide opportunities for struggle against oppression to grow by increasing participation in demonstrations, events, organised groups, and fundraisers) so Echo's mission doesn't become diluted and its effectiveness lessened.
 
 We realise this might seem arbitrary or unfair to you. If you feel strongly that your event fits our ethos, please reply and explain why and we'll reconsider.  Sometimes it's hard to judge from the little blurb/link and we might have missed out some crucial information!
 
 We hope you understand our position and that this doesn't put you off posting future events within our event guidelines.
+
+
 
 Take care,
 

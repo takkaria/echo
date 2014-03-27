@@ -13,7 +13,8 @@
 <li>{{@event->blurb}}
 </ul>
 
-<p>Please go to <a href="http://{{@domain}}/events/unapproved">http://{{@domain}}/events/unapproved</a> to approve it.
+<p>Please <a href="http://{{@domain}}/admin">log in to Echo</a>, and then go to <a href="http://{{@domain}}/event/{{@event->id}}">http://{{@domain}}/event/{{@event->id}}</a> to edit or approve this event.
+You can also see a list of <a href="http://{{@domain}}/events/unapproved">other unapproved events</a>.
 
 <p>- <b>The Echo Automaton</b>
 

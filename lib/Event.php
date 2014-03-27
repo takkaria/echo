@@ -1,5 +1,8 @@
 <?php
 
+require_once 'lib_autolink.php';
+require_once 'lib_parsedown.php';
+
 function parse_time($value) {
 	$normalise = function($time) {
 		// Check if the time is set to 7am or before; if so, make it pm
@@ -73,6 +76,10 @@ class Event {
 		if (!$this->enddt) return FALSE;
 		$interval = $this->startdt->diff($this->enddt);
 		return $interval->d >= 1;
+	}
+	
+	public function blurb_as_html() {
+		return Parsedown::instance()->parse(autolink($this->blurb, 40));
 	}
 	
 	public function parse_form_data() {

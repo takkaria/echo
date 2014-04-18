@@ -244,6 +244,14 @@ $f3->route('GET /event/@id', function($f3) {
 	try { $event = new Event(intval($f3->get('PARAMS.id'))); }
 	catch (Exception $e) { $f3->error(404); }
 
+	$f3->set('nav', [
+		"title" => "Event",
+		"prev" => [
+			"title" => "More events in " . $event->startdt->format("F Y"),
+			"url" => "/events/".strtolower($event->startdt->format("Y/M"))
+		]
+	]);
+
 	$f3->set("event", $event);
 	echo Template::instance()->render("event.html");
 });

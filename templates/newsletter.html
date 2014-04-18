@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<title>Leaflet</title>
+<style>
+	body { font-family: Arial; font-size: 14px; }
+</style>
+
+<p>Coming up over the next couple of weeks:</p>
+
+<repeat group="{{@group_events()}}" key="{{@date}}" value="{{@events}}">
+	
+	<b>{{@formatdate(@date, FALSE)}}</b>
+
+	<table style="border-spacing: 0; padding-top: 2px; ">
+	<repeat group="{{@events}}" value="{{@event}}">
+
+		<tr>
+			<td style="width: 4em; vertical-align: top;">
+				<check if="{{@event->startdt->format('i') != '00'}}">
+					<true>{{@event->startdt->format("g:ia")}}</true>
+					<false>{{@event->startdt->format("ga")}}</false>
+				</check>
+
+			<td>
+				<a href="https://{{@domain}}/event/{{@event->id}}">
+				<F3:check if="{{@event->film}}">Film: </F3:check>
+				{{@event->title}}
+				</a><br>
+
+				{{@event->location->short()}}
+
+	</repeat>
+	</table>
+
+	<br>
+
+</repeat>
+
+Please keep an eye on <a href="https://{{@domain}}/">echomanchester.net</a> for updates and new events.
+
+<p>Cheers,<br>
+<b>- The Echo crew</b>
+
+<p><small>To subscribe to this fortnightly newsletter, email echomanchester-subscribe@lists.riseup.net<br>
+To unsubscribe, email echomanchester-unsubscribe@lists.riseup.net</small></p>

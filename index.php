@@ -283,7 +283,7 @@ $f3->route('POST /event/@id/edit', function($f3) {
 		echo Template::instance()->render("event_add.html");
 	} else {
 		$event->save();
-		$_SESSION['Event saved.'];
+		$_SESSION['message'] = 'Event saved.';
 		$f3->reroute("/event/" . $id . "/edit");
 	}
 });

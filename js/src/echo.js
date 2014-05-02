@@ -59,7 +59,7 @@ var echo = {
 
 $(function() {
 
-	$("button.ajax").click(function(e) {
+	$("body").on("click", "button.ajax", function(e) {
 		var url = this.form.action;
 		var method = this.form.method;
 

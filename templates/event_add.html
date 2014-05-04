@@ -40,7 +40,7 @@ Starts <input class="required time" type="text" name="time1" id="time1" {{isset(
 Ends <input class="required time" type="text" name="time2" id="time2" {{isset(@time2)?@value(@time2):NULL}} placeholder="time"> on <input class="required date" type="text" id="date2" name="date2" placeholder="date" {{isset(@date2)?@value(@date2):NULL}}>
 </div>
 <div>
-<input type="checkbox" id="set_end"> <label for="set_end">Set an end time and date?</label>
+<input type="checkbox" id="set_end" name="set_end"> <label for="set_end">Set an end time and date?</label>
 </div>
 </fieldset>
 

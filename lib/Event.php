@@ -85,6 +85,7 @@ class Event {
 	public function parse_form_data() {
 		$messages = array();
 		$self = $this;
+		$set_end = false;
 
 		$handlers = array(
 			"title" => function($value) use(&$self, &$messages) {
@@ -109,23 +110,30 @@ class Event {
 					$self->startdt->setTime($time['hour'], $time['minute']);
 			},
 
-			"date2" => function($value) use(&$self, &$messages) {
-				if ($value) {
+			"set_end" => function($value) use (&$self, &$set_end) {
+				$set_end = $value ? true : false;
+			},
+
+			"date2" => function($value) use(&$self, &$messages, &$set_end) {
+				if ($value && $set_end) {
 					$self->enddt = DateTime::createFromFormat("l j F", $value);
 					if (!$self->enddt)
 						$messages[] = "Invalid end date.";
+				} else {
+					$self->enddt = NULL;
 				}
 			},
 
-			"time2" => function($value) use(&$self, &$messages) {
-				if ($value) {
+			"time2" => function($value) use(&$self, &$messages, &$set_end) {
+				if ($value && $set_end) {
 					$time = parse_time($value);
 
-					if ($time['error_count'] > 0) {
+					if ($time['error_count'] > 0)
 						$messages[] = "Invalid end time.";
-					} else if ($self->enddt) {
+					else if ($self->enddt)
 						$self->enddt->setTime($time['hour'], $time['minute']);
-					}
+				} else {
+					$self->enddt = NULL;
 				}
 			},
 
@@ -159,10 +167,7 @@ class Event {
 
 			"blurb" => function($blurb) use(&$self, &$messages) {
 				global $f3;
-				$blurb = $f3->scrub($blurb);
-				if (strlen($blurb) < 20)
-					$messages[] = "Description too short.";
-				$self->blurb = $blurb;
+				$self->blurb = $f3->scrub($blurb);
 			},
 			
 			"film" => function($film) use(&$self, &$messages) {

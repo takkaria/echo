@@ -76,6 +76,8 @@ function summary_from_content($content) {
 	// strategy: try and grab the first paragraph
 	// failing that, grab the chunk of text up until the first double-<br>
 	$html = str_get_html($content);
+	if (!$html) return;
+
 	$p = $html->find('p', 0);
 	if ($p) {
 		$content = $p->plaintext;

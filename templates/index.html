@@ -46,10 +46,13 @@
 <h2>NEWS</h2>
 <p style="float: right; margin-top: 6px"><a href="/about#addnews">(want yours here?)</a></p>
 
+<ul style="clear: both; margin-left: 0; padding-left: 1em;">
 <repeat group="{{@posts}}" key="{{@i}}" value="{{@post}}">
-<include if="@i < 7" href="_post.html" />
-<include if="@i >= 7" href="_post_short.html" />
+<li><b>{{@post.feed.title}}</b> ({{@formatdate(@post.date)}})<br>
+<a rel="nofollow" href="{{@post.link}}">{{@post.title}}</a>
 </repeat>
+</ul>
+
 </section>
 
 <include href="_footer.html" />

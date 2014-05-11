@@ -196,13 +196,14 @@ $f3->route('POST /events/purge', function($f3) {
 /***************************/
 
 $f3->route('GET /event/add', function($f3) {
+	$event = new Event();
+	$messages = $event->parse_form_data($_GET);
+	$event->set_form_data();
+
 	admin_check(FALSE);
 	if (isset($_SESSION['email']))
 		$f3->set("email", $_SESSION['email']);
 
-	$event = new Event();
-	$messages = $event->parse_form_data($_GET);
-	$event->set_form_data();
 
 	echo Template::instance()->render("event_add.html");
 });

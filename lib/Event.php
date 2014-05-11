@@ -82,7 +82,9 @@ class Event {
 		return Parsedown::instance()->parse(autolink($this->blurb, 40));
 	}
 	
-	public function parse_form_data() {
+	public function parse_form_data($method = "post") {
+		if ($method == "post") $method = $_POST;
+
 		$messages = array();
 		$self = $this;
 		$set_end = false;
@@ -97,6 +99,8 @@ class Event {
 	
 			"date1" => function($value) use(&$self, &$messages) {
 				$self->startdt = DateTime::createFromFormat("l j F", $value);
+				if (!$self->startdt)
+					$self->startdt = DateTime::createFromFormat("Y-m-d", $value);
 				if (!$self->startdt)
 					$messages[] = "Invalid start date.";
 			},
@@ -176,19 +180,19 @@ class Event {
 		);
 
 		foreach ($handlers as $name => $handler) {
-			$value = isset($_POST[$name]) ? $_POST[$name] : NULL;
+			$value = isset($method[$name]) ? $method[$name] : NULL;
 			$handler($value);
 		}
 
-		if (isset($_POST['date2']) != isset($_POST['time2'])) {
+		if (isset($method['date2']) != isset($method['time2'])) {
 			$messages[] = "Only one of end date / end time given.";
 		}
 
-		if (isset($_POST['free']) && $_POST['free'] == 'free') {
+		if (isset($method['free']) && $method['free'] == 'free') {
 			$this->cost = NULL;
 		} else {
 			global $f3;
-			$this->cost = $f3->scrub($_POST['cost']);
+			$this->cost = $f3->scrub($method['cost']);
 		}
 
 		return $messages;

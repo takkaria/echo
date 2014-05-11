@@ -200,6 +200,10 @@ $f3->route('GET /event/add', function($f3) {
 	if (isset($_SESSION['email']))
 		$f3->set("email", $_SESSION['email']);
 
+	$event = new Event();
+	$messages = $event->parse_form_data($_GET);
+	$event->set_form_data();
+
 	echo Template::instance()->render("event_add.html");
 });
 

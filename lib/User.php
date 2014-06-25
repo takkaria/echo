@@ -20,17 +20,22 @@ class User
 		$r = User::$db->exec("SELECT email FROM users WHERE notify=1");
 		foreach ($r as $user) {
 			$email = $user['email'];
+			$boundary = uniqid('np');
 
 			// To send HTML mail, the Content-type header must be set
 			$headers = 'MIME-Version: 1.0' . "\r\n";
-			$headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
 			$headers .= "From: " . $options['general']['email'] . "\r\n";
+			$headers .= "To: " . $email . "\r\n";
 			$headers .= "Reply-To: " . $event->email . "\r\n";
+			$headers .= "Content-Type: multipart/alternative; boundary=" . $boundary . "\r\n";
 
-			$result = mail($email,
-				"New Echo event: " . $event->title,
-				Template::instance()->render('event_notify_email.txt', 'text/html'),
-				$headers);
+			$body = Template::instance()->render('event_notify_email.txt', 'text/plain');
+			$body .= "\r\n\r\n--" . $boundary . "\r\n";
+			$body .= "Content-type: text/html;c harset=utf-8\r\n\r\n";
+			$body .= Template::instance()->render('event_notify_email.html', 'text/html');
+			$body .= "\r\n\r\n--" . $boundary . "--";
+
+			$result = mail($email, "New Echo event: " . $event->title, $body, $headers);
 		}
 	}
 

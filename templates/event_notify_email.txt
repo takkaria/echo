@@ -1,22 +1,14 @@
-<!DOCTYPE html>
-<html>
-<body>
-<p>Hi there!
+Hi there!
 
-<p><b>{{@event->email}}</b> has submitted a new event on Echo.
+{{@event->email}} has submitted a new event on Echo:
 
-<ul>
-<li><b> <F3:check if="{{@event->film}}">Film showing: </F3:check> {{@event->title}}</b>
-<check if="{{@event->url}}"><li>URL: <a href="{{@event->url}}">{{@event->url}}</a></check>
-<li>On: {{@event->startdt->format("l jS F H:i")}}
-<li>At: {{@event->location->short()}}
-<li>{{@event->blurb_as_html() | raw}}
-</ul>
+* <check if="{{@event->film}}">Film showing: </check> {{@event->title}}
+* <check if="{{@event->url}}">URL: {{@event->url}}</check>
+* On: {{@event->startdt->format("l jS F H:i")}}
+* At: {{@event->location->short()}}
+* {{@event->blurb}}
 
-<p>Please <a href="http://{{@domain}}/admin">log in to Echo</a>, and then go to <a href="https://{{@domain}}/event/{{@event->id}}">https://{{@domain}}/event/{{@event->id}}</a> to edit or approve this event.
-You can also see a list of <a href="http://{{@domain}}/events/unapproved">other unapproved events</a>.
+Please log in to Echo, and then go to https://{{@domain}}/event/{{@event->id}} to edit or approve this event.
+You can also see a list of other unapproved events: http://{{@domain}}/events/unapproved
 
-<p>- <b>The Echo Automaton</b>
-
-</body>
-</html>
+- The Echo Automaton

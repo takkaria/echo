@@ -69,7 +69,7 @@ Ends <input class="required time" type="text" name="time2" id="time2" {{isset(@t
 Maximum 120 words.</p>
 
 <textarea class="long required" name="blurb" id="blurb" rows="8">{{isset(@blurb)?@blurb:NULL}}</textarea>
-<p class="right count" style="display: none;"><i>Word count:</i> <span id="wordcount">0</span> / 120</p>
+<p class="right count" style="display: none;"><i>Word count:</i> <span id="wordcount">0</span> / 150</p>
 </fieldset>
 
 <fieldset>
@@ -169,22 +169,25 @@ function initFormValidation() {
 				}
 			},
 			blurb: {
-				wordcount: 120
+				wordcount: 150
 			}
 		}
 	});
 }
 
 function initWordCount() {
-	$(".count").show();
-	$("#blurb").on("input", function(e) {
+	var check = function(e) {
 		var wc = word_count($(e.target).val());
 		$("#wordcount").text(wc);
 		if (wc > 120)
 			$("#wordcount").addClass("overcount");
 		else
 			$("#wordcount").removeClass("overcount");
-	})
+	}
+
+	$(".count").show();
+	$("#blurb").on("input", check);
+	$("#blurb").on("keyup", check);
 }
 
 function initEndDatetime() {

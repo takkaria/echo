@@ -239,8 +239,11 @@ class Event {
 	public function save() {
 		$e = new DB\SQL\Mapper(Events::$db, 'events');
 
-		if ($this->id)
+		$get_id = true;
+		if ($this->id) {
 			$e->load(array('id=?', $this->id));
+			$get_id = false;
+		}
 
 		$e->id = $this->id;
 		$e->title = $this->title;
@@ -260,6 +263,9 @@ class Event {
 		$e->state = $this->state;
 
 		$e->save();
+
+		if ($get_id)
+			$this->id = $e->get('_id');
 	}
 	
 	public function set_form_data() {

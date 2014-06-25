@@ -31,8 +31,6 @@ class User
 				"New Echo event: " . $event->title,
 				Template::instance()->render('event_notify_email.txt', 'text/html'),
 				$headers);
-
-			var_dump($result);
 		}
 	}
 

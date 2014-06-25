@@ -48,8 +48,8 @@
 
 <ul style="clear: both; margin-left: 0; padding-left: 1em;">
 <repeat group="{{@posts}}" key="{{@i}}" value="{{@post}}">
-<li><b>{{@post.feed.title}}</b> ({{@formatdate(@post.date)}})<br>
-<a rel="nofollow" href="{{@post.link}}">{{@post.title}}</a>
+	<li><b>{{@post.feed.title}}</b> ({{@formatdate(@post.date)}})<br>
+	<a rel="nofollow" href="{{@post.link}}">{{@post.title}}</a>
 </repeat>
 </ul>
 

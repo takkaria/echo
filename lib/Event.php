@@ -217,7 +217,7 @@ class Event {
 		$template = new Template;
 		$message = wordwrap($template->render('event_confirm_mail.txt','text/plain'));
 
-		$subject = $options['general']['name'] . ": Please confirm your event";
+		$subject = $options['general']['name'] . ": Event submitted";
 		$headers = "From: " . $options['general']['email'];
 		mail($this->email, $subject, $message, $headers);
 	}

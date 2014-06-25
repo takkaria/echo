@@ -31,7 +31,7 @@ class User
 
 			$body = Template::instance()->render('event_notify_email.txt', 'text/plain');
 			$body .= "\r\n\r\n--" . $boundary . "\r\n";
-			$body .= "Content-type: text/html;c harset=utf-8\r\n\r\n";
+			$body .= "Content-type: text/html; charset=utf-8\r\n\r\n";
 			$body .= Template::instance()->render('event_notify_email.html', 'text/html');
 			$body .= "\r\n\r\n--" . $boundary . "--";
 

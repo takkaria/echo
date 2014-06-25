@@ -3,9 +3,8 @@ Hi there!
 {{@event->email}} has submitted a new event on Echo:
 
 * <check if="{{@event->film}}">Film showing: </check> {{@event->title}}
-
-* <check if="{{@event->url}}">URL: {{@event->url}}</check>
-
+<check if="{{@event->url}}">
+* URL: {{@event->url}}</check>
 * On: {{@event->startdt->format("l jS F H:i")}}
 
 * At: {{@event->location->short()}}

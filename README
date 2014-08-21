@@ -3,6 +3,11 @@ Echo README
 
 To set this up you will need to:
 
+0. Dependencies
+
+PHP 5.4
+PHP's SQLite module
+
 1. Initialise the databases:
 1a. Create the databases from SQL:
 

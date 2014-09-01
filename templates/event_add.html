@@ -121,7 +121,7 @@ function initWidgets() {
 function initFormValidation() {
 
 	$.validator.addMethod("wordcount", function(value, element, params) {
-		return word_count($(element).val()) <= 120
+		return word_count($(element).val()) <= 150
 	}, "Your blurb is over the word limit.");
 
 	$.validator.addMethod("permissive_url", function(value, element) {

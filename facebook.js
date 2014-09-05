@@ -1,7 +1,7 @@
 var makeUrl = function(base, params) {
 	var url = base + "?";
 	for (var prop in params)
-		url += prop + "=" + encodeURI(params[prop]) + "&";
+		url += prop + "=" + encodeURIComponent(params[prop]) + "&";
 	return url;
 };
 

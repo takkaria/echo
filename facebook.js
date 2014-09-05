@@ -13,6 +13,10 @@ if (c)
 	c.click();
 
 var datetime = /(.*)T(.*)/.exec(d.querySelector("[itemprop=startDate]").getAttribute("content"));
+var d = new Date(/(.*)T(.*)/.exec(d.querySelector("[itemprop=startDate]").getAttribute("content")));
+// d now contains the right info.  just need to get it out...
+
+var date = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate()
 
 // Make the actual URL.
 d.location.href = makeUrl("https://echomanchester.net/event/add", {
@@ -21,5 +25,5 @@ d.location.href = makeUrl("https://echomanchester.net/event/add", {
 	blurb: d.querySelector("#event_description").innerText,
 	url: d.location.href,
 	date1: datetime[1],
-	time1: datetime[0],
+	time1: datetime[2],
 });

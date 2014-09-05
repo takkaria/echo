@@ -5,20 +5,22 @@ var makeUrl = function(base, params) {
 	return url;
 };
 
-var d = document;
+d = document;
+d.qs = d.querySelector;
+d.qsa = d.querySelectorAll;
 
 // See more
-var c = d.querySelector(".see_more_link");
+var c = d.qs(".see_more_link");
 if (c)
 	c.click();
 
-var dt = new Date(d.querySelector("[itemprop=startDate]").getAttribute("content"));
+var dt = new Date(d.qs("[itemprop=startDate]").getAttribute("content"));
 
 // Make the actual URL.
 d.location.href = makeUrl("https://echomanchester.net/event/add", {
-	title: d.querySelector("#event_header_info a").innerText,
-	location: d.querySelectorAll("._5xhk")[1].innerText + ", " + d.querySelectorAll("._5xhp")[1].innerText,
-	blurb: d.querySelector("#event_description").innerText,
+	title: d.qs("#event_header_info a").innerText,
+	location: d.qsa("._5xhk")[1].innerText + ", " + d.qsa("._5xhp")[1].innerText,
+	blurb: d.qs("#event_description").innerText,
 	url: d.location.href,
 	date1: dt.getFullYear() + "-" + dt.getMonth() + "-" + dt.getDate(),
 	time1: dt.getHours() + ":" + dt.getMinutes(),

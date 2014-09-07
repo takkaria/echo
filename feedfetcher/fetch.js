@@ -18,7 +18,8 @@ function fetch_feed(url) {
 
 // fetch_feed('https://www.google.com/calendar/ical/7etn2k6kvovrugd1hapue7ghrc%40group.calendar.google.com/public/basic.ics')
 
-var e = Event.find({ where: { id: 150 }}).success(function(event) {
-	console.log(event.title);
-	console.log(event.startdt);
-});
+var e = Event.find({ where: { id: 150 }})
+	.success(function(event) {
+		console.log(event.title);
+		console.log(event.startdt);
+	});

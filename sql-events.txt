@@ -23,7 +23,8 @@ CREATE TABLE events (
 	/* State crap */
 	state TEXT,		/* "submitted", "approved" */
 	email TEXT,		/* Delete after submitted? */
-	key TEXT			/* key needed for validation */ /* XXX remove */
+	key TEXT,			/* key needed for validation */ /* XXX remove */
+	importid TEXT
 );
 
 CREATE TABLE users (

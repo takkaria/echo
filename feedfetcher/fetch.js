@@ -35,4 +35,9 @@ function fetch_feed(url) {
 	})
 }
 
-fetch_feed('https://www.google.com/calendar/ical/7etn2k6kvovrugd1hapue7ghrc%40group.calendar.google.com/public/basic.ics')
+fetch_feed({
+	url: 'https://www.google.com/calendar/ical/7etn2k6kvovrugd1hapue7ghrc%40group.calendar.google.com/public/basic.ics',
+	filter: function(data) {
+		return true;
+	}
+})

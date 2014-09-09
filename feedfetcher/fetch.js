@@ -3,7 +3,7 @@ var models = require('./models')
 
 Event = models.Event
 
-function fetch_feed(params) {
+function ical(params) {
 	var url = params.url;
 	var filter = params.filter;
 	var action = params.action;
@@ -21,9 +21,7 @@ function fetch_feed(params) {
 	})
 }
 
-
 function add_event(data) {
-
 	var e = Event.build({
 		title: data.summary,
 		startdt: data.start,
@@ -35,11 +33,10 @@ function add_event(data) {
 	})
 
 	console.log(e.values)
-
 //	e.save()
 }
 
-fetch_feed({
+ical({
 	url: 'https://www.google.com/calendar/ical/7etn2k6kvovrugd1hapue7ghrc%40group.calendar.google.com/public/basic.ics',
 	filter: function(data) {
 		day = data.start.getDay() // 0 = Sunday, 1 = Monday, etc.
@@ -48,4 +45,49 @@ fetch_feed({
 		return true;
 	},
 	action: add_event
+})
+
+// ============================================================ \\
+
+var FeedParser = require('feedparser')
+var request = require('request');
+
+function add_post() {
+	// https://github.com/danmactough/node-feedparser#what-is-the-parsed-output-produced-by-feedparser
+}
+
+function feed_error() {
+}
+
+function feed(params) {
+	var url = params.url;
+
+	var req = request(url)
+	  , feedparser = new FeedParser();
+
+	// Set error handlers
+	req.on('error', feed_error);
+	feedparser.on('error', feed_error);
+
+	req.on('response', function (res) {
+		var stream = this;
+		if (res.statusCode != 200) return this.emit('error', new Error('Bad status code'));
+
+		stream.pipe(feedparser);
+	});
+
+	feedparser.on('readable', function() {
+		// This is where the action is!
+		var stream = this
+		  , meta = this.meta // **NOTE** the "meta" is always available in the context of the feedparser instance
+		  , item
+		
+		while (item = stream.read()) {
+			add_post(item);
+		}
+	});
+}
+
+feed({
+	url: 'http://manchestersocialcentre.org.uk/feed/
 })

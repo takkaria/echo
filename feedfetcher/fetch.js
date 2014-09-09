@@ -89,5 +89,5 @@ function feed(params) {
 }
 
 feed({
-	url: 'http://manchestersocialcentre.org.uk/feed/
+	url: 'http://manchestersocialcentre.org.uk/feed/'
 })

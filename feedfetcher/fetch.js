@@ -3,20 +3,30 @@ var models = require('./models')
 
 Event = models.Event
 
-function ical(params) {
+function calendar(params) {
 	var url = params.url;
 	var filter = params.filter;
 	var action = params.action;
 
 	ical.fromURL(url, {}, function(err, data) {
 		for (var k in data) {
-			if (!data.hasOwnProperty(k)) continue;
-			if (!filter || !filter(data[k])) continue;
-			if (!data.start || data.start < new Date()) continue;
 
-			Event.find({ where: { importid: data.uid } }).success(function() {
-				action(data[k]);
-			});
+			console.log("ID: " + k);
+
+			if (!data.hasOwnProperty(k)) continue;
+			if (!data[k].start || data[k].start < new Date()) continue;
+			if (filter && filter(data[k])) continue;
+
+			/* Wrapper function to deal with JS's scoping rules */
+			function succeed(data) {
+				return function(evt) {
+					if (evt != null) return;   /* Don't duplicate IDs */
+					action(data);
+				}
+			}
+
+			Event.find({ where: { importid: data[k].uid } })
+				 .success(succeed(data[k]));
 		}
 	})
 }
@@ -30,19 +40,18 @@ function add_event(data) {
 		blurb: data.description,
 		state: 'imported',
 		importid: data.uid
-	})
+	});
 
-	console.log(e.values)
-//	e.save()
+	e.save()
 }
 
-ical({
+calendar({
 	url: 'https://www.google.com/calendar/ical/7etn2k6kvovrugd1hapue7ghrc%40group.calendar.google.com/public/basic.ics',
 	filter: function(data) {
 		day = data.start.getDay() // 0 = Sunday, 1 = Monday, etc.
-		if (day == 1 || day == 2) return false; // Filter out private events on Monday and Tuesday
+		if (day == 1 || day == 2) return true; // Filter out private events on Monday and Tuesday
 
-		return true;
+		return false;
 	},
 	action: add_event
 })
@@ -52,8 +61,10 @@ ical({
 var FeedParser = require('feedparser')
 var request = require('request');
 
-function add_post() {
+function add_post(e) {
 	// https://github.com/danmactough/node-feedparser#what-is-the-parsed-output-produced-by-feedparser
+
+//	console.log(e);
 }
 
 function feed_error() {
@@ -88,6 +99,6 @@ function feed(params) {
 	});
 }
 
-feed({
+/* feed({
 	url: 'http://manchestersocialcentre.org.uk/feed/'
-})
+}) */

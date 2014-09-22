@@ -25,7 +25,8 @@ exports.Event = events.define('event', {
 		values: [ 'submitted', 'approved', 'imported' ]
 	},
 	email: { type: sequelize.TEXT },
-	key: { type: sequelize.TEXT }
+	key: { type: sequelize.TEXT },
+	importid: { type: sequelize.TEXT },
 }, {
 	timestamps: false,
 	createdAt: false,

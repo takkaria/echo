@@ -59,7 +59,7 @@ class Event {
 		$this->id = $r['id'];
 		$this->title = $r['title'];
 		$this->startdt =
-				DateTime::createFromFormat("Y-m-j H:i", $r['startdt']);
+				DateTime::createFromFormat("Y-m-j H:i+", $r['startdt']);
 		$this->enddt =
 				DateTime::createFromFormat("Y-m-j H:i", $r['enddt']);
 		$this->location = new Venue($r['location']);
@@ -312,6 +312,7 @@ class Events {
 
 	static function json($array) {
 		$events = [];
+
 		foreach ($array as $event) {
 			$insert = [
 				'id' => $event->id,

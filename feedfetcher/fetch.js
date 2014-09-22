@@ -4,10 +4,16 @@ var models = require('./models')
 Event = models.Event
 Post = models.Post
 
+// 'Safe' exec - returns an array no matter what, so you can index into it
+RegExp.prototype.sexec = function(str) {
+	return this.exec(str) || [ ];
+};
+
 function calendar(params) {
 	var url = params.url;
 	var filter = params.filter;
 	var action = params.action;
+	var transform = params.transform;
 
 	ical.fromURL(url, {}, function(err, data) {
 		for (var k in data) {
@@ -22,6 +28,7 @@ function calendar(params) {
 			function succeed(data) {
 				return function(evt) {
 					if (evt != null) return;   /* Don't duplicate IDs */
+					if (transform) transform(data);
 					action(data);
 				}
 			}
@@ -43,7 +50,7 @@ function add_event(data) {
 		importid: data.uid
 	});
 
-	e.save()
+	e.save();
 }
 
 /*
@@ -54,6 +61,9 @@ calendar({
 		if (day == 1 || day == 2) return true; // Filter out private events on Monday and Tuesday
 
 		return false;
+	},
+	transform: function(data) {
+		data.location = "Subrosa";
 	},
 	action: add_event
 })
@@ -110,11 +120,6 @@ function monthToInt(s) {
 
 function find_date(text) {
 
-	// 'Safe' exec - returns an array no matter what, so you can index into it
-	RegExp.prototype.sexec = function(str) {
-		return this.exec(str) || [ ];
-	};
-
 	var time = /\d?\d[\.:]\d\d([ap]m)?/.sexec(text)[0] || 
 			/\d?\d([ap]m)/.sexec(text)[0];
 
@@ -122,7 +127,6 @@ function find_date(text) {
 
 	var month = /(January|February|March|May|April|June|July|August|September|October|November|December)/.sexec(text)[0] ||
 			/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)/.sexec(text)[0];
-
 
 	if (time && day && month) {
 		var d = new Date();

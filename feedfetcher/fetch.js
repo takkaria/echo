@@ -2,6 +2,7 @@ var ical = require('ical')
 var models = require('./models')
 
 Event = models.Event
+Post = models.Post
 
 function calendar(params) {
 	var url = params.url;
@@ -45,6 +46,7 @@ function add_event(data) {
 	e.save()
 }
 
+/*
 calendar({
 	url: 'https://www.google.com/calendar/ical/7etn2k6kvovrugd1hapue7ghrc%40group.calendar.google.com/public/basic.ics',
 	filter: function(data) {
@@ -55,30 +57,24 @@ calendar({
 	},
 	action: add_event
 })
+*/
 
 // ============================================================ \\
 
 var FeedParser = require('feedparser')
 var request = require('request');
 
-function add_post(e) {
-	// https://github.com/danmactough/node-feedparser#what-is-the-parsed-output-produced-by-feedparser
-
-//	console.log(e);
-}
-
-function feed_error() {
-}
-
 function feed(params) {
 	var url = params.url;
+	var action = params.action;
+	var onerror = params.error;
 
 	var req = request(url)
 	  , feedparser = new FeedParser();
 
 	// Set error handlers
-	req.on('error', feed_error);
-	feedparser.on('error', feed_error);
+	req.on('error', onerror);
+	feedparser.on('error', onerror);
 
 	req.on('response', function (res) {
 		var stream = this;
@@ -94,11 +90,91 @@ function feed(params) {
 		  , item
 		
 		while (item = stream.read()) {
-			add_post(item);
+			// Filter some items
+			if (!item.title) continue;
+			action(item);
 		}
 	});
 }
 
-/* feed({
-	url: 'http://manchestersocialcentre.org.uk/feed/'
-}) */
+function monthToInt(s) {
+	var first3 = s.slice(0, 3).toLowerCase();
+	var a = {
+		jan: 1,  feb: 2,  mar: 3,  apr: 4,
+		may: 5,  jun: 6,  jul: 7,  aug: 8,
+		sep: 9,  oct: 10, nov: 11, dec: 12
+	};
+
+	return a[first3] || null;
+}
+
+function find_date(text) {
+
+	// 'Safe' exec - returns an array no matter what, so you can index into it
+	RegExp.prototype.sexec = function(str) {
+		return this.exec(str) || [ ];
+	};
+
+	var time = /\d?\d[\.:]\d\d([ap]m)?/.sexec(text)[0] || 
+			/\d?\d([ap]m)/.sexec(text)[0];
+
+	var day = /(\d?\d)(th|rd|nd)/.sexec(text)[1];
+
+	var month = /(January|February|March|May|April|June|July|August|September|October|November|December)/.sexec(text)[0] ||
+			/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)/.sexec(text)[0];
+
+
+	if (time && day && month) {
+		var d = new Date();
+		d.setMonth(monthToInt(month) - 1);
+		d.setDate(parseInt(day));
+
+		var t = parseInt(time);
+		if (/pm/.test(time)) t += 12;
+
+		var m = parseInt(/[\.:](\d\d)/.sexec(time)[1]) || 0;
+
+		d.setHours(t, m, 0, 0);
+
+		return d;
+	}
+}
+
+function add_post(data) {
+	// https://github.com/danmactough/node-feedparser#what-is-the-parsed-output-produced-by-feedparser
+	// may want to re-add summary, content or image parsing at some point
+
+	// Build the post
+	var p = Post.build({
+		id: data.guid,
+		title: data.title,
+		link: data.link,
+		date: data.pubDate,
+		feed_url: data.meta.xmlurl,
+	});
+
+	// Check if it's like an event
+	var date = find_date(data.description);
+	if (!date) return;
+
+	console.log(date);
+
+	var e = Event.build({
+		title: data.title,
+		startdt: null,
+		url: data.link,
+		blurb: data.description,
+		state: 'imported',
+		importid: "???" // XXX work out some way to sort this out
+	});
+}
+
+function feed_error() {
+	// UPDATE feeds SET errors=:errors WHERE feed_url=:url
+}
+
+feed({
+	url: 'http://manchestersocialcentre.org.uk/feed/',
+	action: add_post,
+	error: feed_error,
+})

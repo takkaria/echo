@@ -1,14 +1,14 @@
-var sequelize = require('sequelize')
+var sequelize = require('sequelize');
 
 var events = new sequelize('', '', '', {
 	dialect: 'sqlite',
 	storage: '../db/events.sqlite'
-})
+});
 
 var feeds = new sequelize('', '', '', {
 	dialect: 'sqlite',
 	storage: '../db/feeds.sqlite'
-})
+});
 
 exports.Event = events.define('event', {
 	id: { type: sequelize.INTEGER, primaryKey: true },
@@ -31,7 +31,7 @@ exports.Event = events.define('event', {
 	timestamps: false,
 	createdAt: false,
 	underscored: true
-})
+});
 
 exports.Post = feeds.define('post', {
 	id: { type: sequelize.TEXT, primaryKey: true },
@@ -44,4 +44,11 @@ exports.Post = feeds.define('post', {
 	feed_url: { type: sequelize.TEXT },
 	eventish: { type: sequelize.BOOLEAN },
 	hidden: { type: sequelize.INTEGER }
-})
+});
+
+exports.Feed = feeds.define('feed', {
+	feed_url: { type: sequelize.TEXT, primaryKey: true },
+	site_url: { type: sequelize.TEXT },
+	title: { type: sequelize.TEXT },
+	error: { type: sequelize.TEXT },
+});

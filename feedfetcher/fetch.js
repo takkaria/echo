@@ -3,6 +3,7 @@ var models = require('./models')
 
 Event = models.Event
 Post = models.Post
+Feed = models.Feed
 
 // 'Safe' exec - returns an array no matter what, so you can index into it
 RegExp.prototype.sexec = function(str) {
@@ -74,7 +75,7 @@ calendar({
 var FeedParser = require('feedparser')
 var request = require('request');
 
-function feed(params) {
+function fetch_feed(params) {
 	var url = params.url;
 	var action = params.action;
 	var onerror = params.error;
@@ -161,8 +162,6 @@ function add_post(data) {
 	var date = find_date(data.description);
 	if (!date) return;
 
-	console.log(date);
-
 	var e = Event.build({
 		title: data.title,
 		startdt: null,
@@ -173,12 +172,25 @@ function add_post(data) {
 	});
 }
 
-function feed_error() {
-	// UPDATE feeds SET errors=:errors WHERE feed_url=:url
-}
-
-feed({
+fetch_feed({
 	url: 'http://manchestersocialcentre.org.uk/feed/',
 	action: add_post,
-	error: feed_error,
+	error: console.log,
 })
+
+/*
+Feed.findAll().success(function (e) {
+	e.forEach(function(feed) {
+		fetch_feed({
+			url: feed.feed_url,
+			action: add_post,
+			error: function(error) {
+				Feed.find(where: { feed_url: feed.feed_url }).success(function (feed) {
+					feed.errors = error;
+					feed.save();
+				});
+			},
+		});
+	});
+});
+*/

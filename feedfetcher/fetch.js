@@ -2,7 +2,7 @@ var ical = require('ical');
 var FeedParser = require('feedparser')
 var request = require('request');
 
-function ical(params) {
+exports.ical = function(params) {
 	var url = params.url;
 	var filter = params.filter;
 	var action = params.action;
@@ -32,7 +32,7 @@ function ical(params) {
 	})
 }
 
-function feed(params) {
+exports.feed = function(params) {
 	var url = params.url;
 	var action = params.action;
 	var onerror = params.error;
@@ -64,6 +64,3 @@ function feed(params) {
 		}
 	});
 }
-
-exports.ical = ical
-exports.feed = feed

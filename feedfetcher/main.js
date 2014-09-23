@@ -1,3 +1,5 @@
+var html_strip = require('htmlstrip-native');
+
 var models = require('./models')
 var fetch = require('./fetch')
 
@@ -18,9 +20,8 @@ function add_event(data) {
 		state: 'imported',
 		importid: data.uid
 	}).save();
-}
+};
 
-/*
 fetch.ical({
 	url: 'https://www.google.com/calendar/ical/7etn2k6kvovrugd1hapue7ghrc%40group.calendar.google.com/public/basic.ics',
 	filter: function(data) {
@@ -33,13 +34,12 @@ fetch.ical({
 		data.location = "Subrosa";
 	},
 	action: add_event
-})
-*/
+});
 
 // ============================================================ //
 
-Post = models.Post
-Feed = models.Feed
+Post = models.Post;
+Feed = models.Feed;
 
 function monthToInt(s) {
 	var first3 = s.slice(0, 3).toLowerCase();
@@ -109,14 +109,22 @@ function add_post(data) {
 			date.getTime() > (now.getTime() + 7.88923e9)) // 1.578e10 == 3 months in ms
 		return;
 
-	Event.build({
-		title: data.title,
-		startdt: date,
-		url: data.link,
-		blurb: data.description,
-		state: 'imported',
-		importid: data.guid
-	}).save();
+	Event.find({ where: { importid: data.guid } })
+		 .success(function(evt) {
+			if (evt != null) return;
+
+			Event.build({
+				title: data.title,
+				startdt: date,
+				url: data.link,
+				blurb: html_strip.html_strip(data.description, {
+					include_script: false,
+					include_style: false,
+				}),
+				state: 'imported',
+				importid: data.guid
+			}).save();
+		 });
 }
 
 /* fetch.feed({

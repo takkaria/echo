@@ -54,7 +54,7 @@ function monthToInt(s) {
 	return a[first3] || null;
 }
 
-function find_date(text) {
+function find_date(base, text) {
 
 	var time = /\d?\d[\.:]\d\d([ap]m)?/.sexec(text)[0] || 
 			/\d?\d([ap]m)/.sexec(text)[0];
@@ -66,7 +66,13 @@ function find_date(text) {
 
 	if (time && day && month) {
 		var d = new Date();
+
 		d.setMonth(monthToInt(month) - 1);
+		if (d.getMonth() < base.getMonth())
+			d.setYear(base.getYear() + 1);
+		else
+			d.setYear(base.getYear());
+
 		d.setDate(parseInt(day));
 
 		var t = parseInt(time);
@@ -94,8 +100,13 @@ function add_post(data) {
 	});
 
 	// Check if it's like an event
-	var date = find_date(data.description);
+	var date = find_date(data.pubDate, data.description);
 	if (!date) return;
+
+	var now = new Date();
+	if (date.getTime() < now.getTime() ||
+			date.getTime() > (now.getTime() + 7.88923e9)) // 1.578e10 == 3 months in ms
+		return;
 
 	var e = Event.build({
 		title: data.title,

@@ -180,7 +180,7 @@ $f3->route('GET /events/unapproved', function($f3) {
 		"allow_nav" => true
 	]);
 
-	echo event_page($f3, Events::load("state IS NOT 'approved'"));
+	echo event_page($f3, Events::load("state IS NOT 'approved' AND state IS NOT 'rejected'"));
 });
 
 $f3->route('POST /events/purge', function($f3) {
@@ -349,7 +349,8 @@ $f3->route('POST /event/@id/reject', function($f3) {
 	$headers = "From: " . $options['general']['email'];
 
 	mail($to, $subject, $body, $headers);
-	Events::delete($e->id);
+	$e->state = "rejected";
+	$e->save();
 
 	$_SESSION['message'] = "Event rejected.";
 	$f3->reroute("/admin");

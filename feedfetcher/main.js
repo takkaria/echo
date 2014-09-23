@@ -2,8 +2,6 @@ var models = require('./models')
 var fetch = require('./fetch')
 
 Event = models.Event
-Post = models.Post
-Feed = models.Feed
 
 // 'Safe' exec - returns an array no matter what, so you can index into it
 RegExp.prototype.sexec = function(str) {
@@ -40,7 +38,10 @@ fetch.ical({
 })
 */
 
-// ============================================================ \\
+// ============================================================ //
+
+Post = models.Post
+Feed = models.Feed
 
 function monthToInt(s) {
 	var first3 = s.slice(0, 3).toLowerCase();

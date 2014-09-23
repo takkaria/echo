@@ -10,6 +10,12 @@ var feeds = new sequelize('', '', '', {
 	storage: '../db/feeds.sqlite'
 });
 
+var global_options = {
+	timestamps: false,
+	createdAt: false,
+	underscored: true
+};
+
 exports.Event = events.define('event', {
 	id: { type: sequelize.INTEGER, primaryKey: true },
 	title: { type: sequelize.TEXT },
@@ -27,11 +33,7 @@ exports.Event = events.define('event', {
 	email: { type: sequelize.TEXT },
 	key: { type: sequelize.TEXT },
 	importid: { type: sequelize.TEXT },
-}, {
-	timestamps: false,
-	createdAt: false,
-	underscored: true
-});
+}, global_options);
 
 exports.Post = feeds.define('post', {
 	id: { type: sequelize.TEXT, primaryKey: true },
@@ -44,11 +46,11 @@ exports.Post = feeds.define('post', {
 	feed_url: { type: sequelize.TEXT },
 	eventish: { type: sequelize.BOOLEAN },
 	hidden: { type: sequelize.INTEGER }
-});
+}, global_options);
 
 exports.Feed = feeds.define('feed', {
 	feed_url: { type: sequelize.TEXT, primaryKey: true },
 	site_url: { type: sequelize.TEXT },
 	title: { type: sequelize.TEXT },
-	error: { type: sequelize.TEXT },
-});
+	errors: { type: sequelize.TEXT },
+}, global_options);

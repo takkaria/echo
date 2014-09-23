@@ -9,7 +9,7 @@ RegExp.prototype.sexec = function(str) {
 };
 
 function add_event(data) {
-	var e = Event.build({
+	Event.build({
 		title: data.summary,
 		startdt: data.start,
 		enddt: data.end,
@@ -17,9 +17,7 @@ function add_event(data) {
 		blurb: data.description,
 		state: 'imported',
 		importid: data.uid
-	});
-
-	e.save();
+	}).save();
 }
 
 /*
@@ -90,6 +88,9 @@ function add_post(data) {
 	// https://github.com/danmactough/node-feedparser#what-is-the-parsed-output-produced-by-feedparser
 	// may want to re-add summary, content or image parsing at some point
 
+	if (!data.guid)
+		throw new Error("Feed item with no ID");
+
 	// Build the post
 	var p = Post.build({
 		id: data.guid,
@@ -108,35 +109,33 @@ function add_post(data) {
 			date.getTime() > (now.getTime() + 7.88923e9)) // 1.578e10 == 3 months in ms
 		return;
 
-	var e = Event.build({
+	Event.build({
 		title: data.title,
-		startdt: null,
+		startdt: date,
 		url: data.link,
 		blurb: data.description,
 		state: 'imported',
-		importid: "???" // XXX work out some way to sort this out
-	});
+		importid: data.guid
+	}).save();
 }
 
-fetch.feed({
+/* fetch.feed({
 	url: 'http://manchestersocialcentre.org.uk/feed/',
 	action: add_post,
 	error: console.log,
-})
+}) */
 
-/*
 Feed.findAll().success(function (e) {
 	e.forEach(function(feed) {
 		fetch.feed({
 			url: feed.feed_url,
 			action: add_post,
 			error: function(error) {
-				Feed.find(where: { feed_url: feed.feed_url }).success(function (feed) {
-					feed.errors = error;
-					feed.save();
+				console.log(error.message);
+				Feed.find({ where: { feed_url: feed.feed_url } }).success(function (feed) {
+					feed.updateAttributes({ errors: error.message });
 				});
 			},
 		});
 	});
 });
-*/

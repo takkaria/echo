@@ -244,6 +244,19 @@ $f3->route('GET /event/@id [ajax]', function($f3) {
 	try { $event = new Event(intval($f3->get('PARAMS.id'))); }
 	catch (Exception $e) { $f3->error(404); }
 
+	if ($_SESSION['admin'] && $event->state == 'imported') {
+
+		$n = Events::load("date(startdt) IS date('" . $event->startdt->format("Y-m-d") . "')" .
+				" AND id IS NOT " . $event->id .
+				" AND time(startdt) >= time('" . $event->startdt->format("H:i") . "', '-1 hour')" .
+				" AND time(startdt) <= time('" . $event->startdt->format("H:i") . "', '+1 hour')");
+
+		/* Try to find duplicate events */
+		/* For now just make an array with this event in */
+		if (count($n) > 0)
+			$f3->set("dupes", $n);
+	}
+
 	$f3->set("event", $event);
 	echo Template::instance()->render("_event_box.html");
 });
@@ -343,12 +356,15 @@ $f3->route('POST /event/@id/reject', function($f3) {
 	try { $e = new Event(intval($f3->get('PARAMS.id'))); }
 	catch (Exception $e) { $f3->error(404); }
 
-	$to = $e->email;
-	$subject = 'Unpublished event: "' . $e->title . '"';
-	$body = wordwrap($_POST['text']);
-	$headers = "From: " . $options['general']['email'];
+	if ($e->state != 'imported') {
+		$to = $e->email;
+		$subject = 'Unpublished event: "' . $e->title . '"';
+		$body = wordwrap($_POST['text']);
+		$headers = "From: " . $options['general']['email'];
 
-	mail($to, $subject, $body, $headers);
+		mail($to, $subject, $body, $headers);
+	}
+
 	$e->state = "rejected";
 	$e->save();
 
@@ -823,7 +839,7 @@ $f3->set('ONERROR',
 			if (isset($frame['class']))
 				$line.=$frame['class'].$frame['type'];
 			if (isset($frame['function']))
-				$line.=$frame['function'].' ('.(isset($frame['args'])?
+				$line.=$frame['function'];.' ('.(isset($frame['args'])?
 					$f3->csvspace($frame['args']):'').')';
 			$src=$f3->fixslashes($frame['file']).':'.$frame['line'].' ';
 			error_log('- '.$src.$line);

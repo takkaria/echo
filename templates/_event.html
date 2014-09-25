@@ -48,6 +48,13 @@
 <true>{{@event->blurb_as_html()}}</true>
 </check>
 
+<check if="{{isset(@dupes)}}">
+	<li class="dupes"><i class="fa fa-li fa-warning error"></i> Potential duplicates:
+
+	<repeat group="{{@dupes}}" value="{{@e}}">
+		<br><b><a href="/event/{{@e->id}}">{{@e->title}}</a></b> @ {{@e->startdt->format("g:ia")}}
+	</repeat>
+</check>
 
 </ol>
 

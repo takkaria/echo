@@ -139,7 +139,6 @@ Feed.findAll().success(function (e) {
 			url: feed.feed_url,
 			action: add_post,
 			error: function(error) {
-				console.log(error.message);
 				Feed.find({ where: { feed_url: feed.feed_url } }).success(function (feed) {
 					feed.updateAttributes({ errors: error.message });
 				});

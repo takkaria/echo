@@ -2,12 +2,14 @@ var sequelize = require('sequelize');
 
 var events = new sequelize('', '', '', {
 	dialect: 'sqlite',
-	storage: '../db/events.sqlite'
+	storage: '../db/events.sqlite',
+	logging: false,
 });
 
 var feeds = new sequelize('', '', '', {
 	dialect: 'sqlite',
-	storage: '../db/feeds.sqlite'
+	storage: '../db/feeds.sqlite',
+	logging: false,
 });
 
 var global_options = {

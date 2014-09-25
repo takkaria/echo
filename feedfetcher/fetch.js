@@ -11,8 +11,6 @@ exports.ical = function(params) {
 	ical.fromURL(url, {}, function(err, data) {
 		for (var k in data) {
 
-			console.log("ID: " + k);
-
 			if (!data.hasOwnProperty(k)) continue;
 			if (!data[k].start || data[k].start < new Date()) continue;
 			if (filter && filter(data[k])) continue;

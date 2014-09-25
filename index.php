@@ -239,11 +239,7 @@ $f3->route('POST /event/add', function($f3) {
 	}
 });
 
-$f3->route('GET /event/@id [ajax]', function($f3) {
-	admin_check(FALSE);
-	try { $event = new Event(intval($f3->get('PARAMS.id'))); }
-	catch (Exception $e) { $f3->error(404); }
-
+function find_dupes($f3, $event) {
 	if ($_SESSION['admin'] && $event->state == 'imported') {
 
 		$n = Events::load("date(startdt) IS date('" . $event->startdt->format("Y-m-d") . "')" .
@@ -256,6 +252,14 @@ $f3->route('GET /event/@id [ajax]', function($f3) {
 		if (count($n) > 0)
 			$f3->set("dupes", $n);
 	}
+}
+
+$f3->route('GET /event/@id [ajax]', function($f3) {
+	admin_check(FALSE);
+	try { $event = new Event(intval($f3->get('PARAMS.id'))); }
+	catch (Exception $e) { $f3->error(404); }
+
+	find_dupes($f3, $event);
 
 	$f3->set("event", $event);
 	echo Template::instance()->render("_event_box.html");
@@ -273,6 +277,8 @@ $f3->route('GET /event/@id', function($f3) {
 			"url" => "/events/".strtolower($event->startdt->format("Y/M"))
 		]
 	]);
+
+	find_dupes($f3, $event);
 
 	$f3->set("event", $event);
 	echo Template::instance()->render("event.html");

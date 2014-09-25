@@ -839,7 +839,7 @@ $f3->set('ONERROR',
 			if (isset($frame['class']))
 				$line.=$frame['class'].$frame['type'];
 			if (isset($frame['function']))
-				$line.=$frame['function'];.' ('.(isset($frame['args'])?
+				$line.=$frame['function'].' ('.(isset($frame['args'])?
 					$f3->csvspace($frame['args']):'').')';
 			$src=$f3->fixslashes($frame['file']).':'.$frame['line'].' ';
 			error_log('- '.$src.$line);

@@ -278,8 +278,6 @@ $f3->route('GET /event/@id', function($f3) {
 		]
 	]);
 
-	find_dupes($f3, $event);
-
 	$f3->set("event", $event);
 	echo Template::instance()->render("event.html");
 });

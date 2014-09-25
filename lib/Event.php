@@ -323,6 +323,8 @@ class Events {
 				$insert['end'] = $event->enddt->format('U');
 			if ($event->url)
 				$insert['url'] = $event->url;
+			if (isset($_SESSION['admin']) && $event->state == 'imported')
+				$insert['title'] .= " *";
 
 			$events[] = $insert;
 		}

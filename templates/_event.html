@@ -21,10 +21,16 @@
 </check>
 
 	<li class="location"><i class="fa fa-li fa-map-marker"></i>
-<F3:check if="{{@event->location->in_db}}">
-<true><a href="/venue/{{@event->location->id}}">{{@event->location->short()}}</a></true>
-<false>{{@event->location->short()}}</false>
-</F3:check>
+
+<check if="{{@event->location->short()}} == ''">
+<true><span class="error">Missing<span></true>
+<false>
+	<F3:check if="{{@event->location->in_db}}">
+		<true><a href="/venue/{{@event->location->id}}">{{@event->location->short()}}</a></true>
+		<false>{{@event->location->short()}}</false>
+	</F3:check>
+</false>
+</check>
 
 <check if="{{@event->url}}&&{{@facebook(@event->url)}}">
 	<li class="facebook"><i class="fa fa-li fa-facebook"></i><a target="_blank" href="{{@event->url}}">Facebook event</a>
@@ -36,7 +42,13 @@
 <true>{{@event->cost}}</true>
 </check>
 
-	<li class="description"><i class="fa fa-li fa-align-left fa-flip-vertical"></i>{{@event->blurb_as_html()}}
+	<li class="description"><i class="fa fa-li fa-align-left fa-flip-vertical"></i>
+<check if="{{@event->blurb}}">
+<false><span class="error">Not provided<span></false>
+<true>{{@event->blurb_as_html()}}</true>
+</check>
+
+
 </ol>
 
 <F3:include href="_event_admin.html" />

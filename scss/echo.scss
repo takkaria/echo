@@ -39,9 +39,10 @@ th { background-color: #eee; }
 	i { margin-right: 3px; }
 }
 
+.error { color: rgb(182, 69, 69); }
+
 /** Forms **/
 form {
-	.error { color: rgb(182, 69, 69); }
 	label.error { font-size: 80%; display: block; }
 }
 

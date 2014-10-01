@@ -117,11 +117,49 @@ function initWidgets() {
 	$("#date2").datepicker(date_options);
 }
 
+var validOptions = {
+	errorPlacement: function(error, element) {
+		if (element.attr("name") == "time1" ||
+				element.attr("name") == "date1" ||
+				element.attr("name") == "time2" ||
+				element.attr("name") == "date2")
+			error.insertAfter(element.parent());
+		else
+			error.insertAfter(element);
+	},
+	messages: {
+		title: "You must provide a title.",
+		location: "You must provide a location.",
+		blurb: "You must provide a blurb.",
+		time1: "You must provide a time.",
+		date1: "You must provide a date.",
+		time2: "You must provide a time.",
+		date2: "You must provide a date.",
+		email: {
+			required: "You must provide an email",
+			email: "This email address is not valid.  Please use a valid address."
+		}
+	},
+	rules: {
+		// All other rules are done using classes on the inputs themselves
+		cost: {
+			required: {
+				depends: function(element) {
+					return $("#costbutton:checked").length != 0
+				}
+			}
+		},
+		blurb: {
+			wordcount: 150
+		}
+	}
+};
+
 // Initialise form validation
 function initFormValidation() {
 
-	$.validator.addMethod("wordcount", function(value, element, params) {
-		return word_count($(element).val()) <= 150
+	$.validator.addMethod("wordcount", function(value, element, upper) {
+		return word_count($(element).val()) <= upper
 	}, "Your blurb is over the word limit.");
 
 	$.validator.addMethod("permissive_url", function(value, element) {
@@ -136,50 +174,14 @@ function initFormValidation() {
 		return $.validator.methods.url.call(this, value, element);
 	}, "The link is not valid.  Please provide a valid one.");
 
-	$("form").validate({
-		errorPlacement: function(error, element) {
-			if (element.attr("name") == "time1" ||
-					element.attr("name") == "date1" ||
-					element.attr("name") == "time2" ||
-					element.attr("name") == "date2")
-				error.insertAfter(element.parent());
-			else
-				error.insertAfter(element);
-		},
-		messages: {
-			title: "You must provide a title.",
-			location: "You must provide a location.",
-			blurb: "You must provide a blurb.",
-			time1: "You must provide a time.",
-			date1: "You must provide a date.",
-			time2: "You must provide a time.",
-			date2: "You must provide a date.",
-			email: {
-				required: "You must provide an email",
-				email: "This email address is not valid.  Please use a valid address."
-			}
-		},
-		rules: {
-			// All other rules are done using classes on the inputs themselves
-			cost: {		
-				required: {
-					depends: function(element) {
-						return $("#costbutton:checked").length != 0
-					}
-				}
-			},
-			blurb: {
-				wordcount: 150
-			}
-		}
-	});
+	$("form").validate(validOptions);
 }
 
 function initWordCount() {
 	var check = function(e) {
 		var wc = word_count($(e.target).val());
 		$("#wordcount").text(wc);
-		if (wc > 120)
+		if (wc > validOptions.rules.blurb.wordcount)
 			$("#wordcount").addClass("overcount");
 		else
 			$("#wordcount").removeClass("overcount");

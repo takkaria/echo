@@ -105,7 +105,7 @@ function findDate(base, text) {
 
 		var minutes = parseInt(/[\.:](\d\d)/.sexec(time)[1]) || 0;
 
-		d.setHours(t, m, 0, 0);
+		d.setHours(hours, minutes, 0, 0);
 
 		return d;
 	}

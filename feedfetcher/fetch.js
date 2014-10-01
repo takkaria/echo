@@ -53,6 +53,7 @@ exports.feed = function(params) {
 
 		while (data = stream.read()) {
 			var item = data;	// bind locally
+			item.meta.xmlurl = url;	// this doesn't always get saved by the parser
 
 			if (!item.guid)
 				throw new Error("Feed item with no ID");

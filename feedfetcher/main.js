@@ -34,7 +34,7 @@ function parse_options() {
 
 parse_options();
 
-var html_strip = require('htmlstrip-native');
+var htmlStrip = require('htmlstrip-native').html_strip;
 var models = require('./models')(debug)
 var fetch = require('./fetch')
 
@@ -75,7 +75,7 @@ function monthToInt(s) {
 	return a[first3] || null;
 }
 
-function find_date(base, text) {
+function findDate(base, text) {
 
 	var time = /\d?\d[\.:]\d\d([ap]m)?/.sexec(text)[0] || 
 			/\d?\d([ap]m)/.sexec(text)[0];
@@ -88,18 +88,22 @@ function find_date(base, text) {
 	if (time && day && month) {
 		var d = new Date();
 
+		// Months in JS are 0-11, not 1-12
 		d.setMonth(monthToInt(month) - 1);
+
+		// Assume year in the future
 		if (d.getMonth() < base.getMonth())
 			d.setYear(base.getYear() + 1);
 		else
 			d.setYear(base.getYear());
 
+		// 'day' is in form 23rd, parseInt will just look at numbers
 		d.setDate(parseInt(day));
 
-		var t = parseInt(time);
-		if (/pm/.test(time)) t += 12;
+		var hours = parseInt(time);
+		if (/pm/.test(time)) hours += 12;
 
-		var m = parseInt(/[\.:](\d\d)/.sexec(time)[1]) || 0;
+		var minutes = parseInt(/[\.:](\d\d)/.sexec(time)[1]) || 0;
 
 		d.setHours(t, m, 0, 0);
 
@@ -125,7 +129,7 @@ function add_post(data) {
 	}).save();
 
 	// Check if it's like an event
-	var date = find_date(data.pubDate, data.description);
+	var date = findDate(data.pubDate, data.description);
 	if (!date) return;
 
 	var now = new Date();
@@ -141,7 +145,7 @@ function add_post(data) {
 				title: data.title,
 				startdt: date,
 				url: data.link,
-				blurb: html_strip.html_strip(data.description, {
+				blurb: htmlStrip(data.description, {
 					include_script: false,
 					include_style: false,
 				}),

@@ -115,8 +115,6 @@ function add_post(data) {
 	if (!data.title)
 		return;
 
-	console.log(data.title);
-
 	// Build the post
 	Post.build({
 		id: data.guid,

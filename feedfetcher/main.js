@@ -92,13 +92,13 @@ function add_post(data) {
 		throw new Error("Feed item with no ID");
 
 	// Build the post
-	var p = Post.build({
+	Post.build({
 		id: data.guid,
 		title: data.title,
 		link: data.link,
 		date: data.pubDate,
 		feed_url: data.meta.xmlurl,
-	});
+	}).save();
 
 	// Check if it's like an event
 	var date = find_date(data.pubDate, data.description);

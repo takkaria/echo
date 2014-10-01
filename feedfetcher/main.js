@@ -1,7 +1,44 @@
-var html_strip = require('htmlstrip-native');
+var debug = false
+var action = { type: "all" }
 
-var models = require('./models')
+function parse_options() {
+	// Parse options
+	var next;
+
+	for (var i in process.argv) {
+		var arg = process.argv[i];
+
+		// process command from previous
+		if (next == "skip")
+			next = null;
+		else if (next == "ical")
+			action = { type: "ical", url: arg };
+		else if (next == "feed")
+			action = { type: "feed", url: arg };
+
+		// check content of args
+		else if (arg == "node")
+			next = "skip";
+		else if (arg == "--debug")
+			debug = true;
+		else if (arg == "--ical")
+			next = "ical";
+		else if (arg == "--feed")
+			next = "feed";
+		else if (arg == "--help") {
+			console.log("feedfetcher here, reporting for duty");
+			process.exit();
+		}
+	}
+}
+
+parse_options();
+
+var html_strip = require('htmlstrip-native');
+var models = require('./models')(debug)
 var fetch = require('./fetch')
+
+// ============================================================ //
 
 Event = models.Event
 
@@ -21,20 +58,6 @@ function add_event(data) {
 		importid: data.uid
 	}).save();
 };
-
-fetch.ical({
-	url: 'https://www.google.com/calendar/ical/7etn2k6kvovrugd1hapue7ghrc%40group.calendar.google.com/public/basic.ics',
-	filter: function(data) {
-		day = data.start.getDay() // 0 = Sunday, 1 = Monday, etc.
-		if (day == 1 || day == 2) return true; // Filter out private events on Monday and Tuesday
-
-		return false;
-	},
-	transform: function(data) {
-		data.location = "Subrosa";
-	},
-	action: add_event
-});
 
 // ============================================================ //
 
@@ -88,8 +111,11 @@ function add_post(data) {
 	// https://github.com/danmactough/node-feedparser#what-is-the-parsed-output-produced-by-feedparser
 	// may want to re-add summary, content or image parsing at some point
 
-	if (!data.guid)
-		throw new Error("Feed item with no ID");
+	// Filter some items
+	if (!data.title)
+		return;
+
+	console.log(data.title);
 
 	// Build the post
 	Post.build({
@@ -127,22 +153,38 @@ function add_post(data) {
 		 });
 }
 
-/* fetch.feed({
-	url: 'http://manchestersocialcentre.org.uk/feed/',
-	action: add_post,
-	error: console.log,
-}) */
+// ============================================================ //
 
-Feed.findAll().success(function (e) {
-	e.forEach(function(feed) {
-		fetch.feed({
-			url: feed.feed_url,
-			action: add_post,
-			error: function(error) {
-				Feed.find({ where: { feed_url: feed.feed_url } }).success(function (feed) {
-					feed.updateAttributes({ errors: error.message });
-				});
-			},
+if (action.type == "ical") {
+	fetch.ical({ url: action.url, action: add_event });
+} else if (action.type == "feed") {
+	fetch.feed({ url: action.url, action: add_post, error: console.log });
+} else {
+	Feed.findAll().success(function (e) {
+		e.forEach(function(feed) {
+			fetch.feed({
+				url: feed.feed_url,
+				action: add_post,
+				error: function(error) {
+					Feed.find({ where: { feed_url: feed.feed_url } }).success(function (feed) {
+						feed.updateAttributes({ errors: error.message });
+					});
+				},
+			});
 		});
 	});
-});
+
+	fetch.ical({
+		url: 'https://www.google.com/calendar/ical/7etn2k6kvovrugd1hapue7ghrc%40group.calendar.google.com/public/basic.ics',
+		filter: function(data) {
+			day = data.start.getDay() // 0 = Sunday, 1 = Monday, etc.
+			if (day == 1 || day == 2) return true; // Filter out private events on Monday and Tuesday
+
+			return false;
+		},
+		transform: function(data) {
+			data.location = "Subrosa";
+		},
+		action: add_event
+	});
+}

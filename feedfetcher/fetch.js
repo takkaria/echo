@@ -15,19 +15,16 @@ exports.ical = function(params) {
 			if (!data[k].start || data[k].start < new Date()) continue;
 			if (filter && filter(data[k])) continue;
 
-			/* Wrapper function to deal with JS's scoping rules */
-			function succeed(data) {
-				return function(evt) {
-					if (evt != null) return;   /* Don't duplicate IDs */
-					if (transform) transform(data);
-					action(data);
-				}
-			}
+			var item = data[k]; // bind locally
 
 			Event.find({ where: { importid: data[k].uid } })
-				 .success(succeed(data[k]));
+				 .success(function(event) {
+					if (event != null) return;   /* Don't duplicate IDs */
+					if (transform) transform(item);
+					action(item);
+				});
 		}
-	})
+	});
 }
 
 exports.feed = function(params) {
@@ -51,14 +48,20 @@ exports.feed = function(params) {
 
 	feedparser.on('readable', function() {
 		// This is where the action is!
-		var stream = this
-		  , meta = this.meta // **NOTE** the "meta" is always available in the context of the feedparser instance
-		  , item
-		
-		while (item = stream.read()) {
-			// Filter some items
-			if (!item.title) continue;
-			action(item);
+		var stream = this;
+		var data;
+
+		while (data = stream.read()) {
+			var item = data;	// bind locally
+
+			if (!item.guid)
+				throw new Error("Feed item with no ID");
+
+			Post.find({ where: { id: item.guid } })
+				.success(function(post) {
+					if (post != null) return;	/* Don't duplicate posts */
+					action(item);
+				});
 		}
 	});
 }

@@ -1,58 +1,64 @@
 var sequelize = require('sequelize');
 
-var events = new sequelize('', '', '', {
-	dialect: 'sqlite',
-	storage: '../db/events.sqlite',
-	logging: false,
-});
+module.exports = function(debug) {
+	var exports = {};
 
-var feeds = new sequelize('', '', '', {
-	dialect: 'sqlite',
-	storage: '../db/feeds.sqlite',
-	logging: false,
-});
+	var global_options = {
+		timestamps: false,
+		createdAt: false,
+		underscored: true
+	};
 
-var global_options = {
-	timestamps: false,
-	createdAt: false,
-	underscored: true
+	var events = new sequelize('', '', '', {
+		dialect: 'sqlite',
+		storage: '../db/events.sqlite',
+		logging: debug ? console.log : false,
+	});
+
+	var feeds = new sequelize('', '', '', {
+		dialect: 'sqlite',
+		storage: '../db/feeds.sqlite',
+		logging: debug ? console.log : false,
+	});
+
+	exports.Event = events.define('event', {
+		id: { type: sequelize.INTEGER, primaryKey: true },
+		title: { type: sequelize.TEXT },
+		startdt: { type:  sequelize.DATE },
+		enddt: { type: sequelize.DATE },
+		location: { type: sequelize.TEXT },
+		blurb: { type: sequelize.TEXT },
+		url: { type: sequelize.TEXT },
+		type: { type: sequelize.TEXT },
+		cost: { type: sequelize.TEXT },
+		state: {
+			type: sequelize.ENUM,
+			values: [ 'submitted', 'approved', 'imported' ]
+		},
+		email: { type: sequelize.TEXT },
+		key: { type: sequelize.TEXT },
+		importid: { type: sequelize.TEXT },
+	}, global_options);
+
+	exports.Post = feeds.define('post', {
+		id: { type: sequelize.TEXT, primaryKey: true },
+		title: { type: sequelize.TEXT },
+		link: { type: sequelize.TEXT },
+		title: { type: sequelize.TEXT },
+		date: { type: sequelize.DATE },
+		summary: { type: sequelize.TEXT },
+		image: { type: sequelize.TEXT },
+		feed_url: { type: sequelize.TEXT },
+		eventish: { type: sequelize.BOOLEAN },
+		hidden: { type: sequelize.INTEGER }
+	}, global_options);
+
+	exports.Feed = feeds.define('feed', {
+		feed_url: { type: sequelize.TEXT, primaryKey: true },
+		site_url: { type: sequelize.TEXT },
+		title: { type: sequelize.TEXT },
+		errors: { type: sequelize.TEXT },
+	}, global_options);
+
+	return exports;
 };
-
-exports.Event = events.define('event', {
-	id: { type: sequelize.INTEGER, primaryKey: true },
-	title: { type: sequelize.TEXT },
-	startdt: { type:  sequelize.DATE },
-	enddt: { type: sequelize.DATE },
-	location: { type: sequelize.TEXT },
-	blurb: { type: sequelize.TEXT },
-	url: { type: sequelize.TEXT },
-	type: { type: sequelize.TEXT },
-	cost: { type: sequelize.TEXT },
-	state: {
-		type: sequelize.ENUM,
-		values: [ 'submitted', 'approved', 'imported' ]
-	},
-	email: { type: sequelize.TEXT },
-	key: { type: sequelize.TEXT },
-	importid: { type: sequelize.TEXT },
-}, global_options);
-
-exports.Post = feeds.define('post', {
-	id: { type: sequelize.TEXT, primaryKey: true },
-	title: { type: sequelize.TEXT },
-	link: { type: sequelize.TEXT },
-	title: { type: sequelize.TEXT },
-	date: { type: sequelize.DATE },
-	summary: { type: sequelize.TEXT },
-	image: { type: sequelize.TEXT },
-	feed_url: { type: sequelize.TEXT },
-	eventish: { type: sequelize.BOOLEAN },
-	hidden: { type: sequelize.INTEGER }
-}, global_options);
-
-exports.Feed = feeds.define('feed', {
-	feed_url: { type: sequelize.TEXT, primaryKey: true },
-	site_url: { type: sequelize.TEXT },
-	title: { type: sequelize.TEXT },
-	errors: { type: sequelize.TEXT },
-}, global_options);

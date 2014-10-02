@@ -22,6 +22,6 @@ d.location.href = makeUrl("https://echomanchester.net/event/add", {
 	location: d.qsa("._5xhk")[1].innerText + ", " + d.qsa("._5xhp")[1].innerText,
 	blurb: d.qs("#event_description").innerText,
 	url: d.location.href,
-	date1: dt.getFullYear() + "-" + dt.getMonth() + "-" + dt.getDate(),
+	date1: dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate(),
 	time1: dt.getHours() + ":" + dt.getMinutes(),
 });

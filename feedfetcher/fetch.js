@@ -4,6 +4,7 @@ var request = require('request')
 var htmlStrip = require('htmlstrip-native').html_strip
 
 var Event, Post, Feed
+var debug = false
 
 // = iCal ===================================================== //
 
@@ -11,6 +12,29 @@ function fetchICal(params) {
 	var url = params.url;
 	var filter = params.filter;
 	var transform = params.transform;
+
+	function saveEvent(event) {
+		var item = this;
+
+		if (event != null) return;   /* Don't duplicate IDs */
+		if (transform) transform(item);
+
+		if (debug)
+			console.log("Adding new event: " + item.summary);
+
+		Event.build({
+			title: item.summary,
+			startdt: item.start,
+			enddt: item.end,
+			location: item.location,
+			blurb: item.description,
+			state: 'imported',
+			importid: item.uid
+		}).save();
+	}
+
+	if (debug)
+		console.log("Fetching iCal " + url);
 
 	ical.fromURL(url, {}, function(err, data) {
 		for (var k in data) {
@@ -22,20 +46,7 @@ function fetchICal(params) {
 			var item = data[k]; // bind locally
 
 			Event.find({ where: { importid: data[k].uid } })
-				 .success(function(event) {
-					if (event != null) return;   /* Don't duplicate IDs */
-					if (transform) transform(item);
-
-					Event.build({
-						title: item.summary,
-						startdt: item.start,
-						enddt: item.end,
-						location: item.location,
-						blurb: item.description,
-						state: 'imported',
-						importid: item.uid
-					}).save();
-				});
+				 .success(saveEvent.bind(data[k]));
 		}
 	});
 }
@@ -99,6 +110,9 @@ function addPost(data) {
 	// https://github.com/danmactough/node-feedparser#what-is-the-parsed-output-produced-by-feedparser
 	// may want to re-add summary, content or image parsing at some point
 
+	if (debug)
+		console.log("Adding new post: " + data.title);
+
 	// Build the post
 	Post.build({
 		id: data.guid,
@@ -119,7 +133,10 @@ function addPost(data) {
 
 	Event.find({ where: { importid: data.guid } })
 		 .success(function(evt) {
-			if (evt != null) return;
+			if (evt != null) return;  // don't import twice
+
+			if (debug)
+				console.log("Adding new event: " + data.title);
 
 			Event.build({
 				title: data.title,
@@ -153,6 +170,9 @@ function fetchFeed(params) {
 		stream.pipe(feedparser);
 	});
 
+	if (debug)
+		console.log("Fetching feed " + url);
+
 	feedparser.on('readable', function() {
 		// This is where the action is!
 		var stream = this;
@@ -179,7 +199,9 @@ function fetchFeed(params) {
 
 // = Exports ================================================== //
 
-module.exports = function(models) {
+module.exports = function(models, is_debug) {
+	if (is_debug) debug = true;
+
 	Event = models.Event
 	Post = models.Post
 	Feed = models.Feed

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var debug = false
 var action = { type: "all" }
 
@@ -9,12 +11,16 @@ function parse_options() {
 		var arg = process.argv[i];
 
 		// process command from previous
-		if (next == "skip")
+		if (next == "skip")	
 			next = null;
-		else if (next == "ical")
+		else if (next == "ical") {
 			action = { type: "ical", url: arg };
-		else if (next == "feed")
+			next = null;			
+		}
+		else if (next == "feed") {
 			action = { type: "feed", url: arg };
+			next = null;			
+		}
 
 		// check content of args
 		else if (arg == "node")
@@ -25,8 +31,13 @@ function parse_options() {
 			next = "ical";
 		else if (arg == "--feed")
 			next = "feed";
-		else if (arg == "--help") {
+		else if (arg == "--help" || arg == "-h") {
 			console.log("feedfetcher here, reporting for duty");
+			console.log("args:");
+			console.log(" --debug       Turn debugging output on");
+			console.log(" --ical <url>  Fetch specified ical feed");
+			console.log(" --feed <url>  Fetch specified RSS/Atom feed");
+			console.log(" --help        Display this message");
 			process.exit();
 		}
 	}
@@ -35,7 +46,7 @@ function parse_options() {
 parse_options();
 
 var models = require('./models')(debug)
-var fetch = require('./fetch')(models)
+var fetch = require('./fetch')(models, debug)
 
 Feed = models.Feed
 

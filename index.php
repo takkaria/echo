@@ -642,6 +642,8 @@ $f3->route('POST /admin/login', function($f3) {
 	$result = Events::$db->exec("SELECT * FROM users WHERE email=:email",
 		[ ':email' => $_POST['email'] ]);
 
+	$f3->set('message', "Fwap");
+
 	/* No such user! */
 	if (sizeof($result) == 0) {
 		$f3->set('message', "Failed login attempt, try again.");

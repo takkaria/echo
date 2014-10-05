@@ -593,7 +593,7 @@ $f3->route('GET /admin', function($f3) {
 		"old" => 0
 	];
 
-	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state IS "submitted" OR state IS NULL');
+	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state IS "submitted" OR state IS "imported"');
 	$events_info['submitted'] = $r[0]['count'];
 
 	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state="approved"');

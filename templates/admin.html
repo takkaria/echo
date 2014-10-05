@@ -14,10 +14,7 @@
 <h3>Events</h3>
 <ul>
 <li>{{@events.submitted}} <a href="/events/unapproved">unapproved events</a>
-<li>{{@events.approved}} approved events
-<ul>
-<li>With {{@events.old}} of those in the past
-</ul>
+<li>{{@events.new}} approved events coming up ({{@events.approved}} total)
 <li><form action="/events/purge" method="POST"><b>Purge events</b> older than <input type="number" name="months"> months <input type="submit" value="Purge"></form>
 <li><a href='javascript:(function(){var makeUrl=function(base,params)
 {var url=base+"?";for(var prop in params)url+=prop+"="+encodeURIComponent(params[prop])

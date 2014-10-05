@@ -599,8 +599,8 @@ $f3->route('GET /admin', function($f3) {
 	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state="approved"');
 	$events_info['approved'] = $r[0]['count'];
 
-	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state="approved" AND date < date("now", "start of day")');
-	$events_info['old'] = $r[0]['count'];
+	$r = Events::$db->exec('SELECT count(*) AS count FROM events WHERE state="approved" AND startdt > date("now", "start of day")');
+	$events_info['new'] = $r[0]['count'];
 
 	$f3->set("events", $events_info);
 

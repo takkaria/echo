@@ -16,8 +16,7 @@ function parse_options() {
 		else if (next == "ical") {
 			action = { type: "ical", url: arg };
 			next = null;			
-		}
-		else if (next == "feed") {
+		} else if (next == "feed") {
 			action = { type: "feed", url: arg };
 			next = null;			
 		}
@@ -65,7 +64,7 @@ var calendars = [
 	{
 		url: 'https://www.google.com/calendar/ical/7etn2k6kvovrugd1hapue7ghrc%40group.calendar.google.com/public/basic.ics',
 		filter: function(data) {
-			day = data.start.getDay() // 0 = Sunday, 1 = Monday, etc.
+			day = data.start.getDay(); // 0 = Sunday, 1 = Monday, etc.
 			if (day == 1 || day == 2) return true; // Filter out private events on Monday and Tuesday
 
 			return false;

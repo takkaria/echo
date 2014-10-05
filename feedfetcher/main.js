@@ -71,7 +71,7 @@ var calendars = [
 			return false;
 		},
 		transform: function(data) {
-			data.location = "Subrosa";
+			data.location = "SubRosa, 27 Lloyd St South, Moss Side, Manchester";
 		},
 	},
 ];

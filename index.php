@@ -259,7 +259,7 @@ $f3->route('GET /event/@id [ajax]', function($f3) {
 	try { $event = new Event(intval($f3->get('PARAMS.id'))); }
 	catch (Exception $e) { $f3->error(404); }
 
-	find_dupes($f3, $event);
+	if ($f3->get('admin') == true) find_dupes($f3, $event);
 
 	$f3->set("event", $event);
 	echo Template::instance()->render("_event_box.html");

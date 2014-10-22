@@ -211,3 +211,63 @@ module.exports = function(models, is_debug) {
 		feed: fetchFeed
 	}
 }
+
+
+// = Testrunner =============================================== //
+
+function main() {
+	fs = require('fs')
+	
+	text = fs.readFileSync('tests.json', 'utf8');
+	tests = JSON.parse(text);
+	
+	Date.prototype.toShortISOString = function() {
+		function pad(number) {
+			if (number < 10)
+				return '0' + number;
+			else
+				return number;
+		}
+		
+		return this.getUTCFullYear() +
+			'-' + pad( this.getUTCMonth() + 1 ) +
+			'-' + pad( this.getUTCDate() ) +
+			'T' + pad( this.getUTCHours() ) +
+			':' + pad( this.getUTCMinutes() );
+	};
+	
+	var data = {
+		total: 0,
+		passed: 0,
+	};
+	
+	console.log("Starting tests...");
+	
+	for (key in tests) {
+		if (!p.hasOwnProperty(prop)) {
+			// The current property is not a direct property of p
+			continue;
+		}
+		
+		data.total++;
+		
+		var test = tests[key];
+		var date = findDate(new Date(test.today), test.content);
+	
+		if (date)
+			date = date.toShortISOString();
+	
+		if (date == test.result) {
+			data.passsed++;
+		} else {
+			console.log("Test '" + key + "' failed:");
+			console.log("- expected '" + test.result + "'");
+			console.log("- got      '" + date + "'");
+		}
+	}
+	
+	console.log("Tests finished. " + data.passed + "/" + data.total + " passed.");
+}
+
+if (require.main == module)
+	main()

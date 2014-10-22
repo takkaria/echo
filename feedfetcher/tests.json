@@ -8,30 +8,30 @@
 	"Date in the past": {
 		"today":   "2013-01-19T04:00",
 		"content": "30 December, 4pm",
-		"result":  null,
+		"result":  null
 	},
 
 	"Normal 1 (no st/nd/rd/th)": {
 		"today":   "2013-01-19T04:00",
 		"content": "30 January, 4pm",
-		"result":  "2013-01-30T16:00",
+		"result":  "2013-01-30T16:00"
 	},
 
 	"Normal 2 (with th)": {
 		"today":   "2013-01-19T04:00",
 		"content": "4pm on January 30th",
-		"result":  "2013-01-30T16:00",
+		"result":  "2013-01-30T16:00"
 	},
 
 	"Leap year 29th Feb": {
 		"today":   "2012-02-20T00:00",
 		"content": "Feb 29th 4pm",
-		"result":  "2012-02-19T16:00",
+		"result":  "2012-02-19T16:00"
 	},
 
 	"Non-leap year 29th Feb": {
 		"today":   "2013-02-20T00:00",
 		"content": "Feb 29th 4pm",
-		"result":  null,
-	},
+		"result":  null
+	}
 }

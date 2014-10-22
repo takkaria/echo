@@ -244,7 +244,7 @@ function main() {
 	console.log("Starting tests...");
 	
 	for (key in tests) {
-		if (!p.hasOwnProperty(prop)) {
+		if (!tests.hasOwnProperty(key)) {
 			// The current property is not a direct property of p
 			continue;
 		}

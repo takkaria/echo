@@ -88,9 +88,9 @@ function findDate(base, text) {
 
 		// Assume year in the future
 		if (d.getMonth() < base.getMonth())
-			d.setYear(base.getYear() + 1);
+			d.setYear(base.getFullYear() + 1);
 		else
-			d.setYear(base.getYear());
+			d.setYear(base.getFullYear());
 
 		// 'day' is in form 23rd, parseInt will just look at numbers
 		d.setDate(parseInt(day));
@@ -104,6 +104,8 @@ function findDate(base, text) {
 
 		return d;
 	}
+
+	return null;
 }
 
 function addPost(data) {
@@ -252,15 +254,18 @@ function main() {
 		data.total++;
 		
 		var test = tests[key];
-		var date = findDate(new Date(test.today), test.content);
+		var base = new Date(test.today);
+
+		var date = findDate(base, test.content);
 	
 		if (date)
 			date = date.toShortISOString();
-	
+
 		if (date == test.result) {
-			data.passsed++;
+			data.passed++;
 		} else {
 			console.log("Test '" + key + "' failed:");
+			console.log("- content  '" + test.content + "'");
 			console.log("- expected '" + test.result + "'");
 			console.log("- got      '" + date + "'");
 		}

@@ -33,5 +33,22 @@
 		"today":   "2013-02-20T00:00",
 		"content": "Feb 29th 4pm",
 		"result":  null
+	},
+
+	"Could be early morning but should be treated as afternoon I": {
+		"today":   "2014-11-01T00:00",
+		"content": "1.45, Sunday 2nd November",
+		"result":  "2014-11-02T13:45"
+	},
+
+	"Could be early morning but should be treated as afternoon II": {
+		"today":   "2014-11-01T00:00",
+		"content": "6.00, Sunday 2nd November",
+		"result":  "2014-11-02T18:00"
+	},
+
+	"Location test ('at')": {
+		"content": "Please join us at St Peters Metrolink Station at 6.00",
+		"location": "St Peters Metrolink Station"
 	}
 }

@@ -21,11 +21,7 @@
 				</check>
 
 			<td>
-				<a href="https://{{@domain}}/event/{{@event->id}}?pk_campaign=newsletter">
-				<F3:check if="{{@event->film}}">Film: </F3:check>
-				{{@event->title}}
-				</a><br>
-
+				<a href="https://{{@domain}}/event/{{@event->id}}?pk_campaign=newsletter">{{@event->title}}</a><br>
 				{{@event->location->short()}}
 
 	</repeat>

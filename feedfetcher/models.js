@@ -9,19 +9,13 @@ module.exports = function(debug) {
 		underscored: true
 	};
 
-	var events = new sequelize('', '', '', {
+	var db = new sequelize('', '', '', {
 		dialect: 'sqlite',
-		storage: '../db/events.sqlite',
+		storage: '../db/echo.sqlite',
 		logging: debug ? console.log : false,
 	});
 
-	var feeds = new sequelize('', '', '', {
-		dialect: 'sqlite',
-		storage: '../db/feeds.sqlite',
-		logging: debug ? console.log : false,
-	});
-
-	exports.Event = events.define('event', {
+	exports.Event = db.define('event', {
 		id: { type: sequelize.INTEGER, primaryKey: true },
 		title: { type: sequelize.TEXT },
 		startdt: { type:  sequelize.DATE },
@@ -40,7 +34,7 @@ module.exports = function(debug) {
 		importid: { type: sequelize.TEXT },
 	}, global_options);
 
-	exports.Post = feeds.define('post', {
+	exports.Post = db.define('post', {
 		id: { type: sequelize.TEXT, primaryKey: true },
 		title: { type: sequelize.TEXT },
 		link: { type: sequelize.TEXT },
@@ -53,7 +47,7 @@ module.exports = function(debug) {
 		hidden: { type: sequelize.INTEGER }
 	}, global_options);
 
-	exports.Feed = feeds.define('feed', {
+	exports.Feed = db.define('feed', {
 		feed_url: { type: sequelize.TEXT, primaryKey: true },
 		site_url: { type: sequelize.TEXT },
 		title: { type: sequelize.TEXT },

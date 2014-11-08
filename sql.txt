@@ -29,7 +29,6 @@ CREATE TABLE events (
 
 CREATE TABLE users (
 	email TEXT PRIMARY KEY,
-	banned BOOLEAN,
 	salt TEXT,
 	digest TEXT,
 
@@ -37,3 +36,21 @@ CREATE TABLE users (
 	notify BOOLEAN,
 	rights TEXT		/* "admin", "editor" */
 );
+
+CREATE TABLE posts (
+	id TEXT PRIMARY KEY,
+	link TEXT,
+	title TEXT,
+	date DATETIME,
+	feed_url TEXT,
+	hidden INTEGER
+);
+
+CREATE TABLE feeds (
+	feed_url TEXT PRIMARY KEY,
+	site_url TEXT,
+	title TEXT,
+	errors TEXT
+);
+
+CREATE VIEW post_info AS SELECT * FROM posts LEFT OUTER JOIN feeds ON posts.feed_url = feeds.feed_url;

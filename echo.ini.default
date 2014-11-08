@@ -4,16 +4,8 @@
 name = Doormat
 email = echo@localhost
 debug = false
-
-[web]
 domain = localhost
-
-[spam]
-blocklist[] = dnsbl.sorbs.net
-blocklist[] = xbl.spamhaus.org
-blocklist[] = ubl.lashback.com
+db = db/echo.sqlite
 
 [db]
-events = db/events.sqlite
-feeds = db/feeds.sqlite
 readonly = false

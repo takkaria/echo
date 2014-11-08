@@ -23,33 +23,14 @@ define("READONLY", $options['db']['readonly']);
 $f3->set('readonly', READONLY);
 $f3->set('version', VERSION);
 $f3->set('DEBUG', $options['general']['debug']);
-$f3->set("domain", $options['web']['domain']);
+$f3->set("domain", $options['general']['domain']);
 
-$db = new DB\SQL("sqlite:" . BASEPATH . $options['db']['events']);
+$db = new DB\SQL("sqlite:" . BASEPATH . $options['general']['db']);
 Events::init($db);
 User::init($db);
-
-$feedsdb = new DB\SQL("sqlite:" . BASEPATH . $options['db']['feeds']);
-Feeds::init($feedsdb);
+Feeds::init($db);
 
 $f3->set('appname', $options['general']['name']);
-
-function spam_check() {
-	global $options;
-
-	if (!isset($options['spam']['blocklist'])) return;
-	$blocklist = $options['spam']['blocklist'];
-	$addr = $f3->realip();
-	$quad = implode('.', array_reverse(explode('.',$addr)));
-
-	foreach ($blocklist as $list) {
-		// Check against DNS blacklist
-		if (gethostbyname($quad.'.'.$list) != $quad.'.'.$list) {
-						echo Template::instance()->render("spam.html");
-			die;
-		}
-	}
-}
 
 function admin_check($reroute = TRUE) {
 	global $f3;
@@ -210,7 +191,6 @@ $f3->route('GET /event/add', function($f3) {
 
 $f3->route('POST /event/add', function($f3) {
 	admin_check(FALSE);
-	spam_check();
 	readonly_check();
 
 	$admin = $f3->get('admin');
@@ -563,7 +543,7 @@ $f3->route('POST /feeds/add', function($f3) {
 });
 
 $f3->route('POST /feeds/edit', function($f3) {
-	global $feedsdb;
+	global $db;
 
 	admin_check();
 	readonly_check();

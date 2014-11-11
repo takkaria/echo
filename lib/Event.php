@@ -98,7 +98,7 @@ class Event {
 			},
 	
 			"date1" => function($value) use(&$self, &$messages) {
-				$self->startdt = DateTime::createFromFormat("l j F", $value);
+				$self->startdt = DateTime::createFromFormat("l j F Y", $value);
 				if (!$self->startdt)
 					$self->startdt = DateTime::createFromFormat("Y-m-d", $value);
 				if (!$self->startdt)
@@ -120,7 +120,7 @@ class Event {
 
 			"date2" => function($value) use(&$self, &$messages, &$set_end) {
 				if ($value && $set_end) {
-					$self->enddt = DateTime::createFromFormat("l j F", $value);
+					$self->enddt = DateTime::createFromFormat("l j F Y", $value);
 					if (!$self->enddt)
 						$messages[] = "Invalid end date.";
 				} else {
@@ -273,9 +273,9 @@ class Event {
 		$f3->mset([
 			'title' => $this->title,
 			'location' => $this->location,
-			'date1' => $this->startdt ? $this->startdt->format("l j F") : NULL,
+			'date1' => $this->startdt ? $this->startdt->format("l j F Y") : NULL,
 			'time1' => $this->startdt ? $this->startdt->format("g:ia") : NULL,
-			'date2' => $this->enddt ? $this->enddt->format("l j F") : NULL,
+			'date2' => $this->enddt ? $this->enddt->format("l j F Y") : NULL,
 			'time2' => $this->enddt ? $this->enddt->format("g:ia") : NULL,
 			'blurb' => $this->blurb,
 			'url' => $this->url,

@@ -213,7 +213,7 @@ class Event {
 		global $options;
 		global $f3;
 
-		$f3->set("domain", $options['web']['domain']);
+		$f3->set("domain", $options['general']['domain']);
 		$template = new Template;
 		$message = wordwrap($template->render('event_confirm_mail.txt','text/plain'));
 
@@ -227,7 +227,7 @@ class Event {
 		global $f3;
 
 		$f3->set("title", $this->title);
-		$f3->set("domain", $options['web']['domain']);
+		$f3->set("domain", $options['general']['domain']);
 		$template = new Template;
 		$message = $template->render('event_approve_mail.txt', 'text/plain');
 

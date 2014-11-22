@@ -14,7 +14,7 @@ class User
 		global $f3;
 
 		$f3->set("event", $event);
-		$f3->set("domain", $options['web']['domain']);
+		$f3->set("domain", $options['general']['domain']);
 		$f3->set('admin', FALSE);
 
 		$r = User::$db->exec("SELECT email FROM users WHERE notify=1");
@@ -101,7 +101,7 @@ class User
 		global $f3;
 
 		$f3->set("pwreset", $pwreset);
-		$f3->set("domain", $options['web']['domain']);
+		$f3->set("domain", $options['general']['domain']);
 		$message = Template::instance()->render('password_mail.txt','text/plain');
 
 		$subject = $options['general']['name'] . ": Please reset your password";

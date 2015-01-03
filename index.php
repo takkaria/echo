@@ -67,8 +67,8 @@ $f3->route('GET /', function($f3) {
 
 	/* Posts */
 	$where = "hidden IS NOT 1 AND date >= date('now', '-3 months') AND ( ".
-		"SELECT COUNT(p2.feed_url) FROM post_info AS p2 " .
-		"WHERE p2.feed_url = post_info.feed_url AND p2.date > post_info.date ".
+		"SELECT COUNT(p2.feed_id) FROM post_info AS p2 " .
+		"WHERE p2.feed_id = post_info.feed_id AND p2.date > post_info.date ".
 	") == 0 ORDER BY date DESC";
 
 	$f3->set('posts', Feeds::load($where));

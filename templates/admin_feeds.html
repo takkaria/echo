@@ -36,11 +36,11 @@
 
 <F3:repeat group="{{@feeds}}" value="{{@feed}}" counter="{{@i}}">
 <tr>
-<input type="hidden" name="feed_url[{{@i}}]" value="{{@feed.feed_url}}">
+<input type="hidden" name="feed_url[{{@i}}]" value="{{@feed.id}}">
 <td class="delete"><input type="checkbox" class="checkbox" name="delete[{{@i}}]">
 <td><input type="text" class="title" name="title[{{@i}}]" value="{{@feed.title}}">
 <td><input type="text" class="site_url" name="site_url[{{@i}}]" value="{{@feed.site_url}}">
-<td {{@feed.errors?'class="error" title="'.@feed.errors.'"':NULL}}>{{@feed.feed_url}}</F3:repeat>
+<td {{@feed.errors?'class="error" title="'.@feed.errors.'"':NULL}}>{{@feed.id}}</F3:repeat>
 </table>
 
 <input type="submit" value="Submit changes">

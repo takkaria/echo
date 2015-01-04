@@ -121,7 +121,7 @@ function addPost(data) {
 		title: data.title,
 		link: data.link,
 		date: data.pubDate,
-		feed_url: data.meta.xmlurl,
+		feed_id: data.meta.xmlurl,
 	}).save();
 
 	// Check if it's like an event

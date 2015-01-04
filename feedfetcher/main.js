@@ -2,6 +2,7 @@
 
 var debug = false
 var action = { type: "all" }
+var moment = require('moment')
 
 function parse_options() {
 	// Parse options
@@ -52,11 +53,32 @@ Feed = models.Feed
 // ============================================================ //
 
 function feedError(error) {
-	var feedUrl = this.feed_url;
-
-	Feed.find({ where: { feed_url: feedUrl } }).success(function (feed) {
+	Feed.find({ where: { id: this.id } }).success(function (feed) {
 		feed.updateAttributes({ errors: error.message });
 	});
+}
+
+function standByYouTransform(data) {
+	// Get original URL
+	var info = /reproduced.+?following.+?:\s*(http[^\s]+)/.exec(data.description);
+	if (info)
+		data.url = info[1];
+
+	// Strip plethora of links
+	var result = /(.*)(fevent.*)/.exec(data.description);
+	if (result)
+		data.description = result[1];
+
+	// Strip repetition at the beginning of the summary
+	result = new RegExp("^" + data.summary.toUpperCase().trim() + "(.*)").exec(data.description);
+	if (result)
+		data.description = result[1];
+}
+
+function standByYouFilter(data) {
+	if (/Freedom Rebels/.test(data.summary))
+		return true;
+	return false;
 }
 
 // make this into a config file sometime
@@ -73,6 +95,16 @@ var calendars = [
 			data.location = "SubRosa, 27 Lloyd St South, Moss Side, Manchester";
 		},
 	},
+	{
+		url: 'http://istandbyyou.org.uk/events/' + moment().format("YYYY-MM") +'/?ical=1',
+		filter: standByYouFilter,
+		transform: standByYouTransform,
+	},
+	{
+		url: 'http://istandbyyou.org.uk/events/' + moment().add('1', 'month').format("YYYY-MM") +'/?ical=1',
+		filter: standByYouFilter,
+		transform: standByYouTransform,
+	}
 ];
 
 if (action.type == "ical") {
@@ -83,7 +115,7 @@ if (action.type == "ical") {
 	Feed.findAll().success(function (e) {
 		e.forEach(function(feed) {
 			fetch.feed({
-				url: feed.feed_url,
+				url: feed.id,
 				error: feedError.bind(feed),
 			});
 		});

@@ -36,23 +36,21 @@ module.exports = function(debug) {
 
 	exports.Post = db.define('post', {
 		id: { type: sequelize.TEXT, primaryKey: true },
-		title: { type: sequelize.TEXT },
 		link: { type: sequelize.TEXT },
 		title: { type: sequelize.TEXT },
 		date: { type: sequelize.DATE },
-		summary: { type: sequelize.TEXT },
-		image: { type: sequelize.TEXT },
-		feed_url: { type: sequelize.TEXT },
-		eventish: { type: sequelize.BOOLEAN },
 		hidden: { type: sequelize.INTEGER }
 	}, global_options);
 
 	exports.Feed = db.define('feed', {
-		feed_url: { type: sequelize.TEXT, primaryKey: true },
+		id: { type: sequelize.TEXT, primaryKey: true },
 		site_url: { type: sequelize.TEXT },
 		title: { type: sequelize.TEXT },
 		errors: { type: sequelize.TEXT },
 	}, global_options);
+
+	exports.Feed.hasMany(exports.Post);
+	exports.Post.belongsTo(exports.Feed);
 
 	return exports;
 };

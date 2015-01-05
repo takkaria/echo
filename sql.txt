@@ -9,6 +9,7 @@ CREATE TABLE venues (
 
 CREATE TABLE events (
 	id INTEGER PRIMARY KEY,
+	slug TEXT,
 
 	/* Event data */
 	title TEXT,

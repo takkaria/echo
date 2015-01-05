@@ -234,22 +234,25 @@ function find_dupes($f3, $event) {
 	}
 }
 
-$f3->route('GET /event/@id [ajax]', function($f3) {
+function event_ajax($f3, $params) {
 	admin_check(FALSE);
-	try { $event = new Event(intval($f3->get('PARAMS.id'))); }
+	try { $event = new Event($params["id"]); }
 	catch (Exception $e) { $f3->error(404); }
 
 	if ($f3->get('admin') == true) find_dupes($f3, $event);
 
 	$f3->set("event", $event);
 	echo Template::instance()->render("_event_box.html");
-});
+}
 
-$f3->route('GET /event/@id', function($f3) {
+$f3->route('GET /event/@id [ajax]', 'event_ajax');
+$f3->route('GET /event/@year/@month/@id [ajax]', 'event_ajax');
+
+function event_non_ajax($f3, $params) {
 	admin_check(FALSE);
-	try { $event = new Event(intval($f3->get('PARAMS.id'))); }
-	catch (Exception $e) { $f3->error(404); }
 
+	try { $event = new Event($params["id"]); }
+	catch (Exception $e) { $f3->error(404); }
 	$f3->set('nav', [
 		"title" => "Event",
 		"prev" => [
@@ -260,7 +263,10 @@ $f3->route('GET /event/@id', function($f3) {
 
 	$f3->set("event", $event);
 	echo Template::instance()->render("event.html");
-});
+}
+
+$f3->route('GET /event/@id', 'event_non_ajax');
+$f3->route('GET /event/@year/@month/@id', 'event_non_ajax');
 
 $f3->route('GET /event/@id/edit', function($f3) {
 	admin_check();
@@ -764,7 +770,7 @@ $f3->set('ONERROR',
 			$msg = "There's been a server error.  There's nothing you can do about this, sorry.  Please retry whatever you were doing.";
 		else
 			$msg = "";
-
+/*
 		foreach ($trace as $frame) {
 			$line='';
 			if (isset($frame['class']))
@@ -778,7 +784,7 @@ $f3->set('ONERROR',
 				($f3->highlight($src).' '.$f3->highlight($line)):
 				($src.$line)).$eol;
 		}
-
+*/
 ?>
 <!DOCTYPE html>
 <title><?=$code?></title>

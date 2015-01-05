@@ -43,6 +43,7 @@ class Event {
 	public $cost;
 	public $film;
 	public $host;
+	public $slug;
 
 	public $email;
 	public $state;
@@ -52,9 +53,9 @@ class Event {
 			return;
 
 		// Get the first result
-		$r = Events::$db->exec("SELECT * FROM events WHERE id=:id", array(":id" => $id));
+		$r = Events::$db->exec("SELECT * FROM events WHERE id=:id OR slug=:id", array(":id" => $id));
 		if (sizeof($r) != 1)
-			throw new Exception("Invalid record.");
+			throw new Exception("Invalid record, id = " . $id);
 
 		$r = $r[0];
 		$this->id = $r['id'];
@@ -69,6 +70,7 @@ class Event {
 		$this->cost = $r['cost'];
 		$this->film = $r['type'] == "film" ? TRUE : FALSE;
 		$this->host = $r['host'];
+		$this->slug = $r['slug'];
 
 		$this->state = $r['state'];
 		$this->email = $r['email'];
@@ -244,6 +246,8 @@ class Event {
 	}
 
 	public function save() {
+		global $f3;
+
 		$e = new DB\SQL\Mapper(Events::$db, 'events');
 
 		$get_id = true;
@@ -266,6 +270,11 @@ class Event {
 		if ($this->film)
 			$e->type = "film";
 		$e->host = $this->host;
+
+		if (!$this->slug)
+			$e->slug = Web::instance()->slug($e->title) . "-" . $e->id;
+		else
+			$e->slug = $this->slug;
 
 		$e->email = $this->email;
 		$e->state = $this->state;

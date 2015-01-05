@@ -32,11 +32,15 @@
 </false>
 </check>
 
-<check if="{{@event->url}}&&{{@facebook(@event->url)}}">
-	<li class="facebook"><i class="fa fa-li fa-facebook"></i><a target="_blank" href="{{@event->url}}">Facebook event</a>
+<check if="{{@event->host}}">
+	<li><i class="fa fa-li fa-group"></i> Hosted by <b>{{@event->host}}</b>
 </check>
 
-	<li class="cost"><i class="fa fa-li fa-gbp"></i>
+<check if="{{@event->url}}&&{{@facebook(@event->url)}}">
+	<li><i class="fa fa-li fa-facebook"></i> <a target="_blank" href="{{@event->url}}">Facebook event</a>
+</check>
+
+	<li><i class="fa fa-li fa-gbp"></i>
 <check if="{{@event->cost}}">
 <false>Free</false>
 <true>{{@event->cost}}</true>

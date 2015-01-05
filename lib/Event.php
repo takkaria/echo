@@ -42,6 +42,7 @@ class Event {
 	public $url;
 	public $cost;
 	public $film;
+	public $host;
 
 	public $email;
 	public $state;
@@ -67,6 +68,7 @@ class Event {
 		$this->url = $r['url'];
 		$this->cost = $r['cost'];
 		$this->film = $r['type'] == "film" ? TRUE : FALSE;
+		$this->host = $r['host'];
 
 		$this->state = $r['state'];
 		$this->email = $r['email'];
@@ -176,6 +178,11 @@ class Event {
 			
 			"film" => function($film) use(&$self, &$messages) {
 				$self->film = $film ? TRUE : FALSE;
+			},
+
+			"host" => function($host) use(&$self, &$messages) {
+				global $f3;
+				$self->host = $f3->scrub($host);
 			}
 		);
 
@@ -258,6 +265,7 @@ class Event {
 		$e->cost = $this->cost;
 		if ($this->film)
 			$e->type = "film";
+		$e->host = $this->host;
 
 		$e->email = $this->email;
 		$e->state = $this->state;
@@ -283,6 +291,7 @@ class Event {
 			'cost' => $this->cost,
 			'film' => $this->film,
 			'email' => $this->email,
+			'host' => $this->host
 		]);
 	}
 }

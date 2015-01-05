@@ -52,6 +52,22 @@ Ends <input class="required time" type="text" name="time2" id="time2" {{isset(@t
 </fieldset>
 
 <fieldset>
+<i class="icon-big fa fa-group"></i>
+<label class="title" for="blurb">Hosted / organised by:</label>
+<input class="long" type="text" name="host" {{isset(@host)?@value(@host):NULL}}>
+<p class="desc">What group or organisation is putting on the event? (optional)</p>
+</fieldset>
+
+<fieldset>
+<i class="icon-big fa fa-align-left fa-flip-vertical"></i>
+
+<label class="title" for="blurb">Event description:</label>
+<textarea class="long required" name="blurb" id="blurb" rows="8">{{isset(@blurb)?@blurb:NULL}}</textarea>
+<p class="desc">Please include information about booking if you have to book.<br>
+Maximum 150 words.  Currently <span id="wordcount">0</span> / 150.</p>
+</fieldset>
+
+<fieldset>
 <i class="icon-big fa fa-gbp"></i>
 <label class="title">Price:</label>
 
@@ -59,17 +75,6 @@ Ends <input class="required time" type="text" name="time2" id="time2" {{isset(@t
 <input type="radio" name="free" id="free" {{isset(@free)&&@free?'checked':''}} value="free"> <label for="free">Free</label><br>
 <input type="radio" name="free" id="costbutton" {{isset(@cost)&&@cost?'checked':''}}> <label for="costbutton">It costs</label> <input type="text" name="cost" id="cost" style="width: 220px;" {{isset(@cost)?@value(@cost):NULL}}>
 </div>
-</fieldset>
-
-<fieldset>
-<i class="icon-big fa fa-align-left fa-flip-vertical"></i>
-
-<label class="title" for="blurb">Event description:</label>
-<p class="desc">Please include the group organising the event and information about booking if you have to book.<br>
-Maximum 120 words.</p>
-
-<textarea class="long required" name="blurb" id="blurb" rows="8">{{isset(@blurb)?@blurb:NULL}}</textarea>
-<p class="right count" style="display: none;"><i>Word count:</i> <span id="wordcount">0</span> / 150</p>
 </fieldset>
 
 <fieldset>

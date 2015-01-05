@@ -22,11 +22,7 @@
 <h3>Posts</h3>
 <ul>
 <li><a href="/feeds">{{@feeds.feeds}} feeds</a>
-<li>{{@feeds.posts}} posts
-<ul>
-	<li><a href="/posts/eventish">{{@feeds.posts_eventish}} which might be events</a>
-	<li>{{@feeds.old_posts}} over two months old
-</ul>
+<li>{{@feeds.posts}} posts ({{@feeds.old_posts}} over two months old)
 <li><form action="/posts/purge" method="POST"><b>Purge posts</b> older than <input type="number" name="months"> months <input type="submit" value="Purge"></form>
 </ul>
 

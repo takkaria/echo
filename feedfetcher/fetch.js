@@ -29,7 +29,8 @@ function fetchICal(params) {
 			location: item.location,
 			blurb: item.description,
 			state: 'imported',
-			importid: item.uid
+			importid: item.uid,
+			email: "support@echomanchester.net"
 		}).save();
 	}
 
@@ -149,7 +150,8 @@ function addPost(data) {
 					include_style: false,
 				}),
 				state: 'imported',
-				importid: data.guid
+				importid: data.guid,
+				email: "support@echomanchester.net"
 			}).save();
 		 });
 }

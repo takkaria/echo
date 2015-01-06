@@ -280,10 +280,10 @@ class Event {
 			$e->type = "film";
 		$e->host = $this->host;
 
-//		if (!$this->slug)
+		if (!$this->slug)
 			$e->slug = Web::instance()->slug($e->title) . "-" . $e->id;
-//		else
-//			$e->slug = $this->slug;
+		else
+			$e->slug = $this->slug;
 
 		$e->email = $this->email;
 		$e->state = $this->state;

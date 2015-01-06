@@ -71,6 +71,11 @@ class Event {
 		$this->location = new Venue($r['location']);
 		$this->blurb = $r['blurb'];
 		$this->url = $r['url'];
+		$this->url_host = parse_url($r['url']);
+		if ($this->url_host)
+			$this->url_host = $this->url_host['host'];
+		else
+			$this->url_host = "more info";
 		$this->cost = $r['cost'];
 		$this->film = $r['type'] == "film" ? TRUE : FALSE;
 		$this->host = $r['host'];
@@ -275,10 +280,10 @@ class Event {
 			$e->type = "film";
 		$e->host = $this->host;
 
-		if (!$this->slug)
+//		if (!$this->slug)
 			$e->slug = Web::instance()->slug($e->title) . "-" . $e->id;
-		else
-			$e->slug = $this->slug;
+//		else
+//			$e->slug = $this->slug;
 
 		$e->email = $this->email;
 		$e->state = $this->state;

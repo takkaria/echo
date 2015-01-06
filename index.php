@@ -738,6 +738,12 @@ $f3->route('GET /icalendar', function($f3) {
 });
 
 $f3->route('GET /json', function($f3) {
+
+	$e = Events::load("1=1");
+	foreach ($e as $event) {
+		$event->save();
+	}
+
 	$startts = intval($_GET['start']);
 	$endts = intval($_GET['end']);
 	if (!$startts || !$endts) {

@@ -1,10 +1,6 @@
 <div class="event">
 
-<h4 class="title">
-	<F3:check if="{{@event->url}}&&{{!@facebook(@event->url)}}"><a href="{{@event->url}}" target="_blank"></F3:check>
-	{{@event->title}}
-	<F3:check if="{{@event->url}}&&{{!@facebook(@event->url)}}"></a></F3:check>
-	<F3:check if="{{@event->film}}"><i class="fa fa-film" style="padding-left: 0.5em;"></i> </F3:check>
+<h4 class="title"><a href="/event/{{@event->startdt->format("Y/M")}}/{{@event->slug}}">{{@event->title}}</a> <check if="{{@event->film}}"><i class="fa fa-film" style="padding-left: 0.5em;"></i> </check>
 </h4>
 
 <ul class="fa-ul">
@@ -36,8 +32,8 @@
 	<li><i class="fa fa-li fa-group"></i> Hosted by <b>{{@event->host}}</b>
 </check>
 
-<check if="{{@event->url}}&&{{@facebook(@event->url)}}">
-	<li><i class="fa fa-li fa-facebook"></i> <a target="_blank" href="{{@event->url}}">Facebook event</a>
+<check if="{{@event->url}}">
+<li><i class="fa fa-li fa-fw fa-external-link"></i> <a href="{{@event->url}}" target="_blank">{{@event->url_host}}</a>
 </check>
 
 	<li><i class="fa fa-li fa-gbp"></i>

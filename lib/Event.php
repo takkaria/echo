@@ -72,7 +72,7 @@ class Event {
 		$this->blurb = $r['blurb'];
 		$this->url = $r['url'];
 		$this->url_host = parse_url($r['url']);
-		if ($this->url_host)
+		if ($this->url_host && isset($this->url_host['host']))
 			$this->url_host = $this->url_host['host'];
 		else
 			$this->url_host = "more info";

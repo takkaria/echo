@@ -48,12 +48,16 @@ class Event {
 	public $email;
 	public $state;
 
-	function __construct($id = NULL) {
+	function __construct($id = NULL, $what = "id") {
 		if (!$id)
 			return;
 
 		// Get the first result
-		$r = Events::$db->exec("SELECT * FROM events WHERE id=:id OR slug=:id", array(":id" => $id));
+		if ($what == "id")
+			$r = Events::$db->exec("SELECT * FROM events WHERE id=:id", array(":id" => $id));
+		else if ($what == "slug")
+			$r = Events::$db->exec("SELECT * FROM events WHERE slug=:id", array(":id" => $id));
+
 		if (sizeof($r) != 1)
 			throw new Exception("Invalid record, id = " . $id);
 

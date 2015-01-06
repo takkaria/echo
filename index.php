@@ -236,7 +236,7 @@ function find_dupes($f3, $event) {
 
 function event_ajax($f3, $params) {
 	admin_check(FALSE);
-	try { $event = new Event($params["id"]); }
+	try { $event = new Event($params["id"], isset($params["year"]) ? "slug" : "id"); }
 	catch (Exception $e) { $f3->error(404); }
 
 	if ($f3->get('admin') == true) find_dupes($f3, $event);
@@ -251,8 +251,9 @@ $f3->route('GET /event/@year/@month/@id [ajax]', 'event_ajax');
 function event_non_ajax($f3, $params) {
 	admin_check(FALSE);
 
-	try { $event = new Event($params["id"]); }
+	try { $event = new Event($params["id"], isset($params["year"]) ? "slug" : "id"); }
 	catch (Exception $e) { $f3->error(404); }
+
 	$f3->set('nav', [
 		"title" => "Event",
 		"prev" => [

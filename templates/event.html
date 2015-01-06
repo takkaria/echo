@@ -1,16 +1,60 @@
 <!DOCTYPE html>
 <title>{{@appname}} :: {{@event->title}}</title>
 <F3:include href="_stylesheets.html" />
+<style>
+h1, h2 { font-weight: normal; }
+section h1 { margin-bottom: 0.3em; }
+section h2 { font-size: 140%; }
+
+.breadcrumb { background: #eee; padding: 5px; border-radius: 5px; padding-left: 10px; }
+.breadcrumb a { border-bottom: 2px solid #ccc; }
+
+section div { max-width: 45em; }
+</style>
 
 <body class="thin">
 <F3:include href="_header.html" />
 
 <section id="event">
 
-	<include href="_event.html" />
+<p class="breadcrumb"><a href="/">Echo</a> /
+	<a href="/events/">Events</a> /
+	<a href="/events/{{@event->startdt->format("Y/M")}}">{{@event->startdt->format("F Y")}}</a>
 
-	<a class="previous" href="{{@nav.prev.url}}"><i class="fa fa-angle-left"></i>{{@nav.prev.title}}</a>
+<div>
 
+<h2>{{@event->startdt->format("l, jS F Y, g:ia")}}</h2>
+<h1>{{@event->title}}</h1>
+
+<check if="{{@event->host}}"><p>Hosted by <b>{{@event->host}}</b></check>
+
+<check if="{{@event->blurb}}">
+<false><span class="error">No blurb<span></false>
+<true>{{@event->blurb_as_html()}}</true>
+</check>
+
+<ul>
+<li><b>Location:</b>
+
+<check if="{{@event->location->short()}} == ''">
+<true><span class="error">Missing<span></true>
+<false>{{@event->location->short()}} (<a href="https://maps.google.co.uk/?q={{@event->location->short()}}" target="_blank">find on Google Maps</a>)</false>
+</check>
+
+<li><b>Cost:</b>
+<check if="{{@event->cost}}">
+<false>Free</false>
+<true>{{@event->cost}}</true>
+</check>
+
+<check if="{{@event->url}}">
+<li><b>More information:</b> <i class="fa fa-fw fa-external-link"></i> <a href="{{@event->url}}" target="_blank">{{@event->url}}</a>
+</check>
+</ul>
+
+<F3:include href="_event_admin.html" />
+
+</div>
 </section>
 
 <F3:include href="_footer.html" />

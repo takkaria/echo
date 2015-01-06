@@ -269,9 +269,10 @@ function event_non_ajax($f3, $params) {
 $f3->route('GET /event/@id', 'event_non_ajax');
 $f3->route('GET /event/@year/@month/@id', 'event_non_ajax');
 
-$f3->route('GET /event/@id/edit', function($f3) {
+$f3->route('GET /event/@id/edit', function($f3, $params) {
 	admin_check();
-	try { $event = new Event(intval($f3->get('PARAMS.id'))); }
+
+	try { $event = new Event($params['id']); }
 	catch (Exception $e) { $f3->error(404); }
 
 	$event->set_form_data();
@@ -279,13 +280,11 @@ $f3->route('GET /event/@id/edit', function($f3) {
 	echo Template::instance()->render("event_add.html");
 });
 
-$f3->route('POST /event/@id/edit', function($f3) {
+$f3->route('POST /event/@id/edit', function($f3, $params) {
 	admin_check();
 	readonly_check();
 
-	$id = intval($f3->get('PARAMS.id'));
-
-	try { $event = new Event(intval($f3->get('PARAMS.id'))); }
+	try { $event = new Event($params['id']); }
 	catch (Exception $e) { $f3->error(404); }
 
 	$messages = $event->parse_form_data();
@@ -297,39 +296,39 @@ $f3->route('POST /event/@id/edit', function($f3) {
 	} else {
 		$event->save();
 		$_SESSION['message'] = 'Event saved.';
-		$f3->reroute("/event/" . $id . "/edit");
+		$f3->reroute("/event/" . $params['id'] . "/edit");
 	}
 });
 
-$f3->route('POST /event/@id/approve', function($f3) {
+$f3->route('POST /event/@id/approve', function($f3, $params) {
 	admin_check();
 	readonly_check();
 
-	try { $e = new Event(intval($f3->get('PARAMS.id'))); }
+	try { $e = new Event($params['id']); }
 	catch (Exception $e) { $f3->error(404); }
 	$e->approve();
 
 	echo "Approved";
 });
 
-$f3->route('POST /event/@id/unapprove', function($f3) {
+$f3->route('POST /event/@id/unapprove', function($f3, $params) {
 	admin_check();
 	readonly_check();
 
-	try { $e = new Event(intval($f3->get('PARAMS.id'))); }
+	try { $e = new Event($params['id']); }
 	catch (Exception $e) { $f3->error(404); }
 	$e->unapprove();
 
 	echo "Unapproved";
 });
 
-$f3->route('GET /event/@id/reject', function($f3) {
+$f3->route('GET /event/@id/reject', function($f3, $params) {
 	global $options;
 
 	admin_check();
 	readonly_check();
 
-	try { $e = new Event(intval($f3->get('PARAMS.id'))); }
+	try { $e = new Event($params['id']); }
 	catch (Exception $e) { $f3->error(404); }
 
 	$f3->set("event", $e);
@@ -338,13 +337,13 @@ $f3->route('GET /event/@id/reject', function($f3) {
 	echo Template::instance()->render("event_reject.html");
 });
 
-$f3->route('POST /event/@id/reject', function($f3) {
+$f3->route('POST /event/@id/reject', function($f3, $params) {
 	global $options;
 
 	admin_check();
 	readonly_check();
 
-	try { $e = new Event(intval($f3->get('PARAMS.id'))); }
+	try { $e = new Event($params['id']); }
 	catch (Exception $e) { $f3->error(404); }
 
 	if ($e->state != 'imported') {

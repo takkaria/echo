@@ -620,7 +620,7 @@ $f3->route('GET /admin/logout', function($f3) {
 
 $f3->route('GET /admin/venues', function($f3) {
 	$f3->set("venues", Events::$db->exec(
-		"SELECT location AS name, count(location) AS count ".
+		"SELECT location_text AS name, count(location) AS count ".
 		"FROM events WHERE location != CAST(location AS INTEGER)".
 		"GROUP BY location ORDER BY name ASC;"));
 

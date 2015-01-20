@@ -68,7 +68,7 @@ class Event {
 				DateTime::createFromFormat("Y-m-j H:i+", $r['startdt']);
 		$this->enddt =
 				DateTime::createFromFormat("Y-m-j H:i", $r['enddt']);
-		$this->location = new Venue($r['location']);
+		$this->location = new Venue($r['location_text']);
 		$this->blurb = $r['blurb'];
 		$this->url = $r['url'];
 		$this->url_host = parse_url($r['url']);
@@ -272,7 +272,7 @@ class Event {
 			$e->enddt = $this->enddt->format("Y-m-d H:i");
 		else
 			$e->enddt = NULL;
-		$e->location = $this->location->dbname();
+		$e->location_text = $this->location->dbname();
 		$e->blurb = $this->blurb;
 		$e->url = $this->url;
 		$e->cost = $this->cost;

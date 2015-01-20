@@ -15,7 +15,7 @@ CREATE TABLE events (
 	title TEXT,
 	startdt DATETIME,
 	enddt DATETIME
-	location TEXT,	/* Either text or numeric reference to venues */
+	location_text TEXT,	/* Either text or numeric reference to venues */
 	blurb TEXT,
 	url TEXT,
 	type TEXT,		/* ATM this can only be "film" */

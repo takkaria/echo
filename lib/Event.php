@@ -254,6 +254,10 @@ class Event {
 		mail($this->email, $subject, $message, $headers);
 	}
 
+	public function generateSlug() {
+		$this->slug = Web::instance()->slug($e->title) . "-" . $e->id;
+	}
+
 	public function save() {
 		global $f3;
 
@@ -281,7 +285,7 @@ class Event {
 		$e->host = $this->host;
 
 		if (!$this->slug)
-			$e->slug = Web::instance()->slug($e->title) . "-" . $e->id;
+			$setslug = true;
 		else
 			$e->slug = $this->slug;
 
@@ -290,8 +294,10 @@ class Event {
 
 		$e->save();
 
-		if ($get_id)
-			$this->id = $e->get('_id');
+		if ($get_id && $setslug) {
+			$e->slug = $this->generateSlug();
+			$e->save();
+		}
 	}
 	
 	public function set_form_data() {
@@ -344,7 +350,7 @@ class Events {
 			$insert = [
 				'id' => $event->id,
 				'title' => $event->title,
-				'start' => $event->startdt->format('U'),
+				'start' => (gettype($event->startdt) == "object") ? $event->startdt->format('U') : null,
 			];
 			if ($event->enddt)
 				$insert['end'] = $event->enddt->format('U');

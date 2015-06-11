@@ -776,7 +776,7 @@ $f3->set('ONERROR',
 			$msg = "There's been a server error.  There's nothing you can do about this, sorry.  Please retry whatever you were doing.";
 		else
 			$msg = "";
-/*
+
 		foreach ($trace as $frame) {
 			$line='';
 			if (isset($frame['class']))
@@ -790,7 +790,7 @@ $f3->set('ONERROR',
 				($f3->highlight($src).' '.$f3->highlight($line)):
 				($src.$line)).$eol;
 		}
-*/
+
 ?>
 <!DOCTYPE html>
 <title><?=$code?></title>
